@@ -10,9 +10,19 @@
 		DA9F43CA305ECB0A00F2E880 /* BigInt in Frameworks */ = {isa = PBXBuildFile; productRef = DADFE161305EB2830078BB0C /* BigInt */; };
 		DA9F43CB305ECB0A00F2E880 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = DADFE163305EB2830078BB0C /* GRDB */; };
 		DA9F43CC305ECB0A00F2E880 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = DADFE165305EB2830078BB0C /* SwiftSoup */; };
+		DA9F4465305EDD6600F2E880 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9F4464305EDD6600F2E880 /* WidgetKit.framework */; };
+		DA9F4467305EDD6600F2E880 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9F4466305EDD6600F2E880 /* SwiftUI.framework */; };
+		DA9F4472305EDD6800F2E880 /* CourseWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DA9F4462305EDD6600F2E880 /* CourseWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		DA9F4470305EDD6800F2E880 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DADFE121305EB2830078BB0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA9F4461305EDD6600F2E880;
+			remoteInfo = CourseWidgetExtension;
+		};
 		DADFE137305EB2830078BB0C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DADFE121305EB2830078BB0C /* Project object */;
@@ -29,13 +39,47 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DA9F4477305EDD6800F2E880 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				DA9F4472305EDD6800F2E880 /* CourseWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		DA9F4462305EDD6600F2E880 /* CourseWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CourseWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA9F4464305EDD6600F2E880 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
+		DA9F4466305EDD6600F2E880 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
+		DA9F447C305EDD9400F2E880 /* CourseWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CourseWidgetExtension.entitlements; sourceTree = "<group>"; };
 		DADFE129305EB2830078BB0C /* BugaoshanSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BugaoshanSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADFE136305EB2830078BB0C /* BugaoshanSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BugaoshanSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADFE140305EB2830078BB0C /* BugaoshanSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BugaoshanSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DA9F4473305EDD6800F2E880 /* Exceptions for "CourseWidget" folder in "CourseWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DA9F4461305EDD6600F2E880 /* CourseWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		DA9F4468305EDD6600F2E880 /* CourseWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DA9F4473305EDD6800F2E880 /* Exceptions for "CourseWidget" folder in "CourseWidgetExtension" target */,
+			);
+			path = CourseWidget;
+			sourceTree = "<group>";
+		};
 		DADFE12B305EB2830078BB0C /* BugaoshanSwift */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BugaoshanSwift;
@@ -54,6 +98,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DA9F445F305EDD6600F2E880 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				DA9F4467305EDD6600F2E880 /* SwiftUI.framework in Frameworks */,
+				DA9F4465305EDD6600F2E880 /* WidgetKit.framework in Frameworks */,
+			);
+		};
 		DADFE126305EB2830078BB0C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
@@ -75,12 +126,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA9F4463305EDD6600F2E880 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DA9F4464305EDD6600F2E880 /* WidgetKit.framework */,
+				DA9F4466305EDD6600F2E880 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DADFE120305EB2830078BB0C = {
 			isa = PBXGroup;
 			children = (
+				DA9F447C305EDD9400F2E880 /* CourseWidgetExtension.entitlements */,
 				DADFE12B305EB2830078BB0C /* BugaoshanSwift */,
 				DADFE139305EB2830078BB0C /* BugaoshanSwiftTests */,
 				DADFE143305EB2830078BB0C /* BugaoshanSwiftUITests */,
+				DA9F4468305EDD6600F2E880 /* CourseWidget */,
+				DA9F4463305EDD6600F2E880 /* Frameworks */,
 				DADFE12A305EB2830078BB0C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,6 +154,7 @@
 				DADFE129305EB2830078BB0C /* BugaoshanSwift.app */,
 				DADFE136305EB2830078BB0C /* BugaoshanSwiftTests.xctest */,
 				DADFE140305EB2830078BB0C /* BugaoshanSwiftUITests.xctest */,
+				DA9F4462305EDD6600F2E880 /* CourseWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +162,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		DA9F4461305EDD6600F2E880 /* CourseWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA9F4474305EDD6800F2E880 /* Build configuration list for PBXNativeTarget "CourseWidgetExtension" */;
+			buildPhases = (
+				DA9F445E305EDD6600F2E880 /* Sources */,
+				DA9F445F305EDD6600F2E880 /* Frameworks */,
+				DA9F4460305EDD6600F2E880 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				DA9F4468305EDD6600F2E880 /* CourseWidget */,
+			);
+			name = CourseWidgetExtension;
+			productName = CourseWidgetExtension;
+			productReference = DA9F4462305EDD6600F2E880 /* CourseWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DADFE128305EB2830078BB0C /* BugaoshanSwift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DADFE148305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwift" */;
@@ -105,8 +187,12 @@
 				DADFE125305EB2830078BB0C /* Sources */,
 				DADFE126305EB2830078BB0C /* Frameworks */,
 				DADFE127305EB2830078BB0C /* Resources */,
+				DA9F4477305EDD6800F2E880 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				DA9F4471305EDD6800F2E880 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				DADFE12B305EB2830078BB0C /* BugaoshanSwift */,
@@ -173,6 +259,9 @@
 				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
+					DA9F4461305EDD6600F2E880 = {
+						CreatedOnToolsVersion = 27.0;
+					};
 					DADFE128305EB2830078BB0C = {
 						CreatedOnToolsVersion = 27.0;
 					};
@@ -208,11 +297,17 @@
 				DADFE128305EB2830078BB0C /* BugaoshanSwift */,
 				DADFE135305EB2830078BB0C /* BugaoshanSwiftTests */,
 				DADFE13F305EB2830078BB0C /* BugaoshanSwiftUITests */,
+				DA9F4461305EDD6600F2E880 /* CourseWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DA9F4460305EDD6600F2E880 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
 		DADFE127305EB2830078BB0C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
@@ -231,6 +326,11 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DA9F445E305EDD6600F2E880 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 		DADFE125305EB2830078BB0C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
@@ -249,6 +349,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		DA9F4471305EDD6800F2E880 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA9F4461305EDD6600F2E880 /* CourseWidgetExtension */;
+			targetProxy = DA9F4470305EDD6800F2E880 /* PBXContainerItemProxy */;
+		};
 		DADFE138305EB2830078BB0C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DADFE128305EB2830078BB0C /* BugaoshanSwift */;
@@ -262,6 +367,92 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		DA9F4475305EDD6800F2E880 /* Debug configuration for PBXNativeTarget "CourseWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CourseWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CourseWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CourseWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwift.CourseWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		DA9F4476305EDD6800F2E880 /* Release configuration for PBXNativeTarget "CourseWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CourseWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CourseWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CourseWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwift.CourseWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
 		DADFE146305EB2830078BB0C /* Debug configuration for PBXProject "BugaoshanSwift" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -540,6 +731,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DA9F4474305EDD6800F2E880 /* Build configuration list for PBXNativeTarget "CourseWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA9F4475305EDD6800F2E880 /* Debug configuration for PBXNativeTarget "CourseWidgetExtension" */,
+				DA9F4476305EDD6800F2E880 /* Release configuration for PBXNativeTarget "CourseWidgetExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
 		DADFE124305EB2830078BB0C /* Build configuration list for PBXProject "BugaoshanSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

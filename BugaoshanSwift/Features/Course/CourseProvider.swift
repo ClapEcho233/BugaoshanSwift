@@ -42,6 +42,7 @@ final class CourseProvider: ObservableObject {
             currentScheduleId = await database.currentScheduleId
             courses = await database.getCourses()
             loadError = nil
+            WidgetUpdateService.reloadTimelines()
         } catch {
             loadError = error.localizedDescription
         }
