@@ -229,9 +229,11 @@ struct SetFontPage: View {
     }
 }
 
-/// 语言偏好存储（当前 UI 文案为中文；供后续 l10n 接入生效）
+/// 语言切换（写入 AppleLanguages，重启后生效；覆盖 UI 文案经
+/// Localizable.xcstrings 本地化，键为中文原文）
 struct SetLanguagePage: View {
     @AppStorage("app_language") private var language = ""
+    @State private var pendingRestart = false
 
     var body: some View {
         List {
@@ -241,14 +243,31 @@ struct SetLanguagePage: View {
                 Text("English").tag("en")
             }
             .pickerStyle(.inline)
+            .onChange(of: language) { _, newValue in
+                apply(newValue)
+            }
             Section {
-                Text("当前版本的界面文案以中文为主，语言偏好将在多语言资源就绪后生效。")
+                Text("切换语言后需要重新启动 App 才能完全生效。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
         }
         .navigationTitle("语言")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("需要重启", isPresented: $pendingRestart) {
+            Button("好", role: .cancel) {}
+        } message: {
+            Text("语言设置将在重新打开 App 后生效。")
+        }
+    }
+
+    private func apply(_ value: String) {
+        if value.isEmpty {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.set([value], forKey: "AppleLanguages")
+        }
+        pendingRestart = true
     }
 }
 
