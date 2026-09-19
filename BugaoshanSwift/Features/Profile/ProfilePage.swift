@@ -83,6 +83,8 @@ struct CampusPage: View {
             ServiceHallPage()
         case "ccyl":
             CcylPage()
+        case "downloaded_attachments":
+            NoticeDownloadedPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,

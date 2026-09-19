@@ -9,9 +9,14 @@ struct WebViewNoticePage: View {
     var beautifyJSFileName: String?
     var title: String
     var userAgent: String? = Constants.userAgent
+    /// 附件下载目录（nil = 不拦截附件）
+    var attachmentDir: String? = nil
+    var downloadReferer: String? = nil
 
     @State private var canGoBack = false
     @State private var canGoForward = false
+    @State private var downloadMessage: String?
+    @State private var isDownloading = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -19,6 +24,10 @@ struct WebViewNoticePage: View {
                 url: url,
                 beautifyJS: beautifyJS,
                 userAgent: userAgent,
+                interceptAttachments: attachmentDir != nil,
+                onDownloadRequested: { downloadURL in
+                    Task { await download(downloadURL) }
+                },
                 onNavigationStateChange: { back, forward in
                     canGoBack = back
                     canGoForward = forward
@@ -27,6 +36,13 @@ struct WebViewNoticePage: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .alert("下载", isPresented: Binding(
+            get: { downloadMessage != nil }, set: { if !$0 { downloadMessage = nil } }
+        )) {
+            Button("好", role: .cancel) {}
+        } message: {
+            Text(downloadMessage ?? "")
+        }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
@@ -42,6 +58,24 @@ struct WebViewNoticePage: View {
                 }
                 .disabled(!canGoForward)
             }
+        }
+    }
+
+    private func download(_ target: URL) async {
+        guard let attachmentDir else { return }
+        isDownloading = true
+        defer { isDownloading = false }
+        let fileName = sanitizeDownloadFileName(target.lastPathComponent)
+        do {
+            let path = try await DownloadManager.shared.download(
+                url: target.absoluteString,
+                dirName: attachmentDir,
+                fileName: fileName,
+                referer: downloadReferer ?? "https://\(target.host ?? "")"
+            )
+            downloadMessage = "已下载：\((path as NSString).lastPathComponent)"
+        } catch {
+            downloadMessage = (error as? LocalizedError)?.errorDescription ?? "下载失败"
         }
     }
 
@@ -64,6 +98,8 @@ struct WebViewContainer: UIViewRepresentable {
     let url: URL
     var beautifyJS: String?
     var userAgent: String?
+    var interceptAttachments: Bool = false
+    var onDownloadRequested: ((URL) -> Void)? = nil
     var onNavigationStateChange: (Bool, Bool) -> Void
 
     func makeUIView(context: Context) -> WKWebView {
@@ -119,6 +155,23 @@ struct WebViewContainer: UIViewRepresentable {
         var progressObserver: NSKeyValueObservation?
         var notificationObservers: [NSObjectProtocol] = []
 
+        func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationAction: WKNavigationAction,
+            decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+        ) {
+            // 附件拦截：download 意图或附件扩展名链接 → 走下载而非网页加载
+            if parent?.interceptAttachments == true,
+               let target = navigationAction.request.url,
+               navigationAction.navigationType != .backForward,
+               target.isAttachmentLike {
+                parent?.onDownloadRequested?(target)
+                decisionHandler(.cancel)
+                return
+            }
+            decisionHandler(.allow)
+        }
+
         func cleanup() {
             progressObserver?.invalidate()
             notificationObservers.forEach(NotificationCenter.default.removeObserver)
@@ -141,10 +194,10 @@ struct WebViewContainer: UIViewRepresentable {
 
 /// 通知 hub：三源入口（教务处 / 党委学工部 / 团委）
 struct NoticePage: View {
-    private let sources: [(label: String, icon: String, tint: Color, url: String, js: String?)] = [
-        ("教务处通知", "graduationcap", .blue, "https://jwc.scu.edu.cn/tzgg.htm", "jwc_notice_beautify"),
-        ("党委学工部", "flag", .red, "https://xgb.scu.edu.cn/index/tzgg.htm", "party_notice_beautify"),
-        ("团委通知", "hands.and.sparkles", .orange, "https://tuanwei.scu.edu.cn/index/gg.htm", "tuanwei_notice_beautify"),
+    private let sources: [(label: String, icon: String, tint: Color, url: String, js: String?, dir: String, referer: String)] = [
+        ("教务处通知", "graduationcap", .blue, "https://jwc.scu.edu.cn/tzgg.htm", "jwc_notice_beautify", DownloadDirs.notice, "https://jwc.scu.edu.cn"),
+        ("党委学工部", "flag", .red, "https://xgb.scu.edu.cn/index/tzgg.htm", "party_notice_beautify", DownloadDirs.party, "https://xgb.scu.edu.cn"),
+        ("团委通知", "hands.and.sparkles", .orange, "https://tuanwei.scu.edu.cn/index/gg.htm", "tuanwei_notice_beautify", DownloadDirs.tuanwei, "https://tuanwei.scu.edu.cn"),
     ]
 
     var body: some View {
@@ -154,7 +207,9 @@ struct NoticePage: View {
                     WebViewNoticePage(
                         url: URL(string: source.url)!,
                         beautifyJSFileName: source.js,
-                        title: source.label
+                        title: source.label,
+                        attachmentDir: source.dir,
+                        downloadReferer: source.referer
                     )
                 } label: {
                     HStack(spacing: 12) {
