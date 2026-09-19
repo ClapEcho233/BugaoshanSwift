@@ -194,7 +194,7 @@ final class ScuAuthTests: XCTestCase {
         XCTAssertNotNil(ts)
         // session/save 带上了 Bearer
         let saveRequest = StubURLProtocol.recordedRequests.first
-        XCTAssertEqual(saveRequest?.value(forHTTPHeaderField: "Authorization"), "Bearer tok")
+        XCTAssertEqual(saveRequest?.headers["authorization"], "Bearer tok")
         // 第二次 getClient 缓存命中（不再发请求）
         let count = StubURLProtocol.recordedRequests.count
         _ = try await auth.getClient()

@@ -29,7 +29,7 @@ final class CookieClientTests: XCTestCase {
 
         // 同 host 二次请求带上 cookie
         _ = try await client.send(HTTPRequest(method: "GET", url: URL(string: "https://a.scu.edu.cn/api")!))
-        let cookieHeader = StubURLProtocol.recordedRequests.last?.value(forHTTPHeaderField: "Cookie")
+        let cookieHeader = StubURLProtocol.recordedRequests.last?.headers["cookie"]
         XCTAssertEqual(cookieHeader, "session=abc")
     }
 
@@ -44,7 +44,7 @@ final class CookieClientTests: XCTestCase {
         _ = try await client.send(HTTPRequest(method: "GET", url: URL(string: "https://scu.edu.cn/x")!))
         _ = try await client.send(HTTPRequest(method: "GET", url: URL(string: "https://id.scu.edu.cn/api")!))
 
-        let cookieHeader = StubURLProtocol.recordedRequests.last?.value(forHTTPHeaderField: "Cookie")
+        let cookieHeader = StubURLProtocol.recordedRequests.last?.headers["cookie"]
         XCTAssertEqual(cookieHeader, "root=1")
     }
 
@@ -59,7 +59,7 @@ final class CookieClientTests: XCTestCase {
         _ = try await client.send(HTTPRequest(method: "GET", url: URL(string: "https://a.com/")!))
         _ = try await client.send(HTTPRequest(method: "GET", url: URL(string: "https://b.com/")!))
 
-        let cookieHeader = StubURLProtocol.recordedRequests.last?.value(forHTTPHeaderField: "Cookie")
+        let cookieHeader = StubURLProtocol.recordedRequests.last?.headers["cookie"]
         XCTAssertNil(cookieHeader)
     }
 
@@ -101,11 +101,11 @@ final class CookieClientTests: XCTestCase {
 
         // start（同源）：带 Authorization + cookie；landing（跨源）：两者都剥离
         let start = StubURLProtocol.recordedRequests[1]
-        XCTAssertEqual(start.value(forHTTPHeaderField: "Authorization"), "Bearer tok")
-        XCTAssertEqual(start.value(forHTTPHeaderField: "Cookie"), "sso=1")
+        XCTAssertEqual(start.headers["authorization"], "Bearer tok")
+        XCTAssertEqual(start.headers["cookie"], "sso=1")
         let landing = StubURLProtocol.recordedRequests.last!
-        XCTAssertNil(landing.value(forHTTPHeaderField: "Authorization"))
-        XCTAssertNil(landing.value(forHTTPHeaderField: "Cookie"))
+        XCTAssertNil(landing.headers["authorization"])
+        XCTAssertNil(landing.headers["cookie"])
     }
 
     func testSensitiveHeaderAllowedOrigin() async throws {
@@ -124,7 +124,7 @@ final class CookieClientTests: XCTestCase {
             sensitiveHeaderAllowedOrigins: [URL(string: "https://allowed.scu.edu.cn/")!]
         )
         let final = StubURLProtocol.recordedRequests.last!
-        XCTAssertEqual(final.value(forHTTPHeaderField: "Authorization"), "Bearer tok")
+        XCTAssertEqual(final.headers["authorization"], "Bearer tok")
     }
 
     func testRelativeLocationResolution() async throws {
@@ -137,7 +137,7 @@ final class CookieClientTests: XCTestCase {
         let client = makeClient()
         let response = try await client.followRedirects(to: URL(string: "https://x.scu.edu.cn/step1")!)
         XCTAssertEqual(response.statusCode, 200)
-        XCTAssertEqual(StubURLProtocol.recordedRequests.last!.url!.absoluteString, "https://x.scu.edu.cn/step2")
+        XCTAssertEqual(StubURLProtocol.recordedRequests.last!.url.absoluteString, "https://x.scu.edu.cn/step2")
     }
 
     func testMaxRedirectsExceeded() async throws {
