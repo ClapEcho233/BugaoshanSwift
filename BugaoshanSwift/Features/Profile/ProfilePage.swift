@@ -67,6 +67,10 @@ struct CampusPage: View {
             ExamPlanPage()
         case "fitness_test":
             FitnessTestPage()
+        case "classroom":
+            ClassroomPage()
+        case "train_program":
+            TrainProgramPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,
