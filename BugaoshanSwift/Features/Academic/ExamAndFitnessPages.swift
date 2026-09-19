@@ -156,8 +156,11 @@ struct IcsPreviewSheet: View {
     let title: String
     let fileName: String
     let content: String
+    var events: [CalendarEventPayload] = []
 
     @Environment(\.dismiss) private var dismiss
+    @State private var showCalendarPicker = false
+    @State private var importMessage: String?
 
     var body: some View {
         NavigationStack {
@@ -179,7 +182,88 @@ struct IcsPreviewSheet: View {
                     }
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                if !events.isEmpty {
+                    Button {
+                        Task { await startImport() }
+                    } label: {
+                        Label("添加到系统日历", systemImage: "calendar.badge.plus")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding()
+                }
+            }
+            .sheet(isPresented: $showCalendarPicker) {
+                calendarPickerSheet
+            }
+            .alert("提示", isPresented: Binding(
+                get: { importMessage != nil }, set: { if !$0 { importMessage = nil } }
+            )) {
+                Button("好", role: .cancel) {}
+            } message: {
+                Text(importMessage ?? "")
+            }
         }
+    }
+
+    @State private var calendars: [CalendarImportService.Destination] = []
+    @State private var importService = CalendarImportService()
+
+    private func startImport() async {
+        do {
+            try await importService.requestWriteAccess()
+            let list = importService.writableCalendars()
+            guard !list.isEmpty else {
+                importMessage = "没有可写的日历"
+                return
+            }
+            calendars = list
+            showCalendarPicker = true
+        } catch {
+            importMessage = (error as? LocalizedError)?.errorDescription ?? "\(error)"
+        }
+    }
+
+    private var calendarPickerSheet: some View {
+        NavigationStack {
+            List(calendars) { calendar in
+                Button {
+                    showCalendarPicker = false
+                    Task {
+                        do {
+                            try importService.importEvents(events, calendarIdentifier: calendar.identifier)
+                            importMessage = "已添加到系统日历（\(events.count) 个事件）"
+                        } catch {
+                            importMessage = (error as? LocalizedError)?.errorDescription ?? "导入失败"
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: calendar.isDefault ? "star.circle" : "calendar")
+                            .foregroundStyle(Color.accentColor)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(calendar.title).foregroundStyle(.primary)
+                            if calendar.isDefault || !calendar.sourceTitle.isEmpty {
+                                Text([calendar.isDefault ? "默认" : nil, calendar.sourceTitle.isEmpty ? nil : calendar.sourceTitle]
+                                    .compactMap { $0 }.joined(separator: " · "))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            .navigationTitle("选择日历")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("取消") { showCalendarPicker = false }
+                }
+            }
+        }
+        .presentationDetents([.medium])
     }
 }
 

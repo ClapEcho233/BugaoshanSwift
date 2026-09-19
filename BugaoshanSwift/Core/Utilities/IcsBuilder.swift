@@ -56,8 +56,9 @@ enum IcsBuilder {
                 lines.append("DTSTART;TZID=Asia/Shanghai:\(dayString)T\(hm(start.startHour, start.startMinute))00")
                 lines.append("DTEND;TZID=Asia/Shanghai:\(dayString)T\(hm(end.endHour, end.endMinute))00")
                 lines.append("SUMMARY:\(escape(course.name))")
-                if !course.location.isEmpty {
-                    lines.append("LOCATION:\(escape(course.location))")
+                let resolvedLocation = CalendarLocationMapper.resolve(course.location, campusName: course.campus).title
+                if !resolvedLocation.isEmpty {
+                    lines.append("LOCATION:\(escape(resolvedLocation))")
                 }
                 if !course.teacher.isEmpty {
                     lines.append("DESCRIPTION:\(escape("教师: \(course.teacher)"))")
@@ -98,8 +99,9 @@ enum IcsBuilder {
             lines.append("DTSTART;TZID=Asia/Shanghai:\(dayString)T\(startHM)00")
             lines.append("DTEND;TZID=Asia/Shanghai:\(dayString)T\(endHM)00")
             lines.append("SUMMARY:\(escape(summary))")
-            if !exam.location.isEmpty {
-                lines.append("LOCATION:\(escape(exam.location))")
+            let resolvedExamLocation = CalendarLocationMapper.resolve(exam.location).title
+            if !resolvedExamLocation.isEmpty {
+                lines.append("LOCATION:\(escape(resolvedExamLocation))")
             }
             lines.append("DESCRIPTION:\(escape(descriptionParts.joined(separator: "\\n")))")
             lines.append("UID:exam-\(uidHash("exam|\(normalizeExamName(exam.name))"))@bugaoshan")
@@ -175,7 +177,7 @@ enum IcsBuilder {
             .joined(separator: " ")
     }
 
-    private static func uidHash(_ input: String) -> String {
+    static func uidHash(_ input: String) -> String {
         // sha1 hex 前 24 字符
         let digest = Insecure.SHA1.hash(data: Data(input.utf8))
         return digest.map { String(format: "%02x", $0) }.joined().prefix(24).description

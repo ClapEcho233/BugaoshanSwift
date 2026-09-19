@@ -13,6 +13,7 @@ struct CoursePage: View {
     @State private var showEditPage = false
     @State private var editingCourse: Course?
     @State private var showImportSheet = false
+    @State private var showCalendarExport = false
     @State private var showManagement = false
 
     init() {
@@ -72,6 +73,11 @@ struct CoursePage: View {
                     prefillDayOfWeek: nil,
                     prefillSection: nil
                 )
+            }
+        }
+        .sheet(isPresented: $showCalendarExport) {
+            if let sheet = exportSheet {
+                sheet.environmentObject(environment)
             }
         }
         .sheet(isPresented: $showImportSheet) {
@@ -154,8 +160,23 @@ struct CoursePage: View {
     }
 
     private func exportSchedule() {
-        guard let json = provider.exportCurrentSchedule() else { return }
-        UIPasteboard.general.string = json
+        showCalendarExport = true
+    }
+
+    private var exportSheet: CalendarExportSheet? {
+        guard let config = provider.config else { return nil }
+        return CalendarExportSheet(
+            title: "导出课表",
+            icsContent: IcsBuilder.courseScheduleIcs(config: config, courses: provider.courses),
+            icsFileName: IcsBuilder.calendarFileName(semesterName: config.semesterName),
+            events: CalendarEventBuilder.courseEvents(config: config, courses: provider.courses),
+            includeCopy: true,
+            onCopy: {
+                if let json = provider.exportCurrentSchedule() {
+                    UIPasteboard.general.string = json
+                }
+            }
+        )
     }
 
     // MARK: - 工具栏

@@ -7,6 +7,7 @@ struct AcademicCalendarPage: View {
     @State private var calendar: AcademicCalendarData?
     @State private var selectedSemesterIndex: Int = 0
     @State private var displayedMonth: Date = Date()
+    @State private var showExportSheet = false
     @State private var isLoading = true
     @State private var loadError: String?
 
@@ -43,6 +44,27 @@ struct AcademicCalendarPage: View {
         }
         .navigationTitle("校历")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if let semester = currentSemester, !semester.events.isEmpty {
+                    Button {
+                        showExportSheet = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showExportSheet) {
+            if let semester = currentSemester {
+                CalendarExportSheet(
+                    title: "校历导出",
+                    icsContent: IcsBuilder.academicCalendarIcs(semester: semester),
+                    icsFileName: IcsBuilder.calendarFileName(semesterName: semester.name),
+                    events: CalendarEventBuilder.academicEvents(semester: semester)
+                )
+            }
+        }
         .task {
             let service = AcademicCalendarService()
             calendar = await service.loadCalendar()
