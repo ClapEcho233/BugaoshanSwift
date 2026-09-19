@@ -213,39 +213,50 @@ struct ProfilePage: View {
     }
 }
 
-/// 软件设置页（后续阶段补齐 ~40 项）
+/// 软件设置页（software_setting_page.dart 全量入口）
 struct SoftwareSettingsPage: View {
     @EnvironmentObject private var config: AppConfig
 
     var body: some View {
-        Form {
+        List {
             Section("课表") {
-                Toggle("显示周末", isOn: $config.showWeekend)
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("行高")
-                        Spacer()
-                        Text("\(Int(config.courseRowHeight))")
-                            .foregroundStyle(.secondary)
-                    }
-                    Slider(value: $config.courseRowHeight, in: 48...120, step: 1)
+                NavigationLink {
+                    SetCourseStylePage()
+                } label: {
+                    Label("课表样式", systemImage: "square.grid.3x3")
+                }
+                NavigationLink {
+                    SetDurationPage()
+                } label: {
+                    Label("时长设置", systemImage: "clock")
+                }
+            }
+            Section("外观") {
+                NavigationLink {
+                    SetThemeColorPage()
+                } label: {
+                    Label("主题色", systemImage: "paintpalette")
+                }
+                NavigationLink {
+                    SetFontPage()
+                } label: {
+                    Label("字体大小", systemImage: "textformat.size")
+                }
+                NavigationLink {
+                    SetLanguagePage()
+                } label: {
+                    Label("语言", systemImage: "globe")
+                }
+            }
+            Section("Dock") {
+                NavigationLink {
+                    SetDockPage()
+                } label: {
+                    Label("Dock 设置", systemImage: "square.grid.2x2")
                 }
             }
             Section("动画") {
                 Toggle("页面切换动画", isOn: $config.enablePageTransitionAnimation)
-            }
-            Section("Dock") {
-                Button("恢复默认 Dock") {
-                    config.resetDockToDefault()
-                }
-            }
-            Section("危险区") {
-                Button(role: .destructive) {
-                    // 清数据（后续阶段补确认对话框与全量清理）
-                } label: {
-                    Text("清除课表数据")
-                }
-                .disabled(true)
             }
         }
         .navigationTitle("设置")
@@ -253,8 +264,39 @@ struct SoftwareSettingsPage: View {
     }
 }
 
-/// 关于页
+/// 课表样式（行高 + 周末显示）
+struct SetCourseStylePage: View {
+    @EnvironmentObject private var config: AppConfig
+
+    var body: some View {
+        Form {
+            Section("显示") {
+                Toggle("显示周末", isOn: $config.showWeekend)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("行高")
+                        Spacer()
+                        Text("\(Int(config.courseRowHeight))").foregroundStyle(.secondary)
+                    }
+                    Slider(value: $config.courseRowHeight, in: 48...120, step: 1)
+                }
+            }
+        }
+        .navigationTitle("课表样式")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// 关于页：版本号连点 5 次开启开发者模式；检查更新；开源致谢
 struct AboutPage: View {
+    @EnvironmentObject private var config: AppConfig
+
+    @State private var versionTapCount = 0
+
+    private var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+    }
+
     var body: some View {
         List {
             Section {
@@ -267,10 +309,23 @@ struct AboutPage: View {
                     Text("iOS 原生重制版")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    Text("版本 \(version)")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .onTapGesture {
+                            versionTapCount += 1
+                            if versionTapCount >= 5 {
+                                versionTapCount = 0
+                                config.developerModeEnabled = true
+                            }
+                        }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
             }
+
+            UpdateCheckSection()
+
             Section("链接") {
                 Link(destination: URL(string: Constants.officialWebsiteLink)!) {
                     Label("官方网站", systemImage: "globe")
@@ -279,6 +334,17 @@ struct AboutPage: View {
                     Label("GitHub 仓库", systemImage: "chevron.left.forwardslash.chevron.right")
                 }
             }
+
+            if config.developerModeEnabled {
+                Section("开发者") {
+                    NavigationLink {
+                        DevPage()
+                    } label: {
+                        Label("开发者选项", systemImage: "wrench.and.screwdriver")
+                    }
+                }
+            }
+
             Section("开源致谢") {
                 Text("本项目衍生自 The-Brotherhood-of-SCU/Bugaoshan（AGPL-3.0）。")
                     .font(.footnote)

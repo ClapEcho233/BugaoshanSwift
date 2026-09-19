@@ -44,6 +44,43 @@ final class AppConfig: ObservableObject {
         didSet { defaults.set(enablePageTransitionAnimation, forKey: "enable_page_transition_animation") }
     }
 
+    // MARK: 外观
+
+    /// 主题强调色（ARGB；0 = 跟随系统默认）
+    @Published var themeColorARGB: Int {
+        didSet { defaults.set(themeColorARGB, forKey: "theme_color_argb") }
+    }
+
+    /// 字体大小偏好："" = 跟随系统 / "small" / "large"
+    @Published var fontScale: String {
+        didSet { defaults.set(fontScale, forKey: "font_scale") }
+    }
+
+    // MARK: 更新
+
+    /// 检查更新时包含预发布版
+    @Published var includePrerelease: Bool {
+        didSet { defaults.set(includePrerelease, forKey: "include_prerelease") }
+    }
+
+    /// 开发者模式（关于页版本号连点 5 次开启）
+    @Published var developerModeEnabled: Bool {
+        didSet { defaults.set(developerModeEnabled, forKey: "developer_mode_enabled") }
+    }
+
+    var themeColor: Color? {
+        guard themeColorARGB != 0 else { return nil }
+        return themeColorARGB.argbColor
+    }
+
+    var dynamicTypeSize: DynamicTypeSize? {
+        switch fontScale {
+        case "small": return .small
+        case "large": return .xLarge
+        default: return nil
+        }
+    }
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         acceptedEulaVersion = defaults.object(forKey: "accepted_eula_version") as? Int ?? 0
@@ -52,6 +89,10 @@ final class AppConfig: ObservableObject {
         showWeekend = defaults.object(forKey: "course_show_weekend") as? Bool ?? false
         courseRowHeight = defaults.object(forKey: "course_row_height") as? Double ?? 72
         enablePageTransitionAnimation = defaults.object(forKey: "enable_page_transition_animation") as? Bool ?? true
+        themeColorARGB = defaults.object(forKey: "theme_color_argb") as? Int ?? 0
+        fontScale = defaults.string(forKey: "font_scale") ?? ""
+        includePrerelease = defaults.bool(forKey: "include_prerelease")
+        developerModeEnabled = defaults.bool(forKey: "developer_mode_enabled")
     }
 
     func resetDockToDefault() {

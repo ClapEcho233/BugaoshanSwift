@@ -20,6 +20,8 @@ struct RootView: View {
                 MainTabView()
             }
         }
+        .tint(config.themeColor ?? Color.accentColor)
+        .modifier(FontScaleModifier(scale: config.dynamicTypeSize))
         .sheet(isPresented: $showLogin) {
             NavigationStack {
                 ScuLoginPage()
@@ -310,5 +312,19 @@ struct WizardFeaturesPage: View {
             Spacer()
         }
         .padding(.horizontal)
+    }
+}
+
+
+/// 字体大小偏好修饰器（nil = 跟随系统）
+struct FontScaleModifier: ViewModifier {
+    let scale: DynamicTypeSize?
+
+    func body(content: Content) -> some View {
+        if let scale {
+            content.dynamicTypeSize(scale)
+        } else {
+            content
+        }
     }
 }
