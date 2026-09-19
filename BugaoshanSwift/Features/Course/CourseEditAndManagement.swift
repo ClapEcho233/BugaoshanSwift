@@ -334,8 +334,34 @@ struct ImportScheduleSheet: View {
     private func importPasted() async {
         isImporting = true
         defer { isImporting = false }
-        guard let (config, courses) = CourseProvider.parseShareImport(pastedJson) else {
-            importError = "JSON 解析失败：请确认粘贴完整的分享文件内容"
+        let trimmed = pastedJson.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // 自动判别：教务原始 JSON（含 xkxx）vs 分享文件 JSON（含 config/courses）
+        if trimmed.contains("xkxx") {
+            do {
+                let parsed = try JwxtParser.parse(jsonString: trimmed)
+                var config = parsed.suggestedConfig
+                config.id = String(Int(Date().timeIntervalSince1970 * 1000))
+                let now = Calendar.current.dateComponents([.month, .day], from: Date())
+                config.semesterName = "导入的课表 \(now.month!)月\(now.day!)日"
+                try JwxtParser.validate(config: config, courses: parsed.courses)
+                await provider.importSchedule(config: &config, courses: parsed.courses) { _ in
+                    .addWithSuffix
+                }
+                if provider.loadError == nil {
+                    showPaste = false
+                    dismiss()
+                } else {
+                    importError = provider.loadError
+                }
+            } catch {
+                importError = error.localizedDescription
+            }
+            return
+        }
+
+        guard let (config, courses) = CourseProvider.parseShareImport(trimmed) else {
+            importError = "JSON 解析失败：请确认粘贴完整的分享文件或教务导出内容"
             return
         }
         var mutableConfig = config
@@ -354,16 +380,149 @@ struct ImportScheduleSheet: View {
     }
 }
 
-/// 在线导入（教务拉取）——依赖 ZhjwApiService（Phase 3 接入后启用）
+/// 在线导入（教务拉取）：登录检查 → 学期选择 → 逐学期拉取解析导入 → 按校历修正日期
 struct OnlineImportPage: View {
+    @EnvironmentObject private var environment: AppEnvironment
+    @Environment(\.dismiss) private var dismiss
+
     let provider: CourseProvider
 
+    @State private var phase: Phase = .idle
+    @State private var semesters: [(value: String, label: String)] = []
+    @State private var errorMessage: String?
+
+    enum Phase: Equatable {
+        case idle
+        case loadingSemesters
+        case picking
+        case importing(current: Int, total: Int)
+        case done
+    }
+
+    private var api: ZhjwApiService {
+        ZhjwApiService(auth: environment.zhjwAuth)
+    }
+
     var body: some View {
-        ContentUnavailableView(
-            "在线导入",
-            systemImage: "cloud",
-            description: Text("教务系统在线导入将在后续版本开放\n可先使用分享文件 / 教务 JSON 导入")
-        )
+        VStack(spacing: 20) {
+            switch phase {
+            case .idle:
+                Image(systemName: "cloud")
+                    .font(.system(size: 64))
+                    .foregroundStyle(Color.accentColor)
+                Text("从教务系统导入课表")
+                    .font(.headline)
+                Text("需要先完成统一身份认证登录")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Button {
+                    Task { await loadSemesters() }
+                } label: {
+                    Text("开始导入")
+                        .frame(minWidth: 160)
+                }
+                .buttonStyle(.borderedProminent)
+            case .loadingSemesters:
+                ProgressView("正在获取学期列表…")
+            case .picking:
+                List {
+                    ForEach(semesters, id: \.value) { semester in
+                        Button {
+                            Task { await importSemesters([semester]) }
+                        } label: {
+                            Text(JwxtParser.cleanSemesterLabel(semester.label))
+                                .foregroundStyle(.primary)
+                        }
+                    }
+                }
+                .listStyle(.insetGrouped)
+                Text("点击要导入的学期")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            case .importing(let current, let total):
+                ProgressView(value: Double(current), total: Double(total))
+                Text("正在导入 \(current)/\(total)…")
+                    .font(.subheadline)
+            case .done:
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 56))
+                    .foregroundStyle(.green)
+                Text("导入完成")
+                    .font(.headline)
+            }
+            if let errorMessage {
+                Label(errorMessage, systemImage: "exclamationmark.triangle")
+                    .foregroundStyle(.red)
+                    .font(.footnote)
+                    .padding(.horizontal)
+            }
+            Spacer()
+        }
+        .padding(.top, 48)
+        .navigationTitle("在线导入")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func loadSemesters() async {
+        var ready = environment.authBus.scuState == .ready
+        if !ready {
+            ready = await environment.scuAuth.isReady
+        }
+        guard ready else {
+            errorMessage = "请先登录统一身份认证"
+            return
+        }
+        phase = .loadingSemesters
+        do {
+            semesters = try await api.fetchSemesters()
+            phase = .picking
+        } catch {
+            phase = .idle
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func importSemesters(_ selected: [(value: String, label: String)]) async {
+        phase = .importing(current: 0, total: selected.count)
+        let calendarService = AcademicCalendarService()
+        var importedCurrent = false
+
+        for (index, semester) in selected.enumerated() {
+            phase = .importing(current: index + 1, total: selected.count)
+            do {
+                let json = try await api.fetchJwxtSchedule(planCode: semester.value)
+                let parsed = try JwxtParser.parse(jsonString: json)
+                var config = parsed.suggestedConfig
+                config.id = String(Int(Date().timeIntervalSince1970 * 1000))
+                let cleanLabel = JwxtParser.cleanSemesterLabel(semester.label)
+                config.semesterName = cleanLabel
+                try JwxtParser.validate(config: config, courses: parsed.courses)
+
+                // 按校历静默修正学期起点与周数
+                if let calendarSemester = await calendarService.findSemester(named: cleanLabel) {
+                    config.semesterStartDate = calendarSemester.startDate
+                    config.totalWeeks = calendarSemester.totalWeeks
+                }
+                // 再校验（校历周数可能更小）
+                if (try? JwxtParser.validate(config: config, courses: parsed.courses)) == nil {
+                    // 校历修正后超界 → 回退建议配置
+                    config = parsed.suggestedConfig
+                    config.id = String(Int(Date().timeIntervalSince1970 * 1000))
+                    config.semesterName = cleanLabel
+                }
+
+                await provider.importSchedule(config: &config, courses: parsed.courses) { _ in
+                    .addWithSuffix
+                }
+                if semester.label.contains("当前") && !importedCurrent {
+                    importedCurrent = true
+                    // importSchedule 已切到新导入的课表
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+        phase = .done
     }
 }
 

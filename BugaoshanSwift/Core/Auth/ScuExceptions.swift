@@ -2,7 +2,7 @@ import Foundation
 
 /// 异常体系（对应 lib/services/auth/scu_exceptions.dart 的 sealed 层级）。
 /// `localizedDescription` 供 UI 直接展示。
-enum SCUError: Error, LocalizedError {
+enum SCUError: Error, LocalizedError, Equatable {
     /// 认证丢失。L1 包装器精确重放一次；随后冒泡到 Provider → UI「前往登录」。
     case unauthenticated(String = "未登录或登录已过期")
     /// 网络/解析/非 200/业务错误。不做认证自动重试。
