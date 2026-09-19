@@ -57,6 +57,8 @@ struct CampusPage: View {
             AcademicCalendarPage()
         case "network_device":
             NetworkDevicePage()
+        case "passpoint":
+            PasspointPage()
         case "notice":
             NoticePage()
         case "repair":
