@@ -103,6 +103,8 @@ final class AuthBus: ObservableObject {
     @Published var realname: String?
     /// 各子系统 moduleId → ready
     @Published var subsystemReady: [String: Bool] = [:]
+    /// 会话过期提示触发器（根视图 onChange 消费；视图侧 5s 冷却）
+    @Published var sessionExpiredTrigger: Int = 0
 
     nonisolated init() {}
 }

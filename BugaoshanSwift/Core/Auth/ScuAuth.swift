@@ -68,9 +68,9 @@ actor ScuAuth {
     private var authEpoch: UInt64 = 0
 
     /// session 过期且自动刷新失败时调用（UI 显示提示）
-    var onSessionExpired: (@Sendable () -> Void)?
+    var onSessionExpired: (@Sendable () async -> Void)?
 
-    func setOnSessionExpired(_ callback: (@Sendable () -> Void)?) {
+    func setOnSessionExpired(_ callback: (@Sendable () async -> Void)?) {
         onSessionExpired = callback
     }
 
@@ -387,7 +387,7 @@ actor ScuAuth {
             let refreshed = try await synchronizedRefresh()
             if !refreshed {
                 log.e("ScuAuth", "getClient: refresh failed, session expired")
-                onSessionExpired?()
+                await onSessionExpired?()
                 throw SCUError.unauthenticated()
             }
             return try await bindSession()
@@ -405,7 +405,7 @@ actor ScuAuth {
             let refreshed = try await synchronizedRefresh()
             if !refreshed {
                 log.e("ScuAuth", "getClient: refresh failed, session expired")
-                onSessionExpired?()
+                await onSessionExpired?()
                 throw SCUError.unauthenticated()
             }
             return try await bindSession()
@@ -418,7 +418,7 @@ actor ScuAuth {
             let refreshed = try await synchronizedRefresh()
             if !refreshed {
                 log.e("ScuAuth", "getAccessToken: refresh failed, session expired")
-                onSessionExpired?()
+                await onSessionExpired?()
                 throw SCUError.unauthenticated()
             }
         }
@@ -559,6 +559,17 @@ actor ScuAuth {
         await secure.delete(StorageKeys.scuRememberPassword)
         await secure.delete(StorageKeys.scuSavedUsername)
         await secure.delete(StorageKeys.scuSavedPassword)
+    }
+
+    /// UI 级自动登录开关（kScuAutoLogin = 'true'/'false'）
+    func setAutoLoginEnabled(_ enabled: Bool) async {
+        await secure.write(StorageKeys.scuAutoLogin, enabled ? "true" : "false")
+    }
+
+    var isAutoLoginEnabled: Bool {
+        get async {
+            await secure.read(StorageKeys.scuAutoLogin) == "true"
+        }
     }
 
     /// 自动登录：凭据 + OCR 验证码，单次尝试。任何失败返回 false。
