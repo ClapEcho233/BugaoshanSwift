@@ -63,6 +63,10 @@ struct CampusPage: View {
             RepairPage()
         case "balance_query":
             BalanceQueryPage()
+        case "exam_plan":
+            ExamPlanPage()
+        case "fitness_test":
+            FitnessTestPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,

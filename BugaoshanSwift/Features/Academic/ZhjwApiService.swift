@@ -13,9 +13,9 @@ struct ZhjwApiService {
         self.log = log
     }
 
-    private var base: URL { URL(string: Constants.zhjwBase)! }
+    var base: URL { URL(string: Constants.zhjwBase)! }
 
-    private var htmlHeaders: [String: String] {
+    var htmlHeaders: [String: String] {
         [
             "Accept": "text/html,*/*",
             "Referer": "\(Constants.zhjwBase)/",
