@@ -69,14 +69,6 @@ struct CampusPage: View {
             ExamPlanPage()
         case "fitness_test":
             FitnessTestPage()
-        case "classroom":
-            ClassroomPage()
-        case "class_schedule_inquiry":
-            ClassScheduleInquiryPage()
-        case "course_curriculum":
-            CourseCurriculumPage()
-        case "train_program":
-            TrainProgramPage()
         case "plan_completion":
             PlanCompletionPage()
         case "leave":
@@ -182,14 +174,6 @@ struct ProfilePage: View {
                 }
             }
 
-            Section("通用") {
-                NavigationLink {
-                    AcademicCalendarPage()
-                } label: {
-                    Label("校历", systemImage: "calendar.circle")
-                }
-            }
-
             Section("应用") {
                 NavigationLink {
                     SoftwareSettingsPage()
@@ -219,18 +203,6 @@ struct SoftwareSettingsPage: View {
 
     var body: some View {
         List {
-            Section("课表") {
-                NavigationLink {
-                    SetCourseStylePage()
-                } label: {
-                    Label("课表样式", systemImage: "square.grid.3x3")
-                }
-                NavigationLink {
-                    SetDurationPage()
-                } label: {
-                    Label("时长设置", systemImage: "clock")
-                }
-            }
             Section("外观") {
                 NavigationLink {
                     SetThemeColorPage()
@@ -260,29 +232,6 @@ struct SoftwareSettingsPage: View {
             }
         }
         .navigationTitle("设置")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-/// 课表样式（行高 + 周末显示）
-struct SetCourseStylePage: View {
-    @EnvironmentObject private var config: AppConfig
-
-    var body: some View {
-        Form {
-            Section("显示") {
-                Toggle("显示周末", isOn: $config.showWeekend)
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("行高")
-                        Spacer()
-                        Text("\(Int(config.courseRowHeight))").foregroundStyle(.secondary)
-                    }
-                    Slider(value: $config.courseRowHeight, in: 48...120, step: 1)
-                }
-            }
-        }
-        .navigationTitle("课表样式")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

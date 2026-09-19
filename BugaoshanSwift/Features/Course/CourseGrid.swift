@@ -204,41 +204,6 @@ struct CourseGridDayColumns: View {
     }
 }
 
-// MARK: - 整周网格（单页完整视图：表头 + 节次列 + 天列）
-
-/// 周网格（对应 course_grid.dart）：固定 35pt 节次列 + 5/7 天列。
-/// 课表主页用 CoursePage 的分页组合（节次列固定），此处供班级/课程课表查询页整页使用。
-struct CourseGrid: View {
-    let courses: [Course]
-    let config: ScheduleConfig
-    let week: Int
-    let showWeekend: Bool
-    let rowHeight: Double
-    let todayWeek: Int
-    /// 历年学期查询（班级/课程课表）日期无意义时隐藏表头日期
-    var showDates: Bool = true
-
-    var onTapCourse: ((Course) -> Void)?
-
-    var body: some View {
-        VStack(spacing: 0) {
-            CourseGridHeader(config: config, week: week, showWeekend: showWeekend, todayWeek: todayWeek, showDates: showDates)
-            Divider()
-            ScrollView(.vertical) {
-                HStack(alignment: .top, spacing: 0) {
-                    CourseGridGutter(config: config, rowHeight: rowHeight)
-                    CourseGridDayColumns(
-                        courses: courses, config: config, week: week,
-                        showWeekend: showWeekend, rowHeight: rowHeight,
-                        onTapCourse: onTapCourse
-                    )
-                }
-            }
-        }
-        .background(Color(.systemBackground))
-    }
-}
-
 // MARK: - 课程卡（Apple 日历日程卡风格：浅色底 + 左色条 + 彩色文字）
 
 struct CourseCardView: View {

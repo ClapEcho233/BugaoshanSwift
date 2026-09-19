@@ -1,5 +1,6 @@
-// 生成“不高山上”App 图标：极简圆角红色山（锦绣红 #B4100A），暖白底
-// 圆角做在山形上；画布保持满幅方形 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
+// 生成“不高山上”App 图标：米色底 + 锦红大小双山（大山描线、小山实心）
+// 几何与设计稿 MountainAppIcon.svg 一致：24 单位坐标系居中缩放到 832×832
+// 画布保持满幅方形 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
 // 运行：swift scripts/generate_app_icon.swift
 import CoreGraphics
 import ImageIO
@@ -11,7 +12,7 @@ let S: CGFloat = 1024
 struct Palette {
     let bgTop: CGColor
     let bgBottom: CGColor
-    let mountain: CGColor
+    let ink: CGColor
 }
 
 func rgb(_ hex: UInt32) -> CGColor {
@@ -21,19 +22,19 @@ func rgb(_ hex: UInt32) -> CGColor {
             alpha: 1)
 }
 
-// 默认：暖白底 + 锦绣红山
-let lightPalette = Palette(bgTop: rgb(0xFBF8F2), bgBottom: rgb(0xF0EADD), mountain: rgb(0xB4100A))
-// 深色：暗底 + 提亮的锦绣红
-let darkPalette = Palette(bgTop: rgb(0x272120), bgBottom: rgb(0x161211), mountain: rgb(0xCE3A30))
+// 默认：米色底 + 锦红双山（设计稿原色）
+let lightPalette = Palette(bgTop: rgb(0xF5EFE5), bgBottom: rgb(0xF5EFE5), ink: rgb(0xC50000))
+// 深色：暗底 + 提亮红
+let darkPalette = Palette(bgTop: rgb(0x241E1B), bgBottom: rgb(0x15110F), ink: rgb(0xE0483A))
 // 着色：灰阶（系统按亮度着色）
-let tintedPalette = Palette(bgTop: rgb(0xA8A8A8), bgBottom: rgb(0x787878), mountain: rgb(0xFFFFFF))
+let tintedPalette = Palette(bgTop: rgb(0xA8A8A8), bgBottom: rgb(0x787878), ink: rgb(0xFFFFFF))
 
 func makeContext(_ size: Int) -> CGContext {
     let ctx = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8,
                         bytesPerRow: 0, space: CGColorSpace(name: CGColorSpace.sRGB)!,
                         // App 图标不允许 alpha 通道
                         bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
-    // 本管线中 user y 直接对应 PNG 行号（自上而下），按 y 向下设计坐标作画
+    // 标准位图上下文为 y 向上；PNG 编码后 y=0 位于图像顶行
     ctx.setAllowsAntialiasing(true)
     ctx.setShouldAntialias(true)
     return ctx
@@ -43,30 +44,45 @@ func drawIcon(_ p: Palette, size: Int = 1024) -> CGImage {
     let ctx = makeContext(size)
     ctx.scaleBy(x: CGFloat(size) / S, y: CGFloat(size) / S)
 
-    // 背景：对角线柔和渐变
+    // 背景：对角线柔和渐变（两端同色即纯色）
     let grad = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.sRGB)!,
                           colors: [p.bgTop, p.bgBottom] as CFArray, locations: [0, 1])!
     ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
 
-    // 圆角山：三角形路径 + 同色描边（圆角连接）实现圆角顶点
-    let r: CGFloat = 56
-    let apex = CGPoint(x: 512, y: 336)
-    let baseL = CGPoint(x: 216, y: 656)
-    let baseR = CGPoint(x: 808, y: 656)
-    let path = CGMutablePath()
-    path.move(to: apex)
-    path.addLine(to: baseR)
-    path.addLine(to: baseL)
-    path.closeSubpath()
-    // 视觉占位：底边 y 656、外缘最宽 ~160..864（69% 宽度），保持在中央 80% 安全区内
-    ctx.setFillColor(p.mountain)
-    ctx.setStrokeColor(p.mountain)
-    ctx.setLineWidth(r * 2)
+    // 双山：SVG transform translate(96 96) scale(832/24)；SVG 是 y 向下坐标系，需翻转 y
+    ctx.translateBy(x: 96, y: 96)
+    ctx.scaleBy(x: 832.0 / 24.0, y: 832.0 / 24.0)
+    ctx.translateBy(x: 0, y: 24)
+    ctx.scaleBy(x: 1, y: -1)
+    ctx.setStrokeColor(p.ink)
+    ctx.setFillColor(p.ink)
+    ctx.setLineWidth(1.5)
     ctx.setLineJoin(.round)
     ctx.setLineCap(.round)
-    ctx.addPath(path)
+
+    // 大山（描线不填充）：左坡 → 平顶 → 右坡 → 右底角 → 底边（左侧开放）
+    let big = CGMutablePath()
+    big.move(to: CGPoint(x: 9, y: 12.42))
+    big.addLine(to: CGPoint(x: 13.83, y: 5.66))
+    big.addLine(to: CGPoint(x: 14.16, y: 5.66))
+    big.addLine(to: CGPoint(x: 21.8, y: 18.11))
+    big.addLine(to: CGPoint(x: 21.63, y: 18.42))
+    big.addLine(to: CGPoint(x: 13, y: 18.42))
+    ctx.addPath(big)
+    ctx.strokePath()
+
+    // 小山（实心 + 描边）
+    let small = CGMutablePath()
+    small.move(to: CGPoint(x: 5.84, y: 12.65))
+    small.addLine(to: CGPoint(x: 2.2, y: 18.11))
+    small.addLine(to: CGPoint(x: 2.37, y: 18.42))
+    small.addLine(to: CGPoint(x: 10.16, y: 18.42))
+    small.addLine(to: CGPoint(x: 10.31, y: 18.10))
+    small.addLine(to: CGPoint(x: 6.16, y: 12.64))
+    small.closeSubpath()
+    ctx.addPath(small)
     ctx.fillPath()
-    ctx.addPath(path)
+    ctx.addPath(small)
     ctx.strokePath()
 
     return ctx.makeImage()!

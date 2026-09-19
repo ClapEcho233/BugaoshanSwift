@@ -18,128 +18,8 @@
         }
       }
     },
-    "#%@" : {
+    ".%@" : {
 
-    },
-    "%.1f 学时" : {
-
-    },
-    "%@" : {
-
-    },
-    "%@ %@ %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@ %3$@"
-          }
-        }
-      }
-    },
-    "%@ %@ %@ %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@ %3$@ %4$@"
-          }
-        }
-      }
-    },
-    "%@ · %@ · %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ · %2$@ · %3$@"
-          }
-        }
-      }
-    },
-    "%@ · %lld 门" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ · %2$lld 门"
-          }
-        }
-      }
-    },
-    "%@ · 到期时间: %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ · 到期时间: %2$@"
-          }
-        }
-      }
-    },
-    "%@ — %@ · 共 %lld 周" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ — %2$@ · 共 %3$lld 周"
-          }
-        }
-      }
-    },
-    "%@ 分 · %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ 分 · %2$@"
-          }
-        }
-      }
-    },
-    "%@ 学分" : {
-
-    },
-    "%@ 学时" : {
-
-    },
-    "%@ 年暂无体测成绩" : {
-
-    },
-    "%@学分" : {
-
-    },
-    "%@级" : {
-
-    },
-    "%lld" : {
-
-    },
-    "%lld 分钟" : {
-
-    },
-    "%lld 座%@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld 座%2$@"
-          }
-        }
-      }
-    },
-    "%lld 星" : {
-
-    },
-    "%lld/%lld" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld/%2$lld"
-          }
-        }
-      }
     },
     "(导入)" : {
       "extractionState" : "stale",
@@ -158,287 +38,6 @@
         }
       }
     },
-    "*" : {
-
-    },
-    ".%@" : {
-
-    },
-    "0-365 天，0 表示最长有效期 6 年" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "0-365 days, 0 means max 6 years"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "0-365 天，0 表示最长有效期 6 年"
-          }
-        }
-      }
-    },
-    "50米跑" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "50m Sprint"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "50米跑"
-          }
-        }
-      }
-    },
-    "800/1000米跑" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "800/1000m Run"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "800/1000米跑"
-          }
-        }
-      }
-    },
-    "Bugaoshan 启动失败" : {
-
-    },
-    "Bugaoshan 新图标" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bugaoshan New Icon"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bugaoshan 新图标"
-          }
-        }
-      }
-    },
-    "Bugaoshan 经典图标" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bugaoshan Classic Icon"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bugaoshan 经典图标"
-          }
-        }
-      }
-    },
-    "Dock" : {
-
-    },
-    "Dock 设置" : {
-
-    },
-    "Dock栏页面切换动画" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dock Page Transition Animation"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dock栏页面切换动画"
-          }
-        }
-      }
-    },
-    "Dock预览" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dock Preview"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dock预览"
-          }
-        }
-      }
-    },
-    "E 错误" : {
-
-    },
-    "English" : {
-
-    },
-    "GPA" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GPA"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "GPA"
-          }
-        }
-      }
-    },
-    "Git 标签" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Git Tag"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Git 标签"
-          }
-        }
-      }
-    },
-    "GitHub 仓库" : {
-
-    },
-    "IP 地址" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IP Address"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "IP 地址"
-          }
-        }
-      }
-    },
-    "JWXT 导入 {month}-{day}" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JWXT Import {month}-{day}"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JWXT 导入 {month}-{day}"
-          }
-        }
-      }
-    },
-    "MAC %@" : {
-
-    },
-    "MAC 地址" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MAC Address"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MAC 地址"
-          }
-        }
-      }
-    },
-    "MAC 格式无效，需 12 位十六进制" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid MAC format, need 12 hex digits"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "MAC 格式无效，需 12 位十六进制"
-          }
-        }
-      }
-    },
-    "QQ邮箱" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QQ Email"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "QQ邮箱"
-          }
-        }
-      }
-    },
-    "The-Brotherhood-of-SCU 是一个非官方的四川大学开源组织，由一群热爱技术、关注校园生活的川大学生共同维护。我们的目标是通过开源协作，为川大同学打造实用的校园工具。" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The-Brotherhood-of-SCU is an unofficial open-source organization of Sichuan University, maintained by a group of SCU students who are passionate about technology and campus life. Our goal is to build practical campus tools for SCU students through open-source collaboration."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The-Brotherhood-of-SCU 是一个非官方的四川大学开源组织，由一群热爱技术、关注校园生活的川大学生共同维护。我们的目标是通过开源协作，为川大同学打造实用的校园工具。"
-          }
-        }
-      }
-    },
-    "W 警告" : {
-
-    },
     "[非本周]" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -455,9 +54,6 @@
           }
         }
       }
-    },
-    "iOS 原生重制版" : {
-
     },
     "{campusName}校区" : {
       "extractionState" : "stale",
@@ -662,6 +258,388 @@
           }
         }
       }
+    },
+    "*" : {
+
+    },
+    "%.1f 学时" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ — %@ · 共 %lld 周" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ — %2$@ · 共 %3$lld 周"
+          }
+        }
+      }
+    },
+    "%@ · %@ · %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@ · %3$@"
+          }
+        }
+      }
+    },
+    "%@ · %lld 门" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$lld 门"
+          }
+        }
+      }
+    },
+    "%@ · 到期时间: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · 到期时间: %2$@"
+          }
+        }
+      }
+    },
+    "%@ %@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@"
+          }
+        }
+      }
+    },
+    "%@ %@ %@ %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@ %4$@"
+          }
+        }
+      }
+    },
+    "%@ 分 · %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ 分 · %2$@"
+          }
+        }
+      }
+    },
+    "%@ 学分" : {
+
+    },
+    "%@ 年暂无体测成绩" : {
+
+    },
+    "%@学分" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld 星" : {
+
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "0-365 天，0 表示最长有效期 6 年" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0-365 days, 0 means max 6 years"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0-365 天，0 表示最长有效期 6 年"
+          }
+        }
+      }
+    },
+    "50米跑" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50m Sprint"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "50米跑"
+          }
+        }
+      }
+    },
+    "800/1000米跑" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "800/1000m Run"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "800/1000米跑"
+          }
+        }
+      }
+    },
+    "Bugaoshan 启动失败" : {
+
+    },
+    "Bugaoshan 新图标" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bugaoshan New Icon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bugaoshan 新图标"
+          }
+        }
+      }
+    },
+    "Bugaoshan 经典图标" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bugaoshan Classic Icon"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bugaoshan 经典图标"
+          }
+        }
+      }
+    },
+    "Dock" : {
+
+    },
+    "Dock 设置" : {
+
+    },
+    "Dock栏页面切换动画" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock Page Transition Animation"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock栏页面切换动画"
+          }
+        }
+      }
+    },
+    "Dock预览" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock Preview"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock预览"
+          }
+        }
+      }
+    },
+    "E 错误" : {
+
+    },
+    "English" : {
+
+    },
+    "Git 标签" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git Tag"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git 标签"
+          }
+        }
+      }
+    },
+    "GitHub 仓库" : {
+
+    },
+    "GPA" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPA"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPA"
+          }
+        }
+      }
+    },
+    "iOS 原生重制版" : {
+
+    },
+    "IP 地址" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IP Address"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IP 地址"
+          }
+        }
+      }
+    },
+    "JWXT 导入 {month}-{day}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JWXT Import {month}-{day}"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JWXT 导入 {month}-{day}"
+          }
+        }
+      }
+    },
+    "MAC %@" : {
+
+    },
+    "MAC 地址" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC Address"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC 地址"
+          }
+        }
+      }
+    },
+    "MAC 格式无效，需 12 位十六进制" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid MAC format, need 12 hex digits"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC 格式无效，需 12 位十六进制"
+          }
+        }
+      }
+    },
+    "QQ邮箱" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QQ Email"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QQ邮箱"
+          }
+        }
+      }
+    },
+    "The-Brotherhood-of-SCU 是一个非官方的四川大学开源组织，由一群热爱技术、关注校园生活的川大学生共同维护。我们的目标是通过开源协作，为川大同学打造实用的校园工具。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The-Brotherhood-of-SCU is an unofficial open-source organization of Sichuan University, maintained by a group of SCU students who are passionate about technology and campus life. Our goal is to build practical campus tools for SCU students through open-source collaboration."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The-Brotherhood-of-SCU 是一个非官方的四川大学开源组织，由一群热爱技术、关注校园生活的川大学生共同维护。我们的目标是通过开源协作，为川大同学打造实用的校园工具。"
+          }
+        }
+      }
+    },
+    "W 警告" : {
+
     },
     "一键导入到日历" : {
       "extractionState" : "stale",
@@ -1040,6 +1018,7 @@
       }
     },
     "专业" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1368,6 +1347,9 @@
         }
       }
     },
+    "从教务系统导入，或从其他设备分享的文件导入" : {
+
+    },
     "从教务系统导入课表" : {
       "localizations" : {
         "en" : {
@@ -1383,9 +1365,6 @@
           }
         }
       }
-    },
-    "从教务系统导入，或从其他设备分享的文件导入" : {
-
     },
     "从教务系统抓包导入" : {
       "extractionState" : "stale",
@@ -1785,9 +1764,6 @@
         }
       }
     },
-    "修改后按上午 4 节 / 下午 5 节 / 晚上 3 节重建节次时间表" : {
-
-    },
     "修改语言" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2078,16 +2054,6 @@
         }
       }
     },
-    "共 %lld 周 · %@ 开学" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "共 %1$lld 周 · %2$@ 开学"
-          }
-        }
-      }
-    },
     "共 {count} 周" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2118,6 +2084,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "共 {weeks} 周"
+          }
+        }
+      }
+    },
+    "共 %lld 周 · %@ 开学" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "共 %1$lld 周 · %2$@ 开学"
           }
         }
       }
@@ -2241,6 +2217,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "内含学时"
+          }
+        }
+      }
+    },
+    "最终用户许可协议" : {
+
+    },
+    "最长有效期6年" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max 6 years"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最长有效期6年"
           }
         }
       }
@@ -2408,9 +2404,6 @@
         }
       }
     },
-    "删除 %lld 个文件？" : {
-
-    },
     "删除 ({count})" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2427,6 +2420,9 @@
           }
         }
       }
+    },
+    "删除 %lld 个文件？" : {
+
     },
     "删除后不可恢复" : {
 
@@ -3242,9 +3238,6 @@
         }
       }
     },
-    "名称" : {
-
-    },
     "名称 \"{name}\" 已存在，请重命名：" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3482,9 +3475,6 @@
         }
       }
     },
-    "周次" : {
-
-    },
     "周次类型" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3616,6 +3606,9 @@
     "图形验证码" : {
 
     },
+    "图片（最多 3 张）" : {
+
+    },
     "图片不能超过 10MB" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3666,9 +3659,6 @@
           }
         }
       }
-    },
-    "图片（最多 3 张）" : {
-
     },
     "在 iOS 26 及更高版本中，主屏幕的透明与着色外观会自动使用系统玻璃或着色效果。" : {
       "extractionState" : "stale",
@@ -3831,9 +3821,6 @@
         }
       }
     },
-    "地点" : {
-
-    },
     "地点信息" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3925,6 +3912,7 @@
 
     },
     "备注" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4220,6 +4208,7 @@
       }
     },
     "学年学期" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4392,6 +4381,7 @@
       }
     },
     "学院" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4564,9 +4554,6 @@
           }
         }
       }
-    },
-    "容量" : {
-
     },
     "宿舍报修" : {
 
@@ -5531,6 +5518,7 @@
       }
     },
     "年级" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5547,9 +5535,6 @@
       }
     },
     "应用" : {
-
-    },
-    "应用到当前课表" : {
 
     },
     "应用名称" : {
@@ -5865,6 +5850,7 @@
       }
     },
     "开课院系" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7753,9 +7739,6 @@
         }
       }
     },
-    "教室信息" : {
-
-    },
     "教室查询" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7925,16 +7908,6 @@
         }
       }
     },
-    "方案号 %@ · %@ 级" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "方案号 %1$@ · %2$@ 级"
-          }
-        }
-      }
-    },
     "方案名称" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7967,9 +7940,6 @@
           }
         }
       }
-    },
-    "方案（%lld）" : {
-
     },
     "无感" : {
       "extractionState" : "stale",
@@ -8080,9 +8050,6 @@
     "时段" : {
 
     },
-    "时长设置" : {
-
-    },
     "时间" : {
 
     },
@@ -8187,9 +8154,6 @@
         }
       }
     },
-    "显示" : {
-
-    },
     "显示今天接下来的 2 节课程" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8208,6 +8172,7 @@
       }
     },
     "显示周末" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8764,23 +8729,6 @@
     "更新" : {
 
     },
-    "更新到最新版本（含预览版）" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update to Latest (Include Preview)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "更新到最新版本（含预览版）"
-          }
-        }
-      }
-    },
     "更新到最新版（包括预览版）" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8794,6 +8742,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新到最新版（包括预览版）"
+          }
+        }
+      }
+    },
+    "更新到最新版本（含预览版）" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update to Latest (Include Preview)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新到最新版本（含预览版）"
           }
         }
       }
@@ -8896,26 +8861,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新日志"
-          }
-        }
-      }
-    },
-    "最终用户许可协议" : {
-
-    },
-    "最长有效期6年" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Max 6 years"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最长有效期6年"
           }
         }
       }
@@ -9139,6 +9084,9 @@
         }
       }
     },
+    "本学期特殊事件" : {
+
+    },
     "本应用基于 AGPL-3.0 开源许可协议发布" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -9175,9 +9123,6 @@
           }
         }
       }
-    },
-    "条件" : {
-
     },
     "来源" : {
 
@@ -9421,6 +9366,7 @@
       }
     },
     "查询" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9607,9 +9553,6 @@
           }
         }
       }
-    },
-    "查询空闲教室" : {
-
     },
     "查询空闲教室与学业成绩，参与第二课堂活动，查询电费与空调余额，管理校园网设备" : {
       "extractionState" : "stale",
@@ -9938,9 +9881,6 @@
         }
       }
     },
-    "止节" : {
-
-    },
     "正在下载" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10009,16 +9949,6 @@
         }
       }
     },
-    "正在导入 %lld/%lld…" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "正在导入 %1$lld/%2$lld…"
-          }
-        }
-      }
-    },
     "正在导入 {current}/{total}..." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10032,6 +9962,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在导入 {current}/{total}..."
+          }
+        }
+      }
+    },
+    "正在导入 %lld/%lld…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "正在导入 %1$lld/%2$lld…"
           }
         }
       }
@@ -10156,9 +10096,6 @@
           }
         }
       }
-    },
-    "每课时长" : {
-
     },
     "气" : {
       "extractionState" : "stale",
@@ -10609,6 +10546,7 @@
       }
     },
     "班级" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -10625,6 +10563,7 @@
       }
     },
     "班级课表" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -10636,16 +10575,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "班级课表"
-          }
-        }
-      }
-    },
-    "班级（%lld/%lld）" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "班级（%1$lld/%2$lld）"
           }
         }
       }
@@ -11522,9 +11451,6 @@
         }
       }
     },
-    "空闲教室" : {
-
-    },
     "立即体验" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11576,12 +11502,6 @@
         }
       }
     },
-    "第 %lld 周" : {
-
-    },
-    "第 %lld 节" : {
-
-    },
     "第 {n} 节" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11616,7 +11536,7 @@
         }
       }
     },
-    "第%lld节" : {
+    "第 %lld 周" : {
 
     },
     "第{start}-{end}节" : {
@@ -11635,6 +11555,9 @@
           }
         }
       }
+    },
+    "第%lld节" : {
+
     },
     "第二课堂" : {
       "localizations" : {
@@ -11670,6 +11593,7 @@
       }
     },
     "筛选" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -11816,6 +11740,9 @@
     "系统" : {
 
     },
+    "级别" : {
+
+    },
     "紧凑" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11883,9 +11810,6 @@
           }
         }
       }
-    },
-    "级别" : {
-
     },
     "绑定后可查看电费余额与用量趋势" : {
 
@@ -12125,16 +12049,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "结束节次必须大于开始节次"
-          }
-        }
-      }
-    },
-    "结果（%lld 间 · 第 %lld 周）" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "结果（%1$lld 间 · 第 %2$lld 周）"
           }
         }
       }
@@ -12809,6 +12723,7 @@
       }
     },
     "节次" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -12823,9 +12738,6 @@
           }
         }
       }
-    },
-    "节次状态（全天）" : {
-
     },
     "节气" : {
       "extractionState" : "stale",
@@ -12894,9 +12806,6 @@
           }
         }
       }
-    },
-    "行高" : {
-
     },
     "表单加载失败，请稍后重试" : {
       "localizations" : {
@@ -13175,9 +13084,6 @@
           }
         }
       }
-    },
-    "该条件下无教室" : {
-
     },
     "该类别下暂无维修项目" : {
       "extractionState" : "stale",
@@ -13467,23 +13373,6 @@
         }
       }
     },
-    "请填写MAC" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please enter MAC"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请填写MAC"
-          }
-        }
-      }
-    },
     "请填写{label}" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13497,6 +13386,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请填写{label}"
+          }
+        }
+      }
+    },
+    "请填写MAC" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter MAC"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请填写MAC"
           }
         }
       }
@@ -13857,6 +13763,7 @@
       }
     },
     "课序号" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -13873,6 +13780,7 @@
       }
     },
     "课程" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -13909,6 +13817,7 @@
       }
     },
     "课程号" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -13925,6 +13834,7 @@
       }
     },
     "课程名" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -14012,6 +13922,7 @@
       }
     },
     "课程类别" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -14079,6 +13990,7 @@
       }
     },
     "课程详情" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -14095,6 +14007,7 @@
       }
     },
     "课程课表" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -14122,16 +14035,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "课程颜色"
-          }
-        }
-      }
-    },
-    "课程（%lld/%lld）" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "课程（%1$lld/%2$lld）"
           }
         }
       }
@@ -14186,6 +14089,9 @@
         }
       }
     },
+    "课表名称（如 2026-2027学年秋季学期）" : {
+
+    },
     "课表名称已存在" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14202,9 +14108,6 @@
           }
         }
       }
-    },
-    "课表名称（如 2026-2027学年秋季学期）" : {
-
     },
     "课表导入成功" : {
       "extractionState" : "stale",
@@ -14239,9 +14142,6 @@
           }
         }
       }
-    },
-    "课表样式" : {
-
     },
     "课表管理" : {
       "localizations" : {
@@ -14327,9 +14227,6 @@
         }
       }
     },
-    "课间时长" : {
-
-    },
     "调整显示区域" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14402,9 +14299,6 @@
           }
         }
       }
-    },
-    "起节" : {
-
     },
     "距离下学期上课还有 {days} 天" : {
       "extractionState" : "stale",
@@ -14611,23 +14505,6 @@
         }
       }
     },
-    "近30天" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last 30d"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "近30天"
-          }
-        }
-      }
-    },
     "近7天" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14641,6 +14518,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "近7天"
+          }
+        }
+      }
+    },
+    "近30天" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 30d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "近30天"
           }
         }
       }
@@ -15057,6 +14951,7 @@
 
     },
     "通用" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -15425,23 +15320,6 @@
         }
       }
     },
-    "附件已保存到：{path}" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Attachment saved to: {path}"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "附件已保存到：{path}"
-          }
-        }
-      }
-    },
     "附件已保存，点击打开" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -15459,7 +15337,25 @@
         }
       }
     },
+    "附件已保存到：{path}" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attachment saved to: {path}"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "附件已保存到：{path}"
+          }
+        }
+      }
+    },
     "院系" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -15697,6 +15593,9 @@
         }
       }
     },
+    "验证码（不区分大小写）" : {
+
+    },
     "验证码使用本地OCR模型识别" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -15764,9 +15663,6 @@
           }
         }
       }
-    },
-    "验证码（不区分大小写）" : {
-
     },
     "高级" : {
       "extractionState" : "stale",

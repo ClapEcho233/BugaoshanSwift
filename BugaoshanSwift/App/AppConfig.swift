@@ -120,10 +120,6 @@ enum DockRegistry {
         DockItem(id: "plan_completion", label: "计划完成度", icon: "checkmark.circle", accent: 0xFF3FA796),
         DockItem(id: "fitness_test", label: "体测", icon: "figure.run", accent: 0xFFF27059),
         DockItem(id: "exam_plan", label: "考表", icon: "doc.text", accent: 0xFFE86A92),
-        DockItem(id: "train_program", label: "培养方案", icon: "books.vertical", accent: 0xFF7C9A4E),
-        DockItem(id: "class_schedule_inquiry", label: "班级课表", icon: "calendar.day.timeline.left" , accent: 0xFF4FA3C4),
-        DockItem(id: "course_curriculum", label: "课程课表", icon: "calendar", accent: 0xFF4FA3C4),
-        DockItem(id: "classroom", label: "空闲教室", icon: "door.left.hand.open", accent: 0xFF6C8CD5),
         DockItem(id: "network_device", label: "校园网设备", icon: "wifi.router", accent: 0xFF5AB8A8),
         DockItem(id: "passpoint", label: "无感认证", icon: "wifi.router.fill", accent: 0xFF5AB8A8),
         DockItem(id: "balance_query", label: "电费查询", icon: "yensign.circle", accent: 0xFFE8A33D),
@@ -138,8 +134,7 @@ enum DockRegistry {
     /// 校园页三节分组（顺序即展示顺序）
     static let campusSections: [(title: String, ids: [String])] = [
         ("学业", ["grades", "ccyl", "plan_completion", "fitness_test", "exam_plan"]),
-        ("实用工具", ["train_program", "class_schedule_inquiry", "course_curriculum", "classroom",
-                      "network_device", "passpoint", "balance_query", "repair",
+        ("实用工具", ["network_device", "passpoint", "balance_query", "repair",
                       "academic_calendar", "zysc", "leave"]),
         ("通知", ["notice", "downloaded_attachments"]),
     ]

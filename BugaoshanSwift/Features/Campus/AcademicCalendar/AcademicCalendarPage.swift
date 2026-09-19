@@ -1,5 +1,18 @@
 import SwiftUI
 
+/// 事件类型 → 颜色（月历圆点与图例共用；五类五色相，区分明显）
+extension AcademicCalendarEvent {
+    var tint: Color {
+        switch tag {
+        case "holiday": return .red       // 假期
+        case "exam": return .orange       // 考试
+        case "start": return .green       // 开学/行课
+        case "course": return .purple     // 实践/课程周
+        default: return .indigo           // 其它活动
+        }
+    }
+}
+
 /// 校历页（对应 academic_calendar_page.dart）：交互式月历（事件高亮）+ 学期选择
 struct AcademicCalendarPage: View {
     @EnvironmentObject private var environment: AppEnvironment
@@ -68,10 +81,10 @@ struct AcademicCalendarPage: View {
         .task {
             let service = AcademicCalendarService()
             calendar = await service.loadCalendar()
-            // 默认选当前学期（否则最后一个）
+            // 默认选当前学期（否则最后一个）；定位到今天所在月份（否则学期首月）
             if let index = calendar?.semesters.firstIndex(where: { $0.isDateInSemester(Date()) }) {
                 selectedSemesterIndex = index
-                displayedMonth = calendar!.semesters[index].startDate
+                displayedMonth = Date()
             } else if let last = calendar?.semesters.indices.last {
                 selectedSemesterIndex = last
                 displayedMonth = calendar!.semesters[last].startDate
@@ -93,7 +106,7 @@ struct AcademicCalendarPage: View {
                         Group {
                         Button {
                             selectedSemesterIndex = index
-                            displayedMonth = item.startDate
+                            displayedMonth = item.isDateInSemester(Date()) ? Date() : item.startDate
                         } label: {
                             Text(item.name)
                                 .font(.caption.weight(selectedSemesterIndex == index ? .semibold : .regular))
@@ -178,9 +191,7 @@ struct AcademicCalendarPage: View {
         let events = semester?.events.filter { $0.isActive(on: day) } ?? []
         let isToday = Calendar.current.isDateInToday(day)
         let inMonth = Calendar.current.isDate(day, equalTo: displayedMonth, toGranularity: .month)
-        let eventColor = events.first?.tag == "holiday" ? Color.red
-            : events.first?.tag == "exam" ? Color.orange
-            : Color.accentColor
+        let eventColor = events.first?.tint ?? Color.accentColor
 
         VStack(spacing: 2) {
             Text("\(Calendar.current.component(.day, from: day))")
@@ -218,25 +229,39 @@ struct AcademicCalendarPage: View {
             Text("\(ScheduleConfig.formatDate(semester.startDate)) — \(ScheduleConfig.formatDate(semester.endDate)) · 共 \(semester.totalWeeks) 周")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            let upcoming = semester.events.filter { !$0.isFinished(on: Date()) }
-            if !upcoming.isEmpty {
-                ForEach(upcoming.prefix(3), id: \.label) { event in
-                    HStack(spacing: 8) {
-                        Circle()
-                            .fill(event.tag == "holiday" ? Color.red : Color.orange)
-                            .frame(width: 6, height: 6)
-                        Text(event.label)
-                            .font(.caption)
-                        Spacer()
-                        Text(ScheduleConfig.formatDate(event.date))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+            // 图例：本学期全部特殊事件（不只当前月）
+            if !semester.events.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("本学期特殊事件")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    ForEach(semester.events, id: \.label) { event in
+                        HStack(spacing: 8) {
+                            Circle()
+                                .fill(event.tint)
+                                .frame(width: 6, height: 6)
+                            Text(event.label)
+                                .font(.caption)
+                                .lineLimit(1)
+                            Spacer()
+                            Text(eventDateText(event))
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
+                .padding(.top, 4)
             }
         }
         .padding()
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .padding()
+    }
+
+    /// 图例日期文案：单日「9月10日」，区间「9月10日–10月7日」
+    private func eventDateText(_ event: AcademicCalendarEvent) -> String {
+        let start = BeijingTime.format(event.date, pattern: "M月d日")
+        guard let end = event.endDate, end != event.date else { return start }
+        return "\(start)–\(BeijingTime.format(end, pattern: "M月d日"))"
     }
 }
