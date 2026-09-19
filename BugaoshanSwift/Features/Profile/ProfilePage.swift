@@ -71,6 +71,10 @@ struct CampusPage: View {
             FitnessTestPage()
         case "classroom":
             ClassroomPage()
+        case "class_schedule_inquiry":
+            ClassScheduleInquiryPage()
+        case "course_curriculum":
+            CourseCurriculumPage()
         case "train_program":
             TrainProgramPage()
         case "plan_completion":

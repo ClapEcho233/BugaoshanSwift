@@ -10,6 +10,8 @@ struct CourseGrid: View {
     let showWeekend: Bool
     let rowHeight: Double
     let todayWeek: Int
+    /// 历年学期查询（班级/课程课表）日期无意义时隐藏表头日期
+    var showDates: Bool = true
 
     var onTapCourse: ((Course) -> Void)?
 
@@ -88,13 +90,15 @@ struct CourseGrid: View {
             ForEach(0..<dayCount, id: \.self) { index in
                 let day = dayOfWeek(for: index)
                 let date = config.dateForCourseDay(week: week, dayOfWeek: day)
-                let isToday = isCurrentWeek && isTodayDate(date)
+                let isToday = showDates && isCurrentWeek && isTodayDate(date)
                 VStack(spacing: 2) {
                     Text(weekdayName(day))
                         .font(.caption.weight(isToday ? .bold : .regular))
-                    Text(dateText(date))
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    if showDates {
+                        Text(dateText(date))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 5)

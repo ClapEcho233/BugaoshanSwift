@@ -73,6 +73,20 @@ enum SafeJSON {
         return object
     }
 
+    /// 解析顶层数组（元素可为任意 JSON 值；用于 [obj…] / [[obj…]] 等嵌套结构）
+    static func parseAnyArray(_ body: String, api: String) throws -> [Any] {
+        guard let data = body.data(using: .utf8),
+              let list = try? JSONSerialization.jsonObject(with: data) as? [Any] else {
+            throw SCUError.service("[\(api)] 响应解析失败")
+        }
+        return list
+    }
+
+    /// 任意数组 → 对象数组（丢弃非对象元素）
+    static func objectList(_ array: [Any]) -> [[String: Any]] {
+        array.compactMap { $0 as? [String: Any] }
+    }
+
     /// 响应摘要（≤200 字符），供日志与错误信息
     static func preview(_ body: String) -> String {
         body.count > 200 ? String(body.prefix(200)) + "…(\(body.count)B)" : body
