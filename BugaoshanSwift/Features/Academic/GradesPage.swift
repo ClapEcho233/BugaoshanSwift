@@ -215,11 +215,8 @@ struct GradesPage: View {
             async let scheme = api.fetchScores(kind: .scheme)
             let (passingJson, schemeJson) = try await (passing, scheme)
 
-            // 及格成绩：{cjList: [...]}（allPassingScores）
-            let passingItems = ((passingJson["cjList"] as? [[String: Any]]) ?? [])
-                .map(SchemeScoreItem.fromJson)
-                .filter { !$0.courseName.isEmpty }
-            passingGroups = PassingScoreGroup.group(passingItems)
+            // 及格成绩：{lnList: [{cjlx, cjList}]}（allPassingScores，组内已带学期标签）
+            passingGroups = PassingScoreGroup.parse(passingJson)
 
             summaries = SchemeScoreSummary.parseSummaries(schemeJson)
             selectedPlanIndex = 0

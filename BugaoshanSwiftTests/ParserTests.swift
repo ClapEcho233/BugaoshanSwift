@@ -332,6 +332,29 @@ final class ScoreParsingTests: XCTestCase {
         XCTAssertEqual(SchemeScoreSummary.defaultScheme([minor, second])?.planName, "计算机微专业")
     }
 
+    /// allPassingScores 真实响应结构：顶层 lnList，每组 {cjlx, cjList}
+    func testPassingScoreParseFromLnList() {
+        let json: [String: Any] = [
+            "lnList": [
+                ["cjlx": "2025-2026学年秋(两学期)", "cjList": [
+                    ["cj": "73.0", "courseName": "通用英语Ⅱ-2", "credit": "2.0",
+                     "academicYearCode": "2025-2026", "termName": "秋", "gradeName": "B-"],
+                ]],
+                ["cjlx": "2026-2027学年秋(两学期)", "cjList": [
+                    ["cj": "88.0", "courseName": "人工智能导论", "credit": "3.0",
+                     "academicYearCode": "2026-2027", "termName": "秋", "gradeName": "B+"],
+                ]],
+                ["cjlx": "2025-2026学年春(两学期)", "cjList": []],
+            ]
+        ]
+        let groups = PassingScoreGroup.parse(json)
+        XCTAssertEqual(groups.count, 2)
+        // 学年倒序，最新在前；空组过滤
+        XCTAssertEqual(groups.first?.label, "2026-2027学年秋(两学期)")
+        XCTAssertEqual(groups.first?.items.first?.courseName, "人工智能导论")
+        XCTAssertEqual(groups.last?.label, "2025-2026学年秋(两学期)")
+    }
+
     func testPassingScoreGroupOrdering() {
         let items = [
             scoreItem("A", credit: "1", score: 90, point: 4, attr: "必修", passed: true, year: "2024-2025", term: "秋"),

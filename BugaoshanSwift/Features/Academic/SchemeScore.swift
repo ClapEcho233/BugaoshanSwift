@@ -128,17 +128,23 @@ struct PassingScoreGroup: Identifiable, Equatable, Sendable {
 
     var id: String { label }
 
-    static func group(_ items: [SchemeScoreItem]) -> [PassingScoreGroup] {
-        var dict: [String: [SchemeScoreItem]] = [:]
-        var order: [String] = []
-        for item in items {
-            let label = "\(item.academicYearCode)学年\(item.termName)"
-            if dict[label] == nil { order.append(label) }
-            dict[label, default: []].append(item)
+    /// allPassingScores callback 响应：顶层 lnList，每组 {cjlx: 学期标签, cjList: [...]}
+    static func parse(_ json: [String: Any]) -> [PassingScoreGroup] {
+        let entries = SafeJSON.objectList(json["lnList"] as? [Any] ?? [])
+        let groups = entries.map { entry -> PassingScoreGroup in
+            PassingScoreGroup(
+                label: SafeJSON.string(entry["cjlx"]),
+                items: ((entry["cjList"] as? [[String: Any]]) ?? [])
+                    .map(SchemeScoreItem.fromJson)
+                    .filter { !$0.courseName.isEmpty })
         }
-        let groups = order.map { PassingScoreGroup(label: $0, items: dict[$0]!) }
-        // 学年倒序；同学年春在前秋在后（label 前 9 字符是学年）
-        return groups.sorted { lhs, rhs in
+        .filter { !$0.items.isEmpty && !$0.label.isEmpty }
+        return sortedByTerm(groups)
+    }
+
+    /// 学年倒序；同学年春在前秋在后（label 前缀为学年）
+    static func sortedByTerm(_ groups: [PassingScoreGroup]) -> [PassingScoreGroup] {
+        groups.sorted { lhs, rhs in
             let lhsYear = String(lhs.label.prefix(9))
             let rhsYear = String(rhs.label.prefix(9))
             if lhsYear != rhsYear {
@@ -148,5 +154,17 @@ struct PassingScoreGroup: Identifiable, Equatable, Sendable {
             let rhsSpring = rhs.label.contains("春")
             return lhsSpring && !rhsSpring
         }
+    }
+
+    static func group(_ items: [SchemeScoreItem]) -> [PassingScoreGroup] {
+        var dict: [String: [SchemeScoreItem]] = [:]
+        var order: [String] = []
+        for item in items {
+            let label = "\(item.academicYearCode)学年\(item.termName)"
+            if dict[label] == nil { order.append(label) }
+            dict[label, default: []].append(item)
+        }
+        let groups = order.map { PassingScoreGroup(label: $0, items: dict[$0]!) }
+        return sortedByTerm(groups)
     }
 }

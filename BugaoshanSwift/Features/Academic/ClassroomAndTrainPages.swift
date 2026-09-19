@@ -165,7 +165,7 @@ struct ClassroomPage: View {
         defer { isLoading = false }
         do {
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyyMMdd"
+            formatter.dateFormat = "yyyy-MM-dd"
             result = try await api.fetchClassroomAvailability(.init(
                 campusNumber: selectedCampusNumber,
                 buildingNumber: selectedBuildingNumber,
