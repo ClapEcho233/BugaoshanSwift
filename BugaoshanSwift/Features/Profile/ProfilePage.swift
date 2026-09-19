@@ -59,6 +59,8 @@ struct CampusPage: View {
             NetworkDevicePage()
         case "notice":
             NoticePage()
+        case "repair":
+            RepairPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,
