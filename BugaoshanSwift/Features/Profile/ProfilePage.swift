@@ -81,6 +81,8 @@ struct CampusPage: View {
             PlanCompletionPage()
         case "leave":
             ServiceHallPage()
+        case "ccyl":
+            CcylPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,
