@@ -206,7 +206,7 @@ struct CourseGrid: View {
     }
 }
 
-// MARK: - 课程卡（液态玻璃招牌场景）
+// MARK: - 课程卡（Apple 日历日程卡风格：浅色底 + 左色条 + 彩色文字）
 
 struct CourseCardView: View {
     let course: Course
@@ -220,16 +220,10 @@ struct CourseCardView: View {
         Double(course.endSection - course.startSection + 1) * rowHeight - 2
     }
 
-    /// 亮度 > 0.45 → 深色文字，否则白字
     private var courseColor: Color { course.colorValue.argbColor }
-    private var textColor: Color {
-        let c = course.colorValue
-        let r = Double((c >> 16) & 0xFF) / 255
-        let g = Double((c >> 8) & 0xFF) / 255
-        let b = Double(c & 0xFF) / 255
-        let luminance = 0.299 * r + 0.587 * g + 0.114 * b
-        return luminance > 0.45 ? .black.opacity(0.85) : .white
-    }
+
+    /// 文字统一黑色
+    private var textColor: Color { .primary }
 
     /// 卡高决定详情行预算：<56 → 0 行；<100 → 3 行；否则 5 行
     private var detailLineBudget: Int {
@@ -240,42 +234,48 @@ struct CourseCardView: View {
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(course.name)
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(textColor)
-                    .lineLimit(6)
-                    .minimumScaleFactor(0.6)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                if detailLineBudget > 0 {
-                    if !course.location.isEmpty, detailLineBudget >= 1 {
-                        detailText(course.location, lines: 4)
+            HStack(alignment: .top, spacing: 0) {
+                Rectangle()
+                    .fill(courseColor)
+                    .frame(width: 3)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(course.name)
+                        .font(.system(size: 12, weight: .semibold))
+                        .lineLimit(6)
+                        .minimumScaleFactor(0.6)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if detailLineBudget > 0 {
+                        if !course.location.isEmpty, detailLineBudget >= 1 {
+                            detailText(course.location, lines: 4)
+                        }
+                        if !course.teacher.isEmpty, detailLineBudget >= 2 {
+                            detailText(course.teacher, lines: 2)
+                        }
+                        if detailLineBudget >= 3 {
+                            detailText(weekRangeText, lines: 4)
+                        }
                     }
-                    if !course.teacher.isEmpty, detailLineBudget >= 2 {
-                        detailText(course.teacher, lines: 2)
-                    }
-                    if detailLineBudget >= 3 {
-                        detailText(weekRangeText, lines: 4)
-                    }
+                    Spacer(minLength: 0)
                 }
-                Spacer(minLength: 0)
+                .padding(.horizontal, 5)
+                .padding(.vertical, 4)
             }
-            .padding(4)
             .frame(maxWidth: .infinity, alignment: .topLeading)
+            .background(courseColor.opacity(0.16), in: .rect(cornerRadius: 6))
+            .clipShape(.rect(cornerRadius: 6))
         }
         .buttonStyle(.plain)
         .frame(height: cardHeight)
-        .background(courseColor, in: .rect(cornerRadius: 8))
-        .contentShape(.rect(cornerRadius: 8))
+        .contentShape(.rect(cornerRadius: 6))
         .opacity(active ? 1 : 0.5)
     }
 
     @ViewBuilder
     private func detailText(_ text: String, lines: Int) -> some View {
         Text(text)
-            .font(.system(size: max(8, 12 * 0.85)))
+            .font(.system(size: 10.5))
             .lineLimit(lines)
-            .foregroundStyle(textColor.opacity(0.9))
+            .foregroundStyle(textColor.opacity(0.85))
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 

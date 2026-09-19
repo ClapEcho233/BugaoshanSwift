@@ -11,12 +11,14 @@ enum JwxtParser {
         var suggestedConfig: ScheduleConfig
     }
 
-    /// Material primaries 调色板（ARGB，与 Dart 版颜色轮转一致）
+    /// Material 调色板扩充版（ARGB；16 primaries + 常用浅色调色，减少课程撞色）
     static let materialPrimaries: [Int] = [
-        0xFFF44336, 0xFFE91E63, 0xFF9C27B0, 0xFF673AB7,
-        0xFF3F51B5, 0xFF2196F3, 0xFF03A9F4, 0xFF00BCD4,
-        0xFF009688, 0xFF4CAF50, 0xFF8BC34A, 0xFFFFC107,
-        0xFFFF9800, 0xFFFF5722, 0xFF795548, 0xFF607D8B,
+        0xFFF44336, 0xFF2196F3, 0xFF4CAF50, 0xFF9C27B0,
+        0xFFFF9800, 0xFF00BCD4, 0xFF3F51B5, 0xFFE91E63,
+        0xFF009688, 0xFFFFC107, 0xFF673AB7, 0xFF8BC34A,
+        0xFFFF5722, 0xFF03A9F4, 0xFF795548, 0xFF607D8B,
+        0xFF26C6DA, 0xFFAB47BC, 0xFF66BB6A, 0xFFFF7043,
+        0xFF5C6BC0, 0xFF26A69A, 0xFFD4E157, 0xFFEC407A,
     ]
 
     enum ParseError: Error, LocalizedError {
@@ -42,7 +44,16 @@ enum JwxtParser {
         }
 
         var courses: [Course] = []
+        // 同名课共用一色，不同名字依次取不重复的颜色
         var colorIndex = 0
+        var colorByName: [String: Int] = [:]
+        func colorFor(name: String) -> Int {
+            if let existing = colorByName[name] { return existing }
+            let color = materialPrimaries[colorIndex % materialPrimaries.count]
+            colorIndex += 1
+            colorByName[name] = color
+            return color
+        }
         for entry in xkxx {
             // 外层 map 每个 key 都是一门课（Dart courseMap.forEach 语义），逐个遍历
             for courseMapAny in entry.values {
@@ -78,6 +89,7 @@ enum JwxtParser {
 
                 let classWeek = SafeJSON.string(tap["classWeek"])
                 let segments = ClassWeekParser.parseSegments(classWeek)
+                let courseColor = colorFor(name: name)
                 for segment in segments {
                     var course = Course()
                     course.id = Course.generateId()
@@ -91,13 +103,10 @@ enum JwxtParser {
                     course.startWeek = segment.startWeek
                     course.endWeek = segment.endWeek
                     course.weekType = segment.weekType
-                    course.colorValue = materialPrimaries[colorIndex % materialPrimaries.count]
+                    course.colorValue = courseColor
                     courses.append(course)
                     producedAny = true
                 }
-            }
-            if producedAny {
-                colorIndex += 1
             }
             }
         }
