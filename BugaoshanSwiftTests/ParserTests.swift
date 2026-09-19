@@ -44,6 +44,28 @@ final class ParserTests: XCTestCase {
     ]}
     """
 
+    /// xkxx 单个元素含多门课（真实数据形态）：全部解析，不能只取第一个 value
+    func testJwxtParseMultiCourseEntry() throws {
+        let json = """
+        {"xkxx": [{"K1": {"courseName": "课程甲", "id": {"coureSequenceNumber": "01"},
+          "attendClassTeacher": "教师A",
+          "timeAndPlaceList": [{"classDay": 1, "classSessions": 1, "continuingSession": 2,
+            "classWeek": "1-16周", "campusName": "江安校区", "teachingBuildingName": "一教", "classroomName": "A101"}]}},
+        {"K2": {"courseName": "课程乙", "id": {"coureSequenceNumber": "02"},
+          "attendClassTeacher": "教师B",
+          "timeAndPlaceList": [{"classDay": 3, "classSessions": 3, "continuingSession": 2,
+            "classWeek": "1-16周", "campusName": "江安校区", "teachingBuildingName": "二教", "classroomName": "B202"}]},
+         "K3": {"courseName": "课程丙", "id": {"coureSequenceNumber": "03"},
+          "attendClassTeacher": "教师C",
+          "timeAndPlaceList": [{"classDay": 5, "classSessions": 6, "continuingSession": 2,
+            "classWeek": "2-15周", "campusName": "江安校区", "teachingBuildingName": "综楼", "classroomName": "C303"}]}}]}
+        """
+        let result = try JwxtParser.parse(jsonString: json)
+        // K2 与 K3 同属第二个 xkxx 元素 —— 三门都必须出现
+        let names = result.courses.map(\.name).sorted()
+        XCTAssertEqual(names, ["课程丙 (03)", "课程乙 (02)", "课程甲 (01)"])
+    }
+
     func testJwxtParse() throws {
         let result = try JwxtParser.parse(jsonString: Self.jwxtFixture)
         // 高数：交替段 1 条 + 连续段 2 条；英语 1 条

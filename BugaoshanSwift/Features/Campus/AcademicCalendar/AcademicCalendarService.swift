@@ -112,9 +112,22 @@ actor AcademicCalendarService {
         }
     }
 
-    /// 按学期名匹配（供导入流程静默修正 semesterStartDate/totalWeeks）
+    /// 按课表名匹配校历学期（findMatchingSemester 语义：提取学年 + 春/秋包含）。
+    /// 教务标签「2026-2027学年秋」需命中校历「2026-2027学年秋季学期」。
     func findSemester(named name: String) async -> AcademicCalendarSemester? {
         let calendar = await loadCalendar()
-        return calendar.semesters.first { $0.name == name }
+        guard let yearMatch = RegexHelper.firstMatch(#"(\d{4})-(\d{4})"#, in: name),
+              yearMatch.count > 2 else {
+            return nil
+        }
+        let academicYear = "\(yearMatch[1])-\(yearMatch[2])"
+        let isSpring = name.contains("春")
+        let isFall = name.contains("秋")
+        return calendar.semesters.first { semester in
+            guard semester.name.contains(academicYear) else { return false }
+            if isSpring { return semester.name.contains("春") }
+            if isFall { return semester.name.contains("秋") }
+            return true
+        }
     }
 }

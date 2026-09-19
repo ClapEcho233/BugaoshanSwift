@@ -100,6 +100,10 @@ struct CcylOAuthService {
                     "User-Agent": Constants.userAgent,
                 ]
             )
+            if resp.statusCode == 483 {
+                AuthLogger.shared.w("CcylAuth", "sp_logged: 防火墙拦截 (483)")
+                return nil
+            }
             // (a) 最终 URL 的 code= 参数
             if let code = resp.queryItems["code"], !code.isEmpty {
                 return code

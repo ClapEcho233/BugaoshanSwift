@@ -91,6 +91,12 @@ actor SsoRelayAuth: SubsystemAuth {
         }
         if resp.statusCode < 200 || resp.statusCode >= 400 {
             log.w(moduleId.uppercased(), "SSO relay: HTTP \(resp.statusCode)")
+            if resp.statusCode == 483 {
+                // 创宇盾按出口 IP 拦截（代理/VPN 网络常见）；换网络即可，非登录态问题
+                throw SCUError.service(
+                    "\(moduleId) 被校园网防火墙拦截（483）。请断开代理/VPN，使用校园网或移动数据后重试",
+                    statusCode: 483)
+            }
             throw SCUError.service(failureMessage, statusCode: resp.statusCode)
         }
         // 与 Dart 版一致：成功后缓存的即共享根 client（子站 cookie 已在其 jar 内）

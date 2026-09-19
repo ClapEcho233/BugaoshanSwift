@@ -142,7 +142,7 @@ struct CcylBindPage: View {
         errorMessage = nil
         defer { isLoading = false }
         guard let code = await CcylOAuthService.getOAuthCode(scuAuth: scuAuth) else {
-            errorMessage = "获取授权码失败"
+            errorMessage = "获取授权码失败。若持续失败，请断开代理/VPN 后用校园网或移动数据重试（防火墙会拦截部分网络）"
             return
         }
         do {

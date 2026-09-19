@@ -44,8 +44,9 @@ enum JwxtParser {
         var courses: [Course] = []
         var colorIndex = 0
         for entry in xkxx {
-            // 外层 map 的 key 未使用，遍历 value
-            guard let courseMap = entry.values.first as? [String: Any] else { continue }
+            // 外层 map 每个 key 都是一门课（Dart courseMap.forEach 语义），逐个遍历
+            for courseMapAny in entry.values {
+            guard let courseMap = courseMapAny as? [String: Any] else { continue }
             let courseName = SafeJSON.string(courseMap["courseName"])
             let idMap = courseMap["id"] as? [String: Any]
             let sequenceNumber = SafeJSON.string(idMap?["coureSequenceNumber"])
@@ -97,6 +98,7 @@ enum JwxtParser {
             }
             if producedAny {
                 colorIndex += 1
+            }
             }
         }
 

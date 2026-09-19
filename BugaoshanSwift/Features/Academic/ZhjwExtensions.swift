@@ -4,16 +4,30 @@ import Foundation
 extension ZhjwApiService {
 
     private static func attrValue(_ html: String, id: String) -> String? {
-        let pattern = #"<input[^>]+id="\#(id)"[^>]+value='([^']+)'""#
-        guard let match = html.range(of: pattern, options: .regularExpression) else {
-            return nil
+        // 按引号类型分组匹配（单引号 attr 内可含 "，双引号 attr 内可含 '）；
+        // 兼容 id/value 两种属性顺序。真实页面：id="xqList" value='[{...}]'
+        let patterns = [
+            #"<input[^>]*id="\#(id)"[^>]*value='([^']*)'"#,
+            #"<input[^>]*id="\#(id)"[^>]*value="([^"]*)""#,
+            #"<input[^>]*value='([^']*)'[^>]*id="\#(id)""#,
+            #"<input[^>]*value="([^"]*)"[^>]*id="\#(id)""#,
+        ]
+        var raw: String?
+        for pattern in patterns {
+            if let m = RegexHelper.allMatches(pattern, in: html).first, m.count > 1 {
+                raw = m[1]
+                break
+            }
         }
-        let sub = String(html[match])
-        guard let firstQuote = sub.firstIndex(of: "'"),
-              let lastQuote = sub.lastIndex(of: "'"), firstQuote < lastQuote else {
-            return nil
-        }
-        return String(sub[sub.index(after: firstQuote)..<lastQuote])
+        guard var raw else { return nil }
+        // HTML 实体还原（JSON 属性值可能被转义）
+        raw = raw
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&#39;", with: "'")
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+        return raw
     }
 
     // MARK: - 空闲教室
@@ -33,7 +47,9 @@ extension ZhjwApiService {
 
             var campuses: [ClassroomCampus] = []
             var buildings: [ClassroomBuilding] = []
-            if let campusJson = Self.attrValue(body, id: "xqList"),
+            let campusJson = Self.attrValue(body, id: "xqList")
+            let buildingJson = Self.attrValue(body, id: "jxlList")
+            if let campusJson,
                let data = campusJson.data(using: .utf8),
                let list = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
                 campuses = list.map {
@@ -42,7 +58,7 @@ extension ZhjwApiService {
                         campusNumber: SafeJSON.string($0["campusNumber"] ?? $0["code"]))
                 }
             }
-            if let buildingJson = Self.attrValue(body, id: "jxlList"),
+            if let buildingJson,
                let data = buildingJson.data(using: .utf8),
                let list = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
                 buildings = list.map { item in
@@ -54,6 +70,7 @@ extension ZhjwApiService {
                 }
             }
             guard !campuses.isEmpty || !buildings.isEmpty else {
+                self.log.w("ZHJW", "classroomIndex 解析失败: xqJson=\(campusJson?.count ?? -1)B jxlJson=\(buildingJson?.count ?? -1)B body=\(SafeJSON.preview(body))")
                 throw SCUError.service("空闲教室索引解析失败", statusCode: resp.statusCode)
             }
             return ClassroomIndex(campuses: campuses, buildings: buildings)

@@ -84,11 +84,13 @@ struct AcademicCalendarPage: View {
     private func calendarBody(_ data: AcademicCalendarData) -> some View {
         let semester = currentSemester
         VStack(spacing: 0) {
-            // 学期选择
+            // 学期选择（初始定位到当前选中项，避免从 2021 年开始展示）
+            ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(data.semesters.indices, id: \.self) { index in
                         let item = data.semesters[index]
+                        Group {
                         Button {
                             selectedSemesterIndex = index
                             displayedMonth = item.startDate
@@ -105,11 +107,21 @@ struct AcademicCalendarPage: View {
                                 )
                                 .foregroundStyle(selectedSemesterIndex == index ? Color.accentColor : .secondary)
                         }
+                        }
+                        .id(index)
                     }
                 }
                 .padding(.horizontal)
             }
             .padding(.vertical, 8)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        proxy.scrollTo(selectedSemesterIndex, anchor: .center)
+                    }
+                }
+            }
+            }
 
             monthHeader
             weekdayHeader
