@@ -89,7 +89,7 @@ enum DockRegistry {
         DockItem(id: "repair", label: "宿舍报修", icon: "wrench.and.screwdriver", accent: 0xFF6C8CD5),
         DockItem(id: "academic_calendar", label: "校历", icon: "calendar.circle", accent: 0xFFD97757),
         DockItem(id: "zysc", label: "志愿四川", icon: "heart.circle", accent: 0xFF9A7FD1),
-        DockItem(id: "leave", label: "请假", icon: "checklist", accent: 0xFF6488C4),
+        DockItem(id: "leave", label: "办事大厅", icon: "checklist", accent: 0xFF6488C4),
         DockItem(id: "notice", label: "通知", icon: "megaphone", accent: 0xFFE05D5D),
         DockItem(id: "downloaded_attachments", label: "下载中心", icon: "folder", accent: 0xFF8F9BA8),
     ]
