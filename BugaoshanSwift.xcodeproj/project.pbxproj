@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		DADFE137305EB2830078BB0C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DADFE121305EB2830078BB0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DADFE128305EB2830078BB0C;
+			remoteInfo = BugaoshanSwift;
+		};
+		DADFE141305EB2830078BB0C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DADFE121305EB2830078BB0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DADFE128305EB2830078BB0C;
+			remoteInfo = BugaoshanSwift;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DADFE129305EB2830078BB0C /* BugaoshanSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BugaoshanSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADFE136305EB2830078BB0C /* BugaoshanSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BugaoshanSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DADFE140305EB2830078BB0C /* BugaoshanSwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BugaoshanSwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		DADFE12B305EB2830078BB0C /* BugaoshanSwift */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BugaoshanSwift;
+			sourceTree = "<group>";
+		};
+		DADFE139305EB2830078BB0C /* BugaoshanSwiftTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BugaoshanSwiftTests;
+			sourceTree = "<group>";
+		};
+		DADFE143305EB2830078BB0C /* BugaoshanSwiftUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BugaoshanSwiftUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DADFE126305EB2830078BB0C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		DADFE133305EB2830078BB0C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		DADFE13D305EB2830078BB0C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DADFE120305EB2830078BB0C = {
+			isa = PBXGroup;
+			children = (
+				DADFE12B305EB2830078BB0C /* BugaoshanSwift */,
+				DADFE139305EB2830078BB0C /* BugaoshanSwiftTests */,
+				DADFE143305EB2830078BB0C /* BugaoshanSwiftUITests */,
+				DADFE12A305EB2830078BB0C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DADFE12A305EB2830078BB0C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DADFE129305EB2830078BB0C /* BugaoshanSwift.app */,
+				DADFE136305EB2830078BB0C /* BugaoshanSwiftTests.xctest */,
+				DADFE140305EB2830078BB0C /* BugaoshanSwiftUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DADFE128305EB2830078BB0C /* BugaoshanSwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADFE148305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwift" */;
+			buildPhases = (
+				DADFE125305EB2830078BB0C /* Sources */,
+				DADFE126305EB2830078BB0C /* Frameworks */,
+				DADFE127305EB2830078BB0C /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				DADFE12B305EB2830078BB0C /* BugaoshanSwift */,
+			);
+			name = BugaoshanSwift;
+			productName = BugaoshanSwift;
+			productReference = DADFE129305EB2830078BB0C /* BugaoshanSwift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DADFE135305EB2830078BB0C /* BugaoshanSwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADFE14B305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwiftTests" */;
+			buildPhases = (
+				DADFE132305EB2830078BB0C /* Sources */,
+				DADFE133305EB2830078BB0C /* Frameworks */,
+				DADFE134305EB2830078BB0C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DADFE138305EB2830078BB0C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DADFE139305EB2830078BB0C /* BugaoshanSwiftTests */,
+			);
+			name = BugaoshanSwiftTests;
+			productName = BugaoshanSwiftTests;
+			productReference = DADFE136305EB2830078BB0C /* BugaoshanSwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DADFE13F305EB2830078BB0C /* BugaoshanSwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADFE14E305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwiftUITests" */;
+			buildPhases = (
+				DADFE13C305EB2830078BB0C /* Sources */,
+				DADFE13D305EB2830078BB0C /* Frameworks */,
+				DADFE13E305EB2830078BB0C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DADFE142305EB2830078BB0C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DADFE143305EB2830078BB0C /* BugaoshanSwiftUITests */,
+			);
+			name = BugaoshanSwiftUITests;
+			productName = BugaoshanSwiftUITests;
+			productReference = DADFE140305EB2830078BB0C /* BugaoshanSwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DADFE121305EB2830078BB0C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					DADFE128305EB2830078BB0C = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					DADFE135305EB2830078BB0C = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = DADFE128305EB2830078BB0C;
+					};
+					DADFE13F305EB2830078BB0C = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = DADFE128305EB2830078BB0C;
+					};
+				};
+			};
+			buildConfigurationList = DADFE124305EB2830078BB0C /* Build configuration list for PBXProject "BugaoshanSwift" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DADFE120305EB2830078BB0C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DADFE12A305EB2830078BB0C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DADFE128305EB2830078BB0C /* BugaoshanSwift */,
+				DADFE135305EB2830078BB0C /* BugaoshanSwiftTests */,
+				DADFE13F305EB2830078BB0C /* BugaoshanSwiftUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DADFE127305EB2830078BB0C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		DADFE134305EB2830078BB0C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		DADFE13E305EB2830078BB0C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DADFE125305EB2830078BB0C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		DADFE132305EB2830078BB0C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		DADFE13C305EB2830078BB0C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DADFE138305EB2830078BB0C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DADFE128305EB2830078BB0C /* BugaoshanSwift */;
+			targetProxy = DADFE137305EB2830078BB0C /* PBXContainerItemProxy */;
+		};
+		DADFE142305EB2830078BB0C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DADFE128305EB2830078BB0C /* BugaoshanSwift */;
+			targetProxy = DADFE141305EB2830078BB0C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DADFE146305EB2830078BB0C /* Debug configuration for PBXProject "BugaoshanSwift" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DADFE147305EB2830078BB0C /* Release configuration for PBXProject "BugaoshanSwift" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DADFE149305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwift" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DADFE14A305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwift" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwift;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DADFE14C305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwiftTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BugaoshanSwift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BugaoshanSwift";
+			};
+			name = Debug;
+		};
+		DADFE14D305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwiftTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwiftTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BugaoshanSwift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BugaoshanSwift";
+			};
+			name = Release;
+		};
+		DADFE14F305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwiftUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwiftUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BugaoshanSwift;
+			};
+			name = Debug;
+		};
+		DADFE150305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwiftUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DR3D7VMQ32;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.ClapEcho233.BugaoshanSwiftUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BugaoshanSwift;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DADFE124305EB2830078BB0C /* Build configuration list for PBXProject "BugaoshanSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADFE146305EB2830078BB0C /* Debug configuration for PBXProject "BugaoshanSwift" */,
+				DADFE147305EB2830078BB0C /* Release configuration for PBXProject "BugaoshanSwift" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		DADFE148305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADFE149305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwift" */,
+				DADFE14A305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwift" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		DADFE14B305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADFE14C305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwiftTests" */,
+				DADFE14D305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwiftTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		DADFE14E305EB2830078BB0C /* Build configuration list for PBXNativeTarget "BugaoshanSwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DADFE14F305EB2830078BB0C /* Debug configuration for PBXNativeTarget "BugaoshanSwiftUITests" */,
+				DADFE150305EB2830078BB0C /* Release configuration for PBXNativeTarget "BugaoshanSwiftUITests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DADFE121305EB2830078BB0C /* Project object */;
+	validationLevel = 1;
+}
