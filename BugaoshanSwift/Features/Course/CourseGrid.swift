@@ -64,14 +64,17 @@ struct CourseGrid: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            Divider()
-            ScrollView(.vertical) {
-                HStack(alignment: .top, spacing: 0) {
-                    sectionColumn
-                    ForEach(0..<dayCount, id: \.self) { index in
-                        dayColumn(index)
+        GeometryReader { proxy in
+            let dayWidth = max(0, (proxy.size.width - 35) / CGFloat(dayCount))
+            VStack(spacing: 0) {
+                header(dayWidth: dayWidth)
+                Divider()
+                ScrollView(.vertical) {
+                    HStack(alignment: .top, spacing: 0) {
+                        sectionColumn
+                        ForEach(0..<dayCount, id: \.self) { index in
+                            dayColumn(index, width: dayWidth)
+                        }
                     }
                 }
             }
@@ -81,7 +84,7 @@ struct CourseGrid: View {
 
     // MARK: - 表头（星期 + 日期）
 
-    private var header: some View {
+    private func header(dayWidth: CGFloat) -> some View {
         HStack(spacing: 0) {
             Text("节次")
                 .font(.caption2.weight(.medium))
@@ -100,11 +103,11 @@ struct CourseGrid: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(width: dayWidth)
                 .padding(.vertical, 5)
                 .background(
                     isToday
-                        ? Color.accentColor.opacity(isToday ? 0.15 : 0)
+                        ? Color.accentColor.opacity(0.15)
                         : Color.clear,
                     in: RoundedRectangle(cornerRadius: 8)
                 )
@@ -167,10 +170,10 @@ struct CourseGrid: View {
 
     // MARK: - 天列
 
-    private func dayColumn(_ index: Int) -> some View {
+    private func dayColumn(_ index: Int, width: CGFloat) -> some View {
         let day = dayOfWeek(for: index)
         let dayCourses = visibleCourses(dayOfWeek: day)
-        return ZStack(alignment: .top) {
+        return ZStack(alignment: .topLeading) {
             // 节次网格底
             VStack(spacing: 0) {
                 ForEach(1...sections, id: \.self) { section in
@@ -180,26 +183,25 @@ struct CourseGrid: View {
                         .overlay(alignment: .bottom) { sectionBoundary(section) }
                 }
             }
-            // 课程卡
-            GlassEffectContainer(spacing: 2) {
-                ForEach(dayCourses) { course in
-                    CourseCardView(
-                        course: course,
-                        config: config,
-                        rowHeight: rowHeight,
-                        onTap: { onTapCourse?(course) }
-                    )
-                    .offset(y: Double(course.startSection - 1) * rowHeight + 1)
-                }
+            // 课程卡（topLeading 对齐 + 固定列宽 + offset 定位，不使用液态玻璃，
+            // 否则相邻卡片会被 GlassEffectContainer 合并/变形导致偏移和吞卡）
+            ForEach(dayCourses) { course in
+                CourseCardView(
+                    course: course,
+                    config: config,
+                    rowHeight: rowHeight,
+                    onTap: { onTapCourse?(course) }
+                )
+                .frame(width: width - 2)
+                .offset(y: Double(course.startSection - 1) * rowHeight + 1)
             }
         }
-        .padding(.leading, 1)
+        .frame(width: width)
         .overlay(alignment: .trailing) {
             Rectangle()
                 .fill(Color(.separator).opacity(0.5))
                 .frame(width: 0.5)
         }
-        .frame(maxWidth: .infinity)
         .clipped()
     }
 }
@@ -241,18 +243,19 @@ struct CourseCardView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(course.name)
                     .font(.footnote.weight(.semibold))
+                    .foregroundStyle(textColor)
                     .lineLimit(6)
                     .minimumScaleFactor(0.6)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if detailLineBudget > 0 {
                     if !course.location.isEmpty, detailLineBudget >= 1 {
-                        detailText(course.location, lines: 4, cost: 1)
+                        detailText(course.location, lines: 4)
                     }
                     if !course.teacher.isEmpty, detailLineBudget >= 2 {
-                        detailText(course.teacher, lines: 2, cost: 1)
+                        detailText(course.teacher, lines: 2)
                     }
                     if detailLineBudget >= 3 {
-                        detailText(weekRangeText, lines: 4, cost: 1)
+                        detailText(weekRangeText, lines: 4)
                     }
                 }
                 Spacer(minLength: 0)
@@ -262,18 +265,17 @@ struct CourseCardView: View {
         }
         .buttonStyle(.plain)
         .frame(height: cardHeight)
-        .glassEffect(
-            .regular.tint(courseColor).interactive(),
-            in: .rect(cornerRadius: 8)
-        )
+        .background(courseColor, in: .rect(cornerRadius: 8))
+        .contentShape(.rect(cornerRadius: 8))
         .opacity(active ? 1 : 0.5)
     }
 
     @ViewBuilder
-    private func detailText(_ text: String, lines: Int, cost: Int) -> some View {
+    private func detailText(_ text: String, lines: Int) -> some View {
         Text(text)
             .font(.system(size: max(8, 12 * 0.85)))
             .lineLimit(lines)
+            .foregroundStyle(textColor.opacity(0.9))
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
