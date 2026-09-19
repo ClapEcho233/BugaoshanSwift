@@ -73,6 +73,8 @@ struct CampusPage: View {
             ClassroomPage()
         case "train_program":
             TrainProgramPage()
+        case "plan_completion":
+            PlanCompletionPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,
