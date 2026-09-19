@@ -181,7 +181,8 @@ final class DownloadManager: ObservableObject {
     @discardableResult
     func download(
         url: String, dirName: String, fileName: String,
-        referer: String = "https://xgb.scu.edu.cn"
+        referer: String = "https://xgb.scu.edu.cn",
+        extraHeaders: [String: String] = [:]
     ) async throws -> String {
         let task = enqueue(url: url, dirName: dirName, fileName: fileName)
         if task.status == .downloading {
@@ -193,7 +194,8 @@ final class DownloadManager: ObservableObject {
         task.status = .downloading
         let networkTask = Task<String, Error> {
             try await Self.downloadFile(
-                url: url, dirName: dirName, fileName: fileName, referer: referer
+                url: url, dirName: dirName, fileName: fileName,
+                referer: referer, extraHeaders: extraHeaders
             )
         }
         task.networkTask = networkTask
@@ -217,7 +219,8 @@ final class DownloadManager: ObservableObject {
     /// 纯函数下载（file_utils.dart downloadFile）
     static func downloadFile(
         url: String, dirName: String, fileName: String,
-        referer: String
+        referer: String,
+        extraHeaders: [String: String] = [:]
     ) async throws -> String {
         guard let requestURL = URL(string: url) else {
             throw DownloadError.http(-1)
@@ -225,6 +228,9 @@ final class DownloadManager: ObservableObject {
         var request = URLRequest(url: requestURL)
         request.setValue(referer, forHTTPHeaderField: "Referer")
         request.setValue(Constants.userAgent, forHTTPHeaderField: "User-Agent")
+        for (key, value) in extraHeaders {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
         let (data, response): (Data, URLResponse)
         do {
             (data, response) = try await URLSession.shared.data(for: request)

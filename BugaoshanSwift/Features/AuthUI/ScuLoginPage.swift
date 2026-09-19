@@ -89,6 +89,20 @@ struct ScuLoginPage: View {
                 .buttonStyle(.borderedProminent)
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
+
+                NavigationLink {
+                    ScuResetPasswordPage()
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text("忘记密码？")
+                            .font(.footnote)
+                        Spacer()
+                    }
+                }
+                .buttonStyle(.bordered)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("统一身份认证")
