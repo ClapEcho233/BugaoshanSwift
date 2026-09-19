@@ -131,13 +131,6 @@ struct WebViewContainer: UIViewRepresentable {
         context.coordinator.webView = webView
         context.coordinator.parent = self
 
-        // 进度条观察
-        context.coordinator.progressObserver = webView.observe(\.estimatedProgress, options: .new) { view, _ in
-            DispatchQueue.main.async {
-                view.setValue(view.estimatedProgress, forKey: "progressValue")
-            }
-        }
-
         // 导航按钮通知
         context.coordinator.notificationObservers = [
             NotificationCenter.default.addObserver(
@@ -170,7 +163,6 @@ struct WebViewContainer: UIViewRepresentable {
     final class Coordinator: NSObject, WKNavigationDelegate {
         weak var webView: WKWebView?
         var parent: WebViewContainer?
-        var progressObserver: NSKeyValueObservation?
         var notificationObservers: [NSObjectProtocol] = []
 
         func webView(
@@ -191,7 +183,6 @@ struct WebViewContainer: UIViewRepresentable {
         }
 
         func cleanup() {
-            progressObserver?.invalidate()
             notificationObservers.forEach(NotificationCenter.default.removeObserver)
         }
 
