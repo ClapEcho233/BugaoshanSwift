@@ -57,6 +57,14 @@ struct CampusPage: View {
             AcademicCalendarPage()
         case "network_device":
             NetworkDevicePage()
+        case "notice":
+            NoticePage()
+        case "zysc":
+            WebViewNoticePage(
+                url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,
+                beautifyJSFileName: "volunteer_sichuan",
+                title: "志愿四川"
+            )
         default:
             PlaceholderFeaturePage(dockId: id)
         }
