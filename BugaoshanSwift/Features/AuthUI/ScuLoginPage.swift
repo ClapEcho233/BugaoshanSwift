@@ -216,6 +216,7 @@ final class ScuLoginViewModel: ObservableObject {
                 await environment.scuAuth.clearCredentials()
             }
             environment.authCoordinator.warmUpAllInBackground()
+            Task { await environment.fetchUserInfo() }
             result = .success
         } catch {
             errorMessage = error.localizedDescription

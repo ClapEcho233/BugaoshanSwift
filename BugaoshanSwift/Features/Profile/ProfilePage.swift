@@ -55,6 +55,8 @@ struct CampusPage: View {
             GradesPage()
         case "academic_calendar":
             AcademicCalendarPage()
+        case "network_device":
+            NetworkDevicePage()
         default:
             PlaceholderFeaturePage(dockId: id)
         }

@@ -100,6 +100,23 @@ final class AppEnvironment: ObservableObject {
             await scuAuth.restoreFromStorage()
             await ccylAuth.restoreFromStorage()
             await zhhqAuth.restoreFromStorage()
+            if await scuAuth.isReady {
+                // 冷启动恢复后：预热子系统 + 拉取用户资料 + 自动登录
+                authCoordinator.warmUpAllInBackground()
+                Task { await self.fetchUserInfo() }
+                if await scuAuth.isAutoLoginEnabled {
+                    Task {
+                        do {
+                            if try await self.scuAuth.autoLogin() {
+                                self.authCoordinator.warmUpAllInBackground()
+                                await self.fetchUserInfo()
+                            }
+                        } catch {
+                            self.authLogger.w("App", "cold-start autoLogin failed: \(error)")
+                        }
+                    }
+                }
+            }
         } catch {
             startupError = "启动失败：\(error.localizedDescription)"
             authLogger.e("App", "bootstrap failed: \(error)")
@@ -111,5 +128,31 @@ final class AppEnvironment: ObservableObject {
         await authCoordinator.invalidateAll()
         await ccylAuth.logout()
         await scuAuth.logout()
+    }
+
+    /// wfw 资料抓取 → AuthBus.realname/username + UserDefaults 缓存（冷启动立即可显示）
+    func fetchUserInfo() async {
+        guard await scuAuth.isReady else { return }
+        let defaults = UserDefaults.standard
+        // 冷启动先回填缓存
+        if authBus.realname == nil {
+            authBus.realname = defaults.string(forKey: StorageKeys.scuUserRealname)
+        }
+        let service = WfwApiService(auth: wfwAuth, log: authLogger)
+        do {
+            let profile = try await service.fetchUserProfile()
+            authBus.realname = profile.realname.isEmpty ? authBus.realname : profile.realname
+            if !profile.number.isEmpty {
+                defaults.set(profile.number, forKey: StorageKeys.scuUserNumber)
+                if authBus.username == nil {
+                    authBus.username = profile.number
+                }
+            }
+            if !profile.realname.isEmpty {
+                defaults.set(profile.realname, forKey: StorageKeys.scuUserRealname)
+            }
+        } catch {
+            authLogger.d("App", "fetchUserInfo failed: \(error)")
+        }
     }
 }

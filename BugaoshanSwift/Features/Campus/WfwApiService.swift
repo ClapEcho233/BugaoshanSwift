@@ -89,6 +89,8 @@ struct WfwApiService {
 
     struct NetworkDevice: Identifiable {
         var id: String
+        /// 下线接口用的设备 id（区别于 Identifiable 的合成 id）
+        var deviceId: String
         var ip: String
         var mac: String
         var location: String
@@ -97,7 +99,8 @@ struct WfwApiService {
 
         static func fromJson(_ json: [String: Any]) -> NetworkDevice {
             NetworkDevice(
-                id: SafeJSON.string(json["id"]) + SafeJSON.string(json["ip"]),
+                id: SafeJSON.string(json["id"]) + "_" + SafeJSON.string(json["ip"]),
+                deviceId: SafeJSON.string(json["id"]),
                 ip: SafeJSON.string(json["ip"]),
                 mac: SafeJSON.string(json["mac"]),
                 location: SafeJSON.string(json["userLocation"]),
