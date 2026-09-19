@@ -29,7 +29,7 @@ struct CampusPage: View {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 14) {
                             ForEach(section.items, id: \.id) { item in
                                 NavigationLink {
-                                    PlaceholderFeaturePage(dockId: item.id)
+                                    campusDestination(item.id)
                                 } label: {
                                     CampusItemCard(item: item)
                                 }
@@ -45,6 +45,19 @@ struct CampusPage: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("校园")
         .searchable(text: $searchText, prompt: "搜索功能")
+    }
+
+    /// 功能路由：已实现的走真页面，其余占位
+    @ViewBuilder
+    private func campusDestination(_ id: String) -> some View {
+        switch id {
+        case "grades":
+            GradesPage()
+        case "academic_calendar":
+            AcademicCalendarPage()
+        default:
+            PlaceholderFeaturePage(dockId: id)
+        }
     }
 }
 
@@ -135,7 +148,7 @@ struct ProfilePage: View {
 
             Section("通用") {
                 NavigationLink {
-                    PlaceholderFeaturePage(dockId: "academic_calendar")
+                    AcademicCalendarPage()
                 } label: {
                     Label("校历", systemImage: "calendar.circle")
                 }

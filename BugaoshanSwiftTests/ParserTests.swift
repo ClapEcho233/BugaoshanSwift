@@ -248,3 +248,91 @@ final class ParserTests: XCTestCase {
         XCTAssertThrowsError(try WfwApiService.decodeResponse(makeResponse(""), api: "test"))
     }
 }
+
+// MARK: - 成绩解析
+
+final class ScoreParsingTests: XCTestCase {
+
+    func testSchemeScoreItemCompositeKey() {
+        // 2026-09 起 schemeScores 把百分制成绩挪进复合主键 json.id.courseScore
+        let item = SchemeScoreItem.fromJson([
+            "courseName": "高等数学",
+            "id": ["courseScore": 92.0, "courseName": "高等数学B"],
+            "courseAttributeName": "必修",
+            "credit": "5.0",
+            "gradePointScore": 4.0,
+            "gradeName": "A",
+            "academicYearCode": "2025-2026",
+            "termName": "秋",
+        ])
+        XCTAssertEqual(item.courseScore, 92.0)
+        XCTAssertEqual(item.courseName, "高等数学")
+        XCTAssertTrue(item.passed)
+        XCTAssertTrue(item.hasEffectiveScore)
+    }
+
+    func testSchemeScoreItemTopLevelFallback() {
+        // allPassingScores：顶层 courseScore
+        let item = SchemeScoreItem.fromJson([
+            "courseName": "大学英语",
+            "courseScore": 85.0,
+            "credit": "2.0",
+            "gradePointScore": 3.3,
+            "gradeName": "B+",
+            "academicYearCode": "2025-2026",
+            "termName": "春",
+        ])
+        XCTAssertEqual(item.courseScore, 85.0)
+    }
+
+    func testSummaryStats() {
+        let items = [
+            scoreItem("高数", credit: "5", score: 92, point: 4.0, attr: "必修", passed: true),
+            scoreItem("英语", credit: "2", score: 85, point: 3.3, attr: "选修", passed: true),
+            scoreItem("体育", credit: "1", score: -1, point: -1, attr: "必修", passed: false),
+        ]
+        let summary = SchemeScoreSummary(planName: "主修方案", items: items)
+        // gpa = (5*4.0 + 2*3.3) / 7
+        XCTAssertEqual(summary.gpa, (20 + 6.6) / 7, accuracy: 0.001)
+        XCTAssertEqual(summary.weightedAvgScore, (5 * 92 + 2 * 85) / 7, accuracy: 0.001)
+        XCTAssertEqual(summary.earnedCredits, 7.0, accuracy: 0.001)
+        XCTAssertEqual(summary.requiredCredits, 5.0, accuracy: 0.001)
+        XCTAssertEqual(summary.electiveCredits, 2.0, accuracy: 0.001)
+        XCTAssertEqual(summary.passedCount, 2)
+        XCTAssertEqual(summary.failedCount, 1)
+    }
+
+    func testDefaultSchemeSkipsAuxiliary() {
+        let main = SchemeScoreSummary(planName: "主修方案", items: [])
+        let minor = SchemeScoreSummary(planName: "计算机微专业", items: [])
+        let second = SchemeScoreSummary(planName: "第二专业(法学)", items: [])
+        XCTAssertEqual(SchemeScoreSummary.defaultScheme([minor, main, second])?.planName, "主修方案")
+        XCTAssertEqual(SchemeScoreSummary.defaultScheme([minor, second])?.planName, "计算机微专业")
+    }
+
+    func testPassingScoreGroupOrdering() {
+        let items = [
+            scoreItem("A", credit: "1", score: 90, point: 4, attr: "必修", passed: true, year: "2024-2025", term: "秋"),
+            scoreItem("B", credit: "1", score: 90, point: 4, attr: "必修", passed: true, year: "2024-2025", term: "春"),
+            scoreItem("C", credit: "1", score: 90, point: 4, attr: "必修", passed: true, year: "2025-2026", term: "秋"),
+        ]
+        let groups = PassingScoreGroup.group(items)
+        XCTAssertEqual(groups.count, 3)
+        // 学年倒序；同学年春在前
+        XCTAssertEqual(groups[0].label, "2025-2026学年秋")
+        XCTAssertEqual(groups[1].label, "2024-2025学年春")
+        XCTAssertEqual(groups[2].label, "2024-2025学年秋")
+    }
+
+    private func scoreItem(_ name: String, credit: String, score: Double, point: Double,
+                           attr: String, passed: Bool,
+                           year: String = "2025-2026", term: String = "秋") -> SchemeScoreItem {
+        SchemeScoreItem(
+            courseName: name, englishCourseName: nil, courseAttributeName: attr,
+            credit: credit, cj: passed ? "88" : "F",
+            courseScore: score, gradePointScore: point,
+            gradeName: passed ? "B+" : "F",
+            academicYearCode: year, termName: term
+        )
+    }
+}
