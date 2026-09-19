@@ -101,19 +101,20 @@ final class AppEnvironment: ObservableObject {
             await ccylAuth.restoreFromStorage()
             await zhhqAuth.restoreFromStorage()
             if await scuAuth.isReady {
-                // 冷启动恢复后：预热子系统 + 拉取用户资料 + 自动登录
+                // 冷启动恢复后：预热子系统 + 拉取用户资料
                 authCoordinator.warmUpAllInBackground()
                 Task { await self.fetchUserInfo() }
-                if await scuAuth.isAutoLoginEnabled {
-                    Task {
-                        do {
-                            if try await self.scuAuth.autoLogin() {
-                                self.authCoordinator.warmUpAllInBackground()
-                                await self.fetchUserInfo()
-                            }
-                        } catch {
-                            self.authLogger.w("App", "cold-start autoLogin failed: \(error)")
+            } else if await scuAuth.isAutoLoginEnabled {
+                // token 过期/缺失 → 自动登录重建会话（对应 Dart HomePage._attemptAutoLogin：
+                // 未登录即尝试 autoLogin，其内部自检开关与凭据），否则整个 app 静默未登录
+                Task {
+                    do {
+                        if try await self.scuAuth.autoLogin() {
+                            self.authCoordinator.warmUpAllInBackground()
+                            await self.fetchUserInfo()
                         }
+                    } catch {
+                        self.authLogger.w("App", "cold-start autoLogin failed: \(error)")
                     }
                 }
             }

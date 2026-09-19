@@ -128,15 +128,75 @@ struct FitnessApiService {
         "sec-ch-ua-platform": #""Windows""#,
     ]
 
+    struct FitnessScoreItem: Equatable, Sendable {
+        var rawScore: String
+        var gradedScore: String
+        var grade: String
+        var isFail: Bool
+
+        init(rawScore: String = "-", gradedScore: String = "-", grade: String = "-", isFail: Bool = false) {
+            self.rawScore = rawScore
+            self.gradedScore = gradedScore
+            self.grade = grade
+            self.isFail = isFail
+        }
+    }
+
+    /// 体测总成绩（字段与 Dart 版 FitnessScore.fromJson 一一对应）
     struct FitnessScore: Equatable, Sendable {
-        var raw: [String: String]
+        var totalScore: String       // 已格式化（"54.4" / "60"）
+        var totalGrade: String
+        var studentName: String
+        var studentNum: String
+        var sex: String
+        var studentYear: String
+        var reportType: String
+        var reportStatus: String
+        var bmi: FitnessScoreItem
+        var vitalCapacity: FitnessScoreItem
+        var jump: FitnessScoreItem
+        var sitAndReach: FitnessScoreItem
+        var pullAndSit: FitnessScoreItem
+        var fiftyM: FitnessScoreItem
+        var run: FitnessScoreItem
 
         static func fromJson(_ data: [String: Any]) -> FitnessScore {
-            var raw: [String: String] = [:]
-            for (key, value) in data {
-                raw[key] = SafeJSON.string(value)
+            func field(_ key: String) -> String {
+                SafeJSON.string(data[key], fallback: "-")
             }
-            return FitnessScore(raw: raw)
+            func item(_ key: String) -> FitnessScoreItem {
+                FitnessScoreItem(
+                    rawScore: field("\(key)_score"),
+                    gradedScore: field("\(key)_score2"),
+                    grade: field("\(key)_grade"),
+                    isFail: field("\(key)_class") == "red"
+                )
+            }
+            let scoreValue = SafeJSON.double(data["total_score"], fallback: .nan)
+            return FitnessScore(
+                totalScore: scoreValue.isNaN ? "-" : formatScore(scoreValue),
+                totalGrade: field("total_grade"),
+                studentName: field("student_name"),
+                studentNum: field("student_num"),
+                sex: field("sex"),
+                studentYear: field("studentYear"),
+                reportType: field("report_type"),
+                reportStatus: field("report_status"),
+                bmi: item("bmi"),
+                vitalCapacity: item("vc"),
+                jump: item("jump"),
+                sitAndReach: item("sit_and_reach"),
+                pullAndSit: item("pull_and_sit"),
+                fiftyM: item("50m"),
+                run: item("run")
+            )
+        }
+
+        /// 54.399999… → "54.4"；整数 → "60"
+        static func formatScore(_ value: Double) -> String {
+            let rounded = (value * 10).rounded() / 10
+            if rounded == rounded.rounded() { return String(Int(rounded)) }
+            return String(format: "%.1f", rounded)
         }
     }
 
@@ -144,15 +204,44 @@ struct FitnessApiService {
         var id: String
         var title: String
         var content: String
+        var plainContent: String
         var time: String
+        var readNum: Int
+        var isSticky: Bool
 
         static func fromJson(_ json: [String: Any]) -> FitnessNotice {
-            FitnessNotice(
+            let content = SafeJSON.string(json["content"])
+            return FitnessNotice(
                 id: SafeJSON.string(json["id"]),
                 title: SafeJSON.string(json["title"]),
-                content: SafeJSON.string(json["content"]),
-                time: SafeJSON.string(json["create_time"] ?? json["createtime"])
+                content: content,
+                plainContent: stripHtml(content),
+                time: SafeJSON.string(json["create_time"] ?? json["createtime"]),
+                readNum: SafeJSON.int(json["read_num"]),
+                isSticky: SafeJSON.string(json["is_stick"]) == "1"
             )
+        }
+
+        /// 通知 HTML → 纯文本（对应 Dart stripFitnessHtml）
+        static func stripHtml(_ html: String) -> String {
+            var text = html
+            func replace(_ pattern: String, _ template: String) {
+                guard let regex = try? NSRegularExpression(pattern: pattern) else { return }
+                text = regex.stringByReplacingMatches(
+                    in: text, range: NSRange(text.startIndex..., in: text), withTemplate: template
+                )
+            }
+            replace(#"<br\s*/?>"#, "\n")
+            replace(#"<p>|<p\s[^>]*>"#, "")
+            replace(#"</p>"#, "\n")
+            replace(#"<[^>]+>"#, "")
+            text = text
+                .replacingOccurrences(of: "&nbsp;", with: " ")
+                .replacingOccurrences(of: "&lt;", with: "<")
+                .replacingOccurrences(of: "&gt;", with: ">")
+                .replacingOccurrences(of: "&amp;", with: "&")
+            replace(#"\n{3,}"#, "\n\n")
+            return text.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 

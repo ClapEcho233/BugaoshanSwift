@@ -233,11 +233,12 @@ final class ScuLoginViewModel: ObservableObject {
             Task { await environment.fetchUserInfo() }
             result = .success
         } catch {
-            errorMessage = error.localizedDescription
-            result = .failure(error.localizedDescription)
-            // 验证码已消耗，刷新
+            // 验证码已消耗，刷新；但错误提示要在刷新后再回填，
+            // 否则会被 refreshCaptcha 成功路径的 errorMessage = nil 清掉
             captchaText = ""
             await refreshCaptcha(environment: environment)
+            errorMessage = error.localizedDescription
+            result = .failure(error.localizedDescription)
         }
     }
 }

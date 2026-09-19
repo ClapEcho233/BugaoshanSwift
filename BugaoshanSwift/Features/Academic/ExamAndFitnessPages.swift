@@ -267,125 +267,228 @@ struct IcsPreviewSheet: View {
     }
 }
 
-/// 体测页（对应 fitness_test_page.dart）：成绩 + 通知双 Tab
+/// 体测页（成绩单页）：胶囊年份条（入学学年 → 当前学年）+ 成绩卡
 struct FitnessTestPage: View {
     @EnvironmentObject private var environment: AppEnvironment
 
-    @State private var tab = 0
     @State private var score: FitnessApiService.FitnessScore?
-    @State private var notices: [FitnessApiService.FitnessNotice] = []
     @State private var year = String(Calendar.current.component(.year, from: Date()))
-    @State private var isLoading = false
+    @State private var isScoreLoading = false
     @State private var needsLogin = false
-    @State private var errorMessage: String?
+    @State private var scoreError: String?
+    @State private var scoreGeneration = 0
+    @State private var showLogin = false
 
     private var api: FitnessApiService {
         FitnessApiService(auth: environment.fitnessAuth)
     }
 
+    private var currentYear: Int {
+        Calendar.current.component(.year, from: Date())
+    }
+
+    /// 入学年：学号前 4 位（2025141530009 → 2025）；取不到时按本科四年回退
+    private var enrollmentYear: Int {
+        let number = UserDefaults.standard.string(forKey: StorageKeys.scuUserNumber)
+            ?? environment.authBus.username ?? ""
+        guard number.count >= 4,
+              let parsed = Int(number.prefix(4)),
+              (1990...currentYear).contains(parsed) else {
+            return max(currentYear - 4, 2000)
+        }
+        return parsed
+    }
+
+    private var availableYears: [String] {
+        (enrollmentYear...currentYear).map(String.init)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            Picker("Tab", selection: $tab) {
-                Text("成绩").tag(0)
-                Text("通知").tag(1)
-            }
-            .pickerStyle(.segmented)
-            .padding()
-
-            if tab == 0 {
-                scoreTab
-            } else {
-                noticeTab
-            }
+            yearBar
+                .padding(.bottom, 8)
+            scoreContent
         }
         .navigationTitle("体测")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await load()
         }
-        .refreshable {
-            await load()
-        }
-    }
-
-    private var scoreTab: some View {
-        Group {
-            if needsLogin {
-                ContentUnavailableView("未登录", systemImage: "person.badge.key")
-            } else if let score {
-                List {
-                    Section("体测成绩（\(year)）") {
-                        ForEach(score.raw.sorted(by: { $0.key < $1.key }), id: \.key) { key, value in
-                            HStack {
-                                Text(key)
-                                Spacer()
-                                Text(value)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .font(.subheadline)
-                        }
-                    }
-                }
-                .listStyle(.insetGrouped)
-            } else if isLoading {
-                ProgressView("查询中…")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                VStack(spacing: 12) {
-                    Picker("年度", selection: $year) {
-                        ForEach(availableYears, id: \.self) { Text($0).tag($0) }
-                    }
-                    .pickerStyle(.menu)
-                    ContentUnavailableView(
-                        "暂无成绩",
-                        systemImage: "figure.run",
-                        description: Text("选择年度后下拉刷新"))
-                }
-            }
-        }
-        .safeAreaInset(edge: .top) {
-            if score != nil {
-                Picker("年度", selection: $year) {
-                    ForEach(availableYears, id: \.self) { Text($0).tag($0) }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal)
-            }
-        }
         .onChange(of: year) { _ in
-            Task { await loadScore() }
+            Task { await loadScore(allowFallback: false) }
         }
     }
 
-    private var noticeTab: some View {
-        Group {
-            if notices.isEmpty && isLoading {
-                ProgressView("加载中…")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if notices.isEmpty {
-                ContentUnavailableView("暂无通知", systemImage: "bell")
-            } else {
-                List {
-                    ForEach(notices) { notice in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(notice.title)
-                                .font(.subheadline.weight(.medium))
-                            Text(notice.time)
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
+    /// 液态玻璃胶囊年份条：入学学年 → 当前学年横向陈列（各状态同一位置同一样式）
+    private var yearBar: some View {
+        Picker("查询年份", selection: $year) {
+            ForEach(availableYears, id: \.self) { y in
+                Text(y).tag(y)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, 16)
+        .disabled(needsLogin)
+    }
+
+    @ViewBuilder
+    private var scoreContent: some View {
+        if needsLogin {
+            loginPrompt
+        } else {
+            List {
+                if isScoreLoading {
+                    loadingRow("查询中…")
+                } else if let score {
+                    totalScoreSection(score)
+                    itemsSection(score)
+                } else if let scoreError {
+                    Section {
+                        errorRow(scoreError) {
+                            Task { await loadScore(allowFallback: false) }
                         }
-                        .padding(.vertical, 2)
+                    }
+                } else {
+                    Section {
+                        VStack(spacing: 10) {
+                            Image(systemName: "figure.run")
+                                .font(.largeTitle)
+                                .foregroundStyle(.secondary)
+                            Text("\(year) 年暂无体测成绩")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 48)
                     }
                 }
-                .listStyle(.insetGrouped)
+            }
+            .listStyle(.insetGrouped)
+            .refreshable {
+                await loadScore(allowFallback: false)
             }
         }
     }
 
-    private var availableYears: [String] {
-        let current = Calendar.current.component(.year, from: Date())
-        return (current - 5...current).map(String.init).reversed()
+    private func totalScoreSection(_ score: FitnessApiService.FitnessScore) -> some View {
+        Section {
+            HStack(spacing: 20) {
+                ZStack {
+                    Circle()
+                        .strokeBorder(gradeColor(score.totalGrade), lineWidth: 4)
+                    Text(score.totalScore)
+                        .font(.title3.weight(.bold))
+                        .monospacedDigit()
+                        .foregroundStyle(gradeColor(score.totalGrade))
+                        .minimumScaleFactor(0.6)
+                }
+                .frame(width: 72, height: 72)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("总分")
+                        .font(.subheadline.weight(.semibold))
+                    Text(score.totalGrade)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(gradeColor(score.totalGrade))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+                        .background(gradeColor(score.totalGrade).opacity(0.12), in: Capsule())
+                }
+                Spacer()
+            }
+            .padding(.vertical, 6)
+        }
     }
+
+    private func itemsSection(_ score: FitnessApiService.FitnessScore) -> some View {
+        Section("单项成绩") {
+            scoreItemRow(label: "身高/体重", item: score.bmi, unit: nil)
+            scoreItemRow(label: "肺活量", item: score.vitalCapacity, unit: nil)
+            scoreItemRow(label: "立定跳远", item: score.jump, unit: "cm")
+            scoreItemRow(label: "坐位体前屈", item: score.sitAndReach, unit: "cm")
+            scoreItemRow(
+                label: score.sex == "女" ? "仰卧起坐" : "引体向上",
+                item: score.pullAndSit, unit: nil)
+            scoreItemRow(label: "50米跑", item: score.fiftyM, unit: "s")
+            scoreItemRow(label: "800/1000米跑", item: score.run, unit: nil)
+        }
+    }
+
+    private func scoreItemRow(
+        label: String, item: FitnessApiService.FitnessScoreItem, unit: String?
+    ) -> some View {
+        let color = item.isFail ? Color.red : Color.green
+        let display = item.rawScore == "-" ? "-" : (unit.map { "\(item.rawScore) \($0)" } ?? item.rawScore)
+        return HStack {
+            Text(label)
+                .font(.subheadline)
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(display)
+                    .font(.subheadline.weight(.medium))
+                    .monospacedDigit()
+                Text("\(item.gradedScore) 分 · \(item.grade)")
+                    .font(.caption)
+                    .foregroundStyle(color)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    /// 等级 → 颜色（不及格须先于及格判断，"不及格"包含"及格"）
+    private func gradeColor(_ grade: String) -> Color {
+        if grade.contains("优秀") { return .blue }
+        if grade.contains("良好") { return .green }
+        if grade.contains("不及格") { return .red }
+        if grade.contains("及格") { return .orange }
+        return .secondary
+    }
+
+    private func loadingRow(_ text: String) -> some View {
+        Section {
+            HStack(spacing: 10) {
+                Spacer()
+                ProgressView()
+                Text(text)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(.vertical, 48)
+        }
+    }
+
+    private func errorRow(_ message: String, retry: @escaping () -> Void) -> some View {
+        VStack(spacing: 10) {
+            Label("加载失败", systemImage: "exclamationmark.triangle")
+                .font(.subheadline.weight(.medium))
+            Text(message)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Button("重试", action: retry)
+                .buttonStyle(.bordered)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 32)
+    }
+
+    private var loginPrompt: some View {
+        ContentUnavailableView {
+            Label("未登录", systemImage: "person.badge.key")
+        } actions: {
+            Button("去登录") { showLogin = true }
+                .buttonStyle(.borderedProminent)
+        }
+        .sheet(isPresented: $showLogin, onDismiss: {
+            Task { await load() }
+        }) {
+            NavigationStack {
+                ScuLoginPage()
+            }
+        }
+    }
+
+    // MARK: - 加载
 
     private func load() async {
         var ready = environment.authBus.scuState == .ready
@@ -397,20 +500,37 @@ struct FitnessTestPage: View {
             return
         }
         needsLogin = false
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            score = try await api.fetchScore(year: year)
-            notices = (try? await api.fetchNotices()) ?? []
-            errorMessage = nil
-        } catch let error as SCUError where error.isUnauthenticated {
-            needsLogin = true
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+        await loadScore(allowFallback: true)
     }
 
-    private func loadScore() async {
-        score = try? await api.fetchScore(year: year)
+    private func loadScore(allowFallback: Bool) async {
+        scoreGeneration += 1
+        let generation = scoreGeneration
+        isScoreLoading = true
+        score = nil
+        scoreError = nil
+        defer {
+            if generation == scoreGeneration {
+                isScoreLoading = false
+            }
+        }
+        let fetchedYear = year
+        do {
+            let result = try await api.fetchScore(year: fetchedYear)
+            guard generation == scoreGeneration else { return }
+            score = result
+            // 首次进入默认查当前历年；无数据（体测在秋季，年初尚未开测）时
+            // 自动回退上一年（仍在滚轮范围内）。用户手动选年不回退。
+            if result == nil, allowFallback, fetchedYear == String(currentYear),
+               currentYear - 1 >= enrollmentYear {
+                year = String(currentYear - 1)
+            }
+        } catch let error as SCUError where error.isUnauthenticated {
+            guard generation == scoreGeneration else { return }
+            needsLogin = true
+        } catch {
+            guard generation == scoreGeneration else { return }
+            scoreError = error.localizedDescription
+        }
     }
 }

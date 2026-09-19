@@ -87,10 +87,23 @@
         }
       }
     },
+    "%@ 分 · %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ 分 · %2$@"
+          }
+        }
+      }
+    },
     "%@ 学分" : {
 
     },
     "%@ 学时" : {
+
+    },
+    "%@ 年暂无体测成绩" : {
 
     },
     "%@学分" : {
@@ -405,9 +418,6 @@
           }
         }
       }
-    },
-    "Tab" : {
-
     },
     "The-Brotherhood-of-SCU 是一个非官方的四川大学开源组织，由一群热爱技术、关注校园生活的川大学生共同维护。我们的目标是通过开源协作，为川大同学打造实用的校园工具。" : {
       "extractionState" : "stale",
@@ -1531,9 +1541,6 @@
           }
         }
       }
-    },
-    "体测成绩（%@）" : {
-
     },
     "体质测试" : {
       "extractionState" : "stale",
@@ -2889,6 +2896,9 @@
         }
       }
     },
+    "单项成绩" : {
+
+    },
     "危险操作" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2941,7 +2951,6 @@
       }
     },
     "去登录" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -5521,9 +5530,6 @@
         }
       }
     },
-    "年度" : {
-
-    },
     "年级" : {
       "localizations" : {
         "en" : {
@@ -6291,7 +6297,6 @@
       }
     },
     "总分" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8668,9 +8673,6 @@
         }
       }
     },
-    "暂无通知" : {
-
-    },
     "暂无附件" : {
 
     },
@@ -9489,7 +9491,6 @@
       }
     },
     "查询年份" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -14930,9 +14931,6 @@
           }
         }
       }
-    },
-    "选择年度后下拉刷新" : {
-
     },
     "选择日历" : {
 
