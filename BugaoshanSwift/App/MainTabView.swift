@@ -23,7 +23,6 @@ struct MainTabView: View {
                 .tag(id)
             }
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
     }
 
     private var visibleTabIds: [String] {

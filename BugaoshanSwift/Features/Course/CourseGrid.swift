@@ -1,28 +1,116 @@
 import SwiftUI
 
-/// 周网格（对应 course_grid.dart + grid_day_column + grid_section_column）：
-/// 固定 35pt 节次列 + 5/7 天列（周末开时顺序为 日一二三四五六），
-/// 课程卡按 (startSection-1)×rowHeight 定位；液态玻璃卡片（iOS 26+）。
-struct CourseGrid: View {
+// MARK: - 共享组件（周网格 = 表头 + 节次列 + 天列）
+
+/// 表头（星期 + 日期，当天加粗高亮）
+struct CourseGridHeader: View {
+    let config: ScheduleConfig
+    let week: Int
+    let showWeekend: Bool
+    let todayWeek: Int
+    var showDates: Bool = true
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Color.clear.frame(width: 35)
+            ForEach(0..<dayCount, id: \.self) { index in
+                let day = dayOfWeek(for: index)
+                let date = config.dateForCourseDay(week: week, dayOfWeek: day)
+                let isToday = showDates && week == todayWeek && Calendar.current.isDate(date, inSameDayAs: Date())
+                VStack(spacing: 2) {
+                    Text(weekdayName(day))
+                        .font(.caption.weight(isToday ? .bold : .regular))
+                        .foregroundStyle(isToday ? Color.accentColor : .secondary)
+                    if showDates {
+                        Text(dateText(date))
+                            .font(.caption.weight(isToday ? .bold : .regular))
+                            .foregroundStyle(isToday ? Color.accentColor : .primary)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 5)
+            }
+        }
+    }
+
+    private var dayCount: Int { showWeekend ? 7 : 5 }
+
+    /// dayIndex → dayOfWeek：周末开启时 0=周日，否则 0=周一
+    func dayOfWeek(for index: Int) -> Int {
+        showWeekend ? (index == 0 ? 7 : index) : index + 1
+    }
+
+    private func dateText(_ date: Date) -> String {
+        let comps = Calendar.current.dateComponents([.month, .day], from: date)
+        return "\(comps.month!)/\(comps.day!)"
+    }
+
+    private func weekdayName(_ day: Int) -> String {
+        ["一", "二", "三", "四", "五", "六", "日"][day - 1]
+    }
+}
+
+/// 节次列（35pt 固定）
+struct CourseGridGutter: View {
+    let config: ScheduleConfig
+    let rowHeight: Double
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ForEach(1...config.sectionsPerDay, id: \.self) { section in
+                VStack(spacing: 1) {
+                    Text("\(section)")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    if section <= config.timeSlots.count {
+                        Text(config.timeSlots[section - 1].format(true))
+                            .font(.system(size: 8))
+                            .foregroundStyle(.tertiary)
+                        if rowHeight >= 60 {
+                            Text(config.timeSlots[section - 1].format(false))
+                                .font(.system(size: 8))
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
+                .frame(width: 35, height: rowHeight)
+                .overlay(alignment: .bottom) { sectionBoundary(section) }
+            }
+        }
+    }
+
+    /// 节次分隔线：上午/下午结束边界 1.5pt 强调，普通 0.5pt
+    private func sectionBoundary(_ section: Int) -> some View {
+        let isBoundary = section == config.morningSections
+            || section == config.morningSections + config.afternoonSections
+        return Rectangle()
+            .fill(isBoundary
+                  ? AnyShapeStyle(Color.accentColor.opacity(150.0 / 255.0))
+                  : AnyShapeStyle(Color(.separator).opacity(0.5)))
+            .frame(height: isBoundary ? 1.5 : 0.5)
+            .padding(.horizontal, 2)
+    }
+}
+
+/// 天列组（仅天列，不带节次列）：供整页使用，也可被按周分页复用
+struct CourseGridDayColumns: View {
     let courses: [Course]
     let config: ScheduleConfig
     let week: Int
     let showWeekend: Bool
     let rowHeight: Double
-    let todayWeek: Int
-    /// 历年学期查询（班级/课程课表）日期无意义时隐藏表头日期
-    var showDates: Bool = true
 
     var onTapCourse: ((Course) -> Void)?
 
-    private var dayCount: Int { showWeekend ? 7 : 5 }
-    private var sections: Int { config.sectionsPerDay }
-    private var isCurrentWeek: Bool { week == todayWeek }
-
-    /// dayIndex → dayOfWeek：周末开启时 0=周日，否则 0=周一
-    private func dayOfWeek(for index: Int) -> Int {
-        showWeekend ? (index == 0 ? 7 : index) : index + 1
+    var body: some View {
+        HStack(alignment: .top, spacing: 0) {
+            ForEach(0..<dayCount, id: \.self) { index in
+                dayColumn(index)
+            }
+        }
     }
+
+    private var dayCount: Int { showWeekend ? 7 : 5 }
 
     /// 该天可见课程（同槽合并 + 按节次排序）
     private func visibleCourses(dayOfWeek: Int) -> [Course] {
@@ -63,97 +151,44 @@ struct CourseGrid: View {
         }
     }
 
-    var body: some View {
-        GeometryReader { proxy in
-            let dayWidth = max(0, (proxy.size.width - 35) / CGFloat(dayCount))
+    private func dayOfWeek(for index: Int) -> Int {
+        showWeekend ? (index == 0 ? 7 : index) : index + 1
+    }
+
+    private func dayColumn(_ index: Int) -> some View {
+        let day = dayOfWeek(for: index)
+        let dayCourses = visibleCourses(dayOfWeek: day)
+        return ZStack(alignment: .topLeading) {
+            // 节次网格底
             VStack(spacing: 0) {
-                header(dayWidth: dayWidth)
-                Divider()
-                ScrollView(.vertical) {
-                    HStack(alignment: .top, spacing: 0) {
-                        sectionColumn
-                        ForEach(0..<dayCount, id: \.self) { index in
-                            dayColumn(index, width: dayWidth)
-                        }
-                    }
+                ForEach(1...config.sectionsPerDay, id: \.self) { section in
+                    Rectangle()
+                        .fill(Color.clear)
+                        .frame(height: rowHeight)
+                        .overlay(alignment: .bottom) { sectionBoundary(section) }
                 }
             }
-        }
-        .background(Color(.systemBackground))
-    }
-
-    // MARK: - 表头（星期 + 日期）
-
-    private func header(dayWidth: CGFloat) -> some View {
-        HStack(spacing: 0) {
-            Text("节次")
-                .font(.caption2.weight(.medium))
-                .foregroundStyle(.secondary)
-                .frame(width: 35)
-            ForEach(0..<dayCount, id: \.self) { index in
-                let day = dayOfWeek(for: index)
-                let date = config.dateForCourseDay(week: week, dayOfWeek: day)
-                let isToday = showDates && isCurrentWeek && isTodayDate(date)
-                VStack(spacing: 2) {
-                    Text(weekdayName(day))
-                        .font(.caption.weight(isToday ? .bold : .regular))
-                    if showDates {
-                        Text(dateText(date))
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .frame(width: dayWidth)
-                .padding(.vertical, 5)
-                .background(
-                    isToday
-                        ? Color.accentColor.opacity(0.15)
-                        : Color.clear,
-                    in: RoundedRectangle(cornerRadius: 8)
+            // 课程卡（topLeading 对齐 + offset 定位，不使用液态玻璃，
+            // 否则相邻卡片会被 GlassEffectContainer 合并/变形导致偏移和吞卡）
+            ForEach(dayCourses) { course in
+                CourseCardView(
+                    course: course,
+                    config: config,
+                    rowHeight: rowHeight,
+                    onTap: { onTapCourse?(course) }
                 )
+                .frame(maxWidth: .infinity, alignment: .topLeading)
+                .padding(.horizontal, 1)
+                .offset(y: Double(course.startSection - 1) * rowHeight + 1)
             }
         }
-        .background(Color(.secondarySystemBackground).opacity(0.5))
-    }
-
-    private func isTodayDate(_ date: Date) -> Bool {
-        Calendar.current.isDate(date, inSameDayAs: Date())
-    }
-
-    private func dateText(_ date: Date) -> String {
-        let comps = Calendar.current.dateComponents([.month, .day], from: date)
-        return "\(comps.month!)/\(comps.day!)"
-    }
-
-    private func weekdayName(_ day: Int) -> String {
-        ["一", "二", "三", "四", "五", "六", "日"][day - 1]
-    }
-
-    // MARK: - 节次列（35pt 固定）
-
-    private var sectionColumn: some View {
-        VStack(spacing: 0) {
-            ForEach(1...sections, id: \.self) { section in
-                VStack(spacing: 1) {
-                    Text("\(section)")
-                        .font(.caption.weight(.semibold))
-                    if section <= config.timeSlots.count {
-                        Text(config.timeSlots[section - 1].format(true))
-                            .font(.system(size: 8))
-                            .foregroundStyle(.tertiary)
-                        if rowHeight >= 60 {
-                            Text(config.timeSlots[section - 1].format(false))
-                                .font(.system(size: 8))
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                }
-                .frame(width: 35, height: rowHeight)
-                .overlay(alignment: .bottom) {
-                    sectionBoundary(section)
-                }
-            }
+        .frame(maxWidth: .infinity)
+        .overlay(alignment: .trailing) {
+            Rectangle()
+                .fill(Color(.separator).opacity(0.5))
+                .frame(width: 0.5)
         }
+        .clipped()
     }
 
     /// 节次分隔线：上午/下午结束边界 1.5pt 强调，普通 0.5pt
@@ -167,42 +202,40 @@ struct CourseGrid: View {
             .frame(height: isBoundary ? 1.5 : 0.5)
             .padding(.horizontal, 2)
     }
+}
 
-    // MARK: - 天列
+// MARK: - 整周网格（单页完整视图：表头 + 节次列 + 天列）
 
-    private func dayColumn(_ index: Int, width: CGFloat) -> some View {
-        let day = dayOfWeek(for: index)
-        let dayCourses = visibleCourses(dayOfWeek: day)
-        return ZStack(alignment: .topLeading) {
-            // 节次网格底
-            VStack(spacing: 0) {
-                ForEach(1...sections, id: \.self) { section in
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(height: rowHeight)
-                        .overlay(alignment: .bottom) { sectionBoundary(section) }
+/// 周网格（对应 course_grid.dart）：固定 35pt 节次列 + 5/7 天列。
+/// 课表主页用 CoursePage 的分页组合（节次列固定），此处供班级/课程课表查询页整页使用。
+struct CourseGrid: View {
+    let courses: [Course]
+    let config: ScheduleConfig
+    let week: Int
+    let showWeekend: Bool
+    let rowHeight: Double
+    let todayWeek: Int
+    /// 历年学期查询（班级/课程课表）日期无意义时隐藏表头日期
+    var showDates: Bool = true
+
+    var onTapCourse: ((Course) -> Void)?
+
+    var body: some View {
+        VStack(spacing: 0) {
+            CourseGridHeader(config: config, week: week, showWeekend: showWeekend, todayWeek: todayWeek, showDates: showDates)
+            Divider()
+            ScrollView(.vertical) {
+                HStack(alignment: .top, spacing: 0) {
+                    CourseGridGutter(config: config, rowHeight: rowHeight)
+                    CourseGridDayColumns(
+                        courses: courses, config: config, week: week,
+                        showWeekend: showWeekend, rowHeight: rowHeight,
+                        onTapCourse: onTapCourse
+                    )
                 }
             }
-            // 课程卡（topLeading 对齐 + 固定列宽 + offset 定位，不使用液态玻璃，
-            // 否则相邻卡片会被 GlassEffectContainer 合并/变形导致偏移和吞卡）
-            ForEach(dayCourses) { course in
-                CourseCardView(
-                    course: course,
-                    config: config,
-                    rowHeight: rowHeight,
-                    onTap: { onTapCourse?(course) }
-                )
-                .frame(width: width - 2)
-                .offset(y: Double(course.startSection - 1) * rowHeight + 1)
-            }
         }
-        .frame(width: width)
-        .overlay(alignment: .trailing) {
-            Rectangle()
-                .fill(Color(.separator).opacity(0.5))
-                .frame(width: 0.5)
-        }
-        .clipped()
+        .background(Color(.systemBackground))
     }
 }
 

@@ -95,7 +95,54 @@ struct CoursePage: View {
     @ViewBuilder
     private func courseContent(_ scheduleConfig: ScheduleConfig) -> some View {
         let pageCount = showVacationPage ? scheduleConfig.totalWeeks + 1 : scheduleConfig.totalWeeks
-        VStack(spacing: 0) {
+        let headerWeek = min(pageIndex + 1, scheduleConfig.totalWeeks)
+        // 行高自适应：12 节整体放进一屏，免去竖向滚动
+        //（顶部玻璃栏 + 表头 + 底部 dock + 安全区合计约 300pt）
+        let rowHeight = min(
+            config.courseRowHeight,
+            (UIScreen.main.bounds.height - 300) / CGFloat(scheduleConfig.sectionsPerDay)
+        )
+        let gridHeight = CGFloat(scheduleConfig.sectionsPerDay) * rowHeight
+        return ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                CourseGridHeader(
+                    config: scheduleConfig,
+                    week: headerWeek,
+                    showWeekend: config.showWeekend,
+                    todayWeek: provider.currentWeek
+                )
+                Divider()
+                HStack(alignment: .top, spacing: 0) {
+                    // 节次列固定在分页视图外：横向翻周时不随页滑动
+                    CourseGridGutter(config: scheduleConfig, rowHeight: rowHeight)
+                    TabView(selection: $pageIndex) {
+                        ForEach(1...scheduleConfig.totalWeeks, id: \.self) { week in
+                            CourseGridDayColumns(
+                                courses: provider.courses,
+                                config: scheduleConfig,
+                                week: week,
+                                showWeekend: config.showWeekend,
+                                rowHeight: rowHeight,
+                                onTapCourse: { course in
+                                    selectedCourse = course
+                                }
+                            )
+                            .tag(week - 1)
+                        }
+                        if showVacationPage {
+                            VacationView(config: scheduleConfig)
+                                .tag(scheduleConfig.totalWeeks)
+                        }
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .frame(height: gridHeight)
+                }
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.top, 54)
+
+            // 顶栏悬浮玻璃
             CourseTopBar(
                 config: scheduleConfig,
                 visibleWeek: min(pageIndex + 1, scheduleConfig.totalWeeks),
@@ -119,27 +166,7 @@ struct CoursePage: View {
                     showEditPage = true
                 }
             )
-            TabView(selection: $pageIndex) {
-                ForEach(1...scheduleConfig.totalWeeks, id: \.self) { week in
-                    CourseGrid(
-                        courses: provider.courses,
-                        config: scheduleConfig,
-                        week: week,
-                        showWeekend: config.showWeekend,
-                        rowHeight: config.courseRowHeight,
-                        todayWeek: provider.currentWeek,
-                        onTapCourse: { course in
-                            selectedCourse = course
-                        }
-                    )
-                    .tag(week - 1)
-                }
-                if showVacationPage {
-                    VacationView(config: scheduleConfig)
-                        .tag(scheduleConfig.totalWeeks)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .glassEffect(.regular, in: .rect)
         }
     }
 
@@ -277,7 +304,6 @@ struct CourseTopBar: View {
         .buttonStyle(.borderless)
         .padding(.horizontal)
         .padding(.vertical, 6)
-        .background(.bar)
     }
 
     private var todayLabel: String {

@@ -87,8 +87,9 @@ struct CcylOAuthService {
         pattern: #"window\.location(?:\.href)?\s*=\s*["']([^"']+)["']"#
     )
 
-    /// 任何失败返回 nil
-    static func getOAuthCode(scuAuth: ScuAuth) async -> String? {
+    /// 任何失败返回 nil，并带诊断信息（log + 返回值第二个元素）
+    static func getOAuthCode(scuAuth: ScuAuth) async -> (code: String?, diagnostic: String?) {
+        let log = AuthLogger.shared
         do {
             let token = try await scuAuth.getAccessToken()
             let client = try await scuAuth.getClient()
@@ -101,12 +102,12 @@ struct CcylOAuthService {
                 ]
             )
             if resp.statusCode == 483 {
-                AuthLogger.shared.w("CcylAuth", "sp_logged: 防火墙拦截 (483)")
-                return nil
+                log.w("CcylAuth", "sp_logged: 防火墙拦截 (483)")
+                return (nil, "被防火墙拦截（HTTP 483）：请断开代理/VPN，用校园网或移动数据重试")
             }
             // (a) 最终 URL 的 code= 参数
             if let code = resp.queryItems["code"], !code.isEmpty {
-                return code
+                return (code, nil)
             }
             // (b) 响应体中的跳转 URI（meta refresh / JS location）
             let body = resp.bodyString
@@ -118,13 +119,16 @@ struct CcylOAuthService {
                     if let comps = URLComponents(string: redirect),
                        let code = comps.queryItems?.first(where: { $0.name == "code" })?.value,
                        !code.isEmpty {
-                        return code
+                        return (code, nil)
                     }
                 }
             }
-            return nil
+            let snippet = body.count > 1500 ? String(body.prefix(1500)) : body
+            log.w("CcylAuth", "sp_logged: 无授权码 status=\(resp.statusCode) url=\(resp.finalURL) body=\(snippet)")
+            return (nil, "统一认证未返回授权码（HTTP \(resp.statusCode)）：\(resp.finalURL)")
         } catch {
-            return nil
+            log.w("CcylAuth", "sp_logged: 异常 \(error)")
+            return (nil, (error as? LocalizedError)?.errorDescription ?? "\(error)")
         }
     }
 }
@@ -169,7 +173,7 @@ actor CcylAuth: SubsystemAuth {
         self.transport = transport
         self.log = log
         self.bus = bus
-        self.oauthCodeProvider = oauthCodeProvider ?? { await CcylOAuthService.getOAuthCode(scuAuth: scuAuth) }
+        self.oauthCodeProvider = oauthCodeProvider ?? { await CcylOAuthService.getOAuthCode(scuAuth: scuAuth).code }
     }
 
     // MARK: - 绑定校验（所有读取的门卫）

@@ -27,6 +27,7 @@ struct CcylPage: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+                .padding(.bottom, 60)
             } else {
                 tabs
             }
@@ -67,7 +68,10 @@ struct CcylPage: View {
 
     private func tabItem(_ index: Int, icon: String, label: String) -> some View {
         Button {
-            withAnimation(.snappy(duration: 0.2)) { currentIndex = index }
+            // 禁用动画：.page 样式带动画切换内容会闪跳
+            var t = Transaction()
+            t.disablesAnimations = true
+            withTransaction(t) { currentIndex = index }
         } label: {
             VStack(spacing: 3) {
                 Image(systemName: icon)
@@ -141,8 +145,9 @@ struct CcylBindPage: View {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
-        guard let code = await CcylOAuthService.getOAuthCode(scuAuth: scuAuth) else {
-            errorMessage = "获取授权码失败。若持续失败，请断开代理/VPN 后用校园网或移动数据重试（防火墙会拦截部分网络）"
+        let oauth = await CcylOAuthService.getOAuthCode(scuAuth: scuAuth)
+        guard let code = oauth.code else {
+            errorMessage = oauth.diagnostic ?? "获取授权码失败"
             return
         }
         do {
@@ -168,28 +173,42 @@ struct CcylActivitiesTab: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-                TextField("搜索活动名称", text: $searchText)
-                    .autocorrectionDisabled()
-                    .onSubmit { Task { await load(loadMore: false) } }
-                if !searchText.isEmpty {
-                    Button {
-                        searchText = ""
-                        Task { await load(loadMore: false) }
-                    } label: {
-                        Image(systemName: "xmark.circle.fill").foregroundStyle(.tertiary)
-                    }
-                }
-            }
-            .padding(10)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-
+        ZStack(alignment: .top) {
             list
+                .contentMargins(.top, 54, for: .scrollContent)
+                .scrollEdgeEffectStyle(.hard, for: .top)
+            searchBar
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
         }
+        .autocorrectionDisabled()
+    }
+
+    /// 液态玻璃胶囊悬浮搜索框（不用 interactive：会随滚动边缘联动吸附）
+    private var searchBar: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("搜索活动名称", text: $searchText)
+                .autocorrectionDisabled()
+                .onSubmit {
+                    Task { await load(loadMore: false) }
+                }
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                    Task { await load(loadMore: false) }
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .font(.subheadline)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .glassEffect(.regular, in: Capsule())
     }
 
     @ViewBuilder
@@ -203,32 +222,24 @@ struct CcylActivitiesTab: View {
                 Button("重试") { Task { await load(loadMore: false) } }
             }
         } else {
-            ScrollView {
-                LazyVStack(spacing: 8) {
-                    if activities.isEmpty && !isLoading {
-                        Text("暂无数据")
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 60)
-                    }
-                    ForEach(activities) { activity in
-                        NavigationLink {
-                            CcylActivityLibDetailPage(api: api, activityLibraryId: activity.activityLibraryId)
-                        } label: {
-                            CcylActivityCard(activity: activity)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    if hasMore {
-                        Button("加载更多") {
-                            Task { await load(loadMore: true) }
-                        }
-                        .disabled(isLoading)
-                        .padding(.vertical, 8)
+            List {
+                ForEach(activities) { activity in
+                    NavigationLink {
+                        CcylActivityLibDetailPage(api: api, activityLibraryId: activity.activityLibraryId)
+                    } label: {
+                        CcylActivityCard(activity: activity)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 16)
+                if hasMore {
+                    Button("加载更多") {
+                        Task { await load(loadMore: true) }
+                    }
+                    .disabled(isLoading)
+                    .frame(maxWidth: .infinity)
+                }
             }
+            .listStyle(.insetGrouped)
+            .scrollDismissesKeyboard(.immediately)
             .refreshable {
                 await load(loadMore: false)
             }
@@ -279,30 +290,23 @@ struct CcylMyActivitiesTab: View {
                     Button("重试") { Task { await load(loadMore: false) } }
                 }
             } else {
-                ScrollView {
-                    LazyVStack(spacing: 8) {
-                        if activities.isEmpty && !isLoading {
-                            Text("暂无数据").foregroundStyle(.secondary).padding(.top, 60)
-                        }
-                        ForEach(activities) { activity in
-                            NavigationLink {
-                                CcylActivityDetailPage(api: api, activityId: activity.activityId ?? activity.id)
-                            } label: {
-                                CcylActivityCard(activity: activity)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                        if hasMore {
-                            Button("加载更多") {
-                                Task { await load(loadMore: true) }
-                            }
-                            .disabled(isLoading)
-                            .padding(.vertical, 8)
+                List {
+                    ForEach(activities) { activity in
+                        NavigationLink {
+                            CcylActivityDetailPage(api: api, activityId: activity.activityId ?? activity.id)
+                        } label: {
+                            CcylActivityCard(activity: activity)
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 16)
+                    if hasMore {
+                        Button("加载更多") {
+                            Task { await load(loadMore: true) }
+                        }
+                        .disabled(isLoading)
+                        .frame(maxWidth: .infinity)
+                    }
                 }
+                .listStyle(.insetGrouped)
                 .refreshable { await load(loadMore: false) }
             }
         }
@@ -355,23 +359,16 @@ struct CcylOrderedActivitiesTab: View {
                     Button("重试") { Task { await load() } }
                 }
             } else {
-                ScrollView {
-                    LazyVStack(spacing: 8) {
-                        if activities.isEmpty && !isLoading {
-                            Text("暂无数据").foregroundStyle(.secondary).padding(.top, 60)
-                        }
-                        ForEach(activities) { activity in
-                            NavigationLink {
-                                CcylActivityLibDetailPage(api: api, activityLibraryId: activity.activityLibraryId)
-                            } label: {
-                                CcylActivityCard(activity: activity)
-                            }
-                            .buttonStyle(.plain)
+                List {
+                    ForEach(activities) { activity in
+                        NavigationLink {
+                            CcylActivityLibDetailPage(api: api, activityLibraryId: activity.activityLibraryId)
+                        } label: {
+                            CcylActivityCard(activity: activity)
                         }
                     }
-                    .padding(.horizontal)
-                    .padding(.bottom, 16)
                 }
+                .listStyle(.insetGrouped)
                 .refreshable { await load() }
             }
         }
@@ -401,9 +398,9 @@ struct CcylActivityCard: View {
     let activity: CyclActivity
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(activity.name)
-                .font(.subheadline.weight(.semibold))
+        VStack(alignment: .leading, spacing: 6) {
+            Text(activity.activityName.isEmpty ? activity.name : activity.activityName)
+                .font(.subheadline.weight(.medium))
                 .multilineTextAlignment(.leading)
             HStack(spacing: 8) {
                 Image(systemName: "building.2")
@@ -443,9 +440,7 @@ struct CcylActivityCard: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+        .padding(.vertical, 2)
     }
 }
 
@@ -491,8 +486,8 @@ struct CcylActivityLibDetailPage: View {
     }
 
     private func content(_ detail: CcylService.LibDetail) -> some View {
-        ScrollView {
-            VStack(spacing: 12) {
+        List {
+            Section {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(detail.activityLib.name)
                         .font(.headline)
@@ -515,21 +510,19 @@ struct CcylActivityLibDetailPage: View {
                     .tint(detail.subscribed ? .red : .accentColor)
                     .disabled(actionLoading)
                 }
-                .padding(14)
-                .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
-
+                .padding(.vertical, 4)
+            }
+            Section {
                 ForEach(detail.activities) { activity in
                     NavigationLink {
                         CcylActivityDetailPage(api: api, activityId: activity.activityId ?? activity.id)
                     } label: {
                         CcylActivityCard(activity: activity)
                     }
-                    .buttonStyle(.plain)
                 }
             }
-            .padding()
         }
-        .background(Color(.systemGroupedBackground))
+        .listStyle(.insetGrouped)
     }
 
     @ViewBuilder
@@ -869,56 +862,44 @@ struct CcylCreditListPage: View {
     }
 
     private var list: some View {
-        ScrollView {
-            LazyVStack(spacing: 8) {
-                if !statsByType.isEmpty {
-                    VStack(alignment: .leading, spacing: 6) {
-                        ForEach(statsByType, id: \.0) { name, hours in
-                            HStack {
-                                Text(name).font(.subheadline)
-                                Spacer()
-                                Text("\(hours, specifier: "%.1f") 学时")
-                                    .font(.caption.weight(.medium))
-                                    .foregroundStyle(Color.accentColor)
-                            }
+        List {
+            if !statsByType.isEmpty {
+                Section("学时统计") {
+                    ForEach(statsByType, id: \.0) { name, hours in
+                        HStack {
+                            Text(name)
+                            Spacer()
+                            Text("\(hours, specifier: "%.1f") 学时")
+                                .foregroundStyle(.secondary)
                         }
+                        .font(.subheadline)
                     }
-                    .padding(14)
-                    .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
                 }
-
-                HStack {
-                    Button(selecting ? "取消" : "选择") {
+            }
+            Section {
+                if !credits.isEmpty {
+                    Button(selecting ? "取消选择" : "选择") {
                         selecting.toggle()
                         if !selecting { selectedIds.removeAll() }
                     }
-                    if selecting {
-                        Button(credits.count == selectedIds.count ? "取消全选" : "全选") {
-                            if credits.count == selectedIds.count {
-                                selectedIds.removeAll()
-                            } else {
-                                selectedIds = Set(credits.map(\.id))
-                            }
+                }
+                if selecting, !credits.isEmpty {
+                    Button(credits.count == selectedIds.count ? "取消全选" : "全选") {
+                        if credits.count == selectedIds.count {
+                            selectedIds.removeAll()
+                        } else {
+                            selectedIds = Set(credits.map(\.id))
                         }
-                        Spacer()
-                        Button {
-                            showEmailDialog = true
-                        } label: {
-                            Label("导出到邮箱", systemImage: "envelope")
-                        }
-                        .disabled(selectedIds.isEmpty || exporting)
-                        .buttonStyle(.borderedProminent)
-                    } else {
-                        Spacer()
                     }
+                    Button {
+                        showEmailDialog = true
+                    } label: {
+                        Label("导出到邮箱", systemImage: "envelope")
+                    }
+                    .disabled(selectedIds.isEmpty || exporting)
                 }
-                .font(.subheadline)
-                .padding(.horizontal, 2)
-
-                if credits.isEmpty && !isLoading {
-                    Text("暂无数据").foregroundStyle(.secondary).padding(.top, 40)
-                }
-
+            }
+            Section {
                 ForEach(credits) { credit in
                     creditRow(credit)
                 }
@@ -927,12 +908,11 @@ struct CcylCreditListPage: View {
                         Task { await load(loadMore: true) }
                     }
                     .disabled(isLoading)
-                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom, 16)
         }
+        .listStyle(.insetGrouped)
         .refreshable { await load(loadMore: false) }
     }
 
@@ -960,8 +940,7 @@ struct CcylCreditListPage: View {
             }
             Spacer()
         }
-        .padding(14)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
+        .padding(.vertical, 2)
         .contentShape(Rectangle())
         .onTapGesture {
             if selecting { toggleSelection(credit.id) }
