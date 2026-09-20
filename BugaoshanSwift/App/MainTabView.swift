@@ -13,6 +13,11 @@ struct MainTabView: View {
     @EnvironmentObject private var authBus: AuthBus
 
     @State private var selection: String = "course"
+    /// 强制导航栏重扫滚动视图的信号：非课表 tab 间切换时导航栏不经历
+    /// 隐藏→重现转换，大标题的滚动跟踪仍绑在上一个 tab 的滚动视图上
+    /// （切到第二个 tab 后大标题钉死不收起，系统缺陷）。切换时短暂
+    /// 隐藏再立即恢复导航栏，迫使跟踪链重新绑定到新 tab 的滚动视图。
+    @State private var rebindTick = false
 
     var body: some View {
         let visibleIds = visibleTabIds
@@ -31,7 +36,12 @@ struct MainTabView: View {
             .navigationBarTitleDisplayMode(.large)
             // 恒定修饰符结构 + 值切换：分支切换会导致 TabView 子树整体重建，
             // 引发 tab 荶丸滑动动画截断与课表页重载闪烁
-            .toolbar(selection == "course" ? .hidden : .visible, for: .navigationBar)
+            .toolbar((selection == "course" || rebindTick) ? .hidden : .visible, for: .navigationBar)
+            .onChange(of: selection) { oldValue, newValue in
+                guard oldValue != newValue, newValue != "course", oldValue != "course" else { return }
+                rebindTick = true
+                DispatchQueue.main.async { rebindTick = false }
+            }
         }
     }
 
