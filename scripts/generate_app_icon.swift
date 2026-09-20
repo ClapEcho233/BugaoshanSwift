@@ -1,5 +1,6 @@
 // 生成“不高山下”App 图标：米色底 + 锦红 mountain.2.fill（关于页同款符号，上下倒置）
-// 使用 AppKit 渲染 SF Symbol（保持纵横比、不拉伸变形），sourceAtop 着色后合成到背景
+// 山形左右出血越过画布、底线水平锚定 —— 截断即图标边界本身，呈全景山景构图
+// 使用 AppKit 渲染 SF Symbol（宽裕画布防内部裁切 + 像素扫描取字形紧包围盒，精确定位）
 // 画布保持满幅方形、无 alpha 通道 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
 // 运行：swift scripts/generate_app_icon.swift
 import AppKit
@@ -47,9 +48,10 @@ func makeContext(_ size: Int) -> CGContext {
     return ctx
 }
 
-/// 将 SF Symbol 渲染为指定颜色 CGImage：居中、原始尺寸（保持纵横比，不拉伸），
-/// 先以模板黑绘制，再用 sourceAtop 整面填充着色（仅命中字形像素）
-func symbolImage(_ name: String, ink: UInt32, pointSize: CGFloat, canvas: Int) -> CGImage {
+/// 渲染 SF Symbol 为带 alpha 的 CGImage，并返回字形像素紧包围盒（画布坐标，y 向上）。
+/// 画布取标称尺寸 3 倍见方，保证任何宽形符号都不会在渲染阶段被裁切；
+/// 先以模板黑绘制，再用 sourceAtop 整面填充着色（仅命中字形像素）。
+func renderSymbol(_ name: String, ink: UInt32, pointSize: CGFloat) -> (image: CGImage, bbox: CGRect) {
     guard let base = NSImage(systemSymbolName: name, accessibilityDescription: nil) else {
         fatalError("SF Symbol 不存在: \(name)")
     }
@@ -57,30 +59,48 @@ func symbolImage(_ name: String, ink: UInt32, pointSize: CGFloat, canvas: Int) -
     guard let sym = base.withSymbolConfiguration(cfg) else {
         fatalError("符号配置失败: \(name)")
     }
-    let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: canvas, pixelsHigh: canvas,
+    let cw = Int(pointSize * 3), ch = Int(pointSize * 3)
+    let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: cw, pixelsHigh: ch,
                                bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
                                colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0)!
-    rep.size = NSSize(width: canvas, height: canvas)
+    rep.size = NSSize(width: cw, height: ch)
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
-    // 居中按符号自身尺寸绘制（避免方形 rect 拉伸宽形山形符号）
-    let origin = NSPoint(x: (CGFloat(canvas) - sym.size.width) / 2,
-                         y: (CGFloat(canvas) - sym.size.height) / 2)
-    sym.draw(in: NSRect(origin: origin, size: sym.size))
+    // 居中按符号自身尺寸绘制（保持纵横比）
+    let r = NSRect(x: (CGFloat(cw) - sym.size.width) / 2,
+                   y: (CGFloat(ch) - sym.size.height) / 2,
+                   width: sym.size.width, height: sym.size.height)
+    sym.draw(in: r)
     // 着色：只覆盖已绘制的字形像素
     nsColor(ink).set()
-    NSRect(x: 0, y: 0, width: canvas, height: canvas).fill(using: .sourceAtop)
+    NSRect(x: 0, y: 0, width: cw, height: ch).fill(using: .sourceAtop)
     NSGraphicsContext.restoreGraphicsState()
-    return rep.cgImage!
+
+    guard let cg = rep.cgImage else { fatalError("符号位图转换失败") }
+    // 扫描 alpha 通道取紧包围盒（去除符号画布的透明边距，供精确定位）
+    guard let data = rep.bitmapData else { fatalError("无法读取位图") }
+    let bpr = rep.bytesPerRow
+    var minX = cw, maxX = 0, minY = ch, maxY = 0
+    for y in 0..<ch {
+        for x in 0..<cw {
+            if data[y * bpr + x * 4 + 3] > 8 {
+                minX = min(minX, x); maxX = max(maxX, x)
+                minY = min(minY, y); maxY = max(maxY, y)
+            }
+        }
+    }
+    let bbox = CGRect(x: minX, y: minY, width: maxX - minX + 1, height: maxY - minY + 1)
+    return (cg, bbox)
 }
 
-// 预渲染符号（三套配色共用同一几何，各着各色）
-let symbolCanvas = 2048
-let lightSymbol = symbolImage("mountain.2.fill", ink: lightPalette.ink, pointSize: 1600, canvas: symbolCanvas)
-let darkSymbol = symbolImage("mountain.2.fill", ink: darkPalette.ink, pointSize: 1600, canvas: symbolCanvas)
-let tintedSymbol = symbolImage("mountain.2.fill", ink: tintedPalette.ink, pointSize: 1600, canvas: symbolCanvas)
+// 预渲染符号（三套配色同几何，各着各色）
+let pointSize: CGFloat = 1600
+let lightSymbol = renderSymbol("mountain.2.fill", ink: lightPalette.ink, pointSize: pointSize)
+let darkSymbol = renderSymbol("mountain.2.fill", ink: darkPalette.ink, pointSize: pointSize)
+let tintedSymbol = renderSymbol("mountain.2.fill", ink: tintedPalette.ink, pointSize: pointSize)
+print(String(format: "字形包围盒: %.0f×%.0f (宽高比 1:%.3f)", lightSymbol.bbox.width, lightSymbol.bbox.height, lightSymbol.bbox.height / lightSymbol.bbox.width))
 
-func drawIcon(_ p: Palette, symbol: CGImage, size: Int = 1024) -> CGImage {
+func drawIcon(_ p: Palette, symbol: (image: CGImage, bbox: CGRect), size: Int = 1024) -> CGImage {
     let ctx = makeContext(size)
     ctx.scaleBy(x: CGFloat(size) / S, y: CGFloat(size) / S)
 
@@ -89,15 +109,30 @@ func drawIcon(_ p: Palette, symbol: CGImage, size: Int = 1024) -> CGImage {
                           colors: [p.bgTop, p.bgBottom] as CFArray, locations: [0, 1])!
     ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
 
-    // 山形符号居中、上下倒置 180°（「不高山下」品牌方向）
-    let side: CGFloat = 860
-    let rect = CGRect(x: (S - side) / 2, y: (S - side) / 2, width: side, height: side)
+    // —— 全景出血构图 ——
+    // 字形宽度取画布 1.3 倍：左右各出血 15%，山坡自然越出图标边界
+    let targetW = S * 1.3
+    let scale = targetW / symbol.bbox.width
+    let targetH = symbol.bbox.height * scale
+    // 旋转后底线（原字形顶边）锚定在画布顶部 20% 处，倒峰向下延伸
+    let anchorFromTop: CGFloat = 0.20
+    let preRotationBaselineY = S * anchorFromTop
+    // 字形目标框（旋转前坐标系：正常朝向、底线即 bbox 底边）
+    let dstGlyph = CGRect(x: (S - targetW) / 2, y: preRotationBaselineY,
+                          width: targetW, height: targetH)
+    // 符号整图对应矩形 = 字形框向外补偿 bbox 原点缩放
+    let dstImage = CGRect(x: dstGlyph.minX - symbol.bbox.minX * scale,
+                          y: dstGlyph.minY - symbol.bbox.minY * scale,
+                          width: CGFloat(symbol.image.width) * scale,
+                          height: CGFloat(symbol.image.height) * scale)
+
+    // 整体旋转 180°（「不高山下」品牌方向：倒山、底线在上）
     ctx.saveGState()
-    ctx.translateBy(x: rect.midX, y: rect.midY)
+    ctx.translateBy(x: S / 2, y: S / 2)
     ctx.rotate(by: .pi)
-    ctx.translateBy(x: -rect.midX, y: -rect.midY)
+    ctx.translateBy(x: -S / 2, y: -S / 2)
     ctx.interpolationQuality = .none
-    ctx.draw(symbol, in: rect)
+    ctx.draw(symbol.image, in: dstImage)
     ctx.restoreGState()
 
     return ctx.makeImage()!
