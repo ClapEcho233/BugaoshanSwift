@@ -37,9 +37,6 @@ struct CoursePage: View {
                 )
             }
         }
-        .navigationTitle("课表")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbarContent }
         .task {
             provider.attach(database: environment.database)
             await provider.reload()
@@ -205,35 +202,6 @@ struct CoursePage: View {
             }
         )
     }
-
-    // MARK: - 工具栏
-
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-                ForEach(provider.schedules, id: \.id) { schedule in
-                    Button {
-                        Task { await provider.switchSchedule(id: schedule.id) }
-                    } label: {
-                        if schedule.id == provider.currentScheduleId {
-                            Label(schedule.semesterName.isEmpty ? "默认课表" : schedule.semesterName, systemImage: "checkmark")
-                        } else {
-                            Text(schedule.semesterName.isEmpty ? "默认课表" : schedule.semesterName)
-                        }
-                    }
-                }
-                Divider()
-                Button {
-                    showManagement = true
-                } label: {
-                    Label("管理课表", systemImage: "list.bullet")
-                }
-            } label: {
-                Image(systemName: "arrow.left.arrow.right")
-            }
-        }
-    }
 }
 
 // MARK: - 顶栏
@@ -290,6 +258,30 @@ struct CourseTopBar: View {
             .buttonStyle(.plain)
 
             Spacer()
+
+            // 课表切换 + 管理（原导航栏工具栏入口，单栈架构下迁入玻璃顶栏）
+            Menu {
+                ForEach(schedules, id: \.id) { schedule in
+                    Button {
+                        onSwitchSchedule(schedule.id)
+                    } label: {
+                        if schedule.id == currentScheduleId {
+                            Label(schedule.semesterName.isEmpty ? "默认课表" : schedule.semesterName, systemImage: "checkmark")
+                        } else {
+                            Text(schedule.semesterName.isEmpty ? "默认课表" : schedule.semesterName)
+                        }
+                    }
+                }
+                Divider()
+                Button {
+                    onManage()
+                } label: {
+                    Label("管理课表", systemImage: "list.bullet")
+                }
+            } label: {
+                Image(systemName: "arrow.left.arrow.right")
+            }
+            .disabled(schedules.isEmpty)
 
             Button(action: onImport) {
                 Image(systemName: "square.and.arrow.down")

@@ -2,6 +2,8 @@ import SwiftUI
 
 /// 校园功能聚合页（对应 campus_page.dart）：搜索 + 三节分组网格，
 /// 功能卡玻璃小卡片（GlassEffectContainer 分组）。
+/// 标题由外层 MainTabView 驱动（单栈架构）；搜索为页内玻璃胶囊
+/// （searchable 无法跨 TabView 传到外层导航栏）。
 struct CampusPage: View {
     @State private var searchText = ""
 
@@ -19,32 +21,61 @@ struct CampusPage: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 20) {
-                ForEach(filteredSections, id: \.title) { section in
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(section.title)
-                            .font(.headline)
-                            .padding(.horizontal)
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 14) {
-                            ForEach(section.items, id: \.id) { item in
-                                NavigationLink {
-                                    campusDestination(item.id)
-                                } label: {
-                                    CampusItemCard(item: item)
+        ZStack(alignment: .top) {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 20) {
+                    ForEach(filteredSections, id: \.title) { section in
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(section.title)
+                                .font(.headline)
+                                .padding(.horizontal)
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 14) {
+                                ForEach(section.items, id: \.id) { item in
+                                    NavigationLink {
+                                        campusDestination(item.id)
+                                    } label: {
+                                        CampusItemCard(item: item)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
                             }
+                            .padding(.horizontal, 8)
                         }
-                        .padding(.horizontal, 8)
                     }
                 }
+                .padding(.vertical)
+                .padding(.top, 52)
             }
-            .padding(.vertical)
+            .scrollEdgeEffectStyle(.hard, for: .top)
+
+            // 页内悬浮玻璃胶囊搜索框（与第二课堂搜索同款）
+            searchBar
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("校园")
-        .searchable(text: $searchText, prompt: "搜索功能")
+    }
+
+    private var searchBar: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("搜索功能", text: $searchText)
+                .autocorrectionDisabled()
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .font(.subheadline)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .glassEffect(.regular, in: Capsule())
     }
 
     /// 功能路由：已实现的走真页面，其余占位
@@ -187,7 +218,6 @@ struct ProfilePage: View {
                 }
             }
         }
-        .navigationTitle("我的")
         .sheet(isPresented: $showLogin) {
             NavigationStack {
                 ScuLoginPage()

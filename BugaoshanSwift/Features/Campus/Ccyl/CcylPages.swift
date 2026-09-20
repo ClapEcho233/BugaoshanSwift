@@ -27,7 +27,6 @@ struct CcylPage: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
-                .padding(.bottom, 60)
             } else {
                 tabs
             }
