@@ -18,7 +18,8 @@ struct CampusPage: View {
             LazyVStack(alignment: .leading, spacing: 20) {
                 Text("校园")
                     .font(.largeTitle.bold())
-                    .padding(.horizontal)
+                    .padding(.leading, 32)
+                    .padding(.trailing, 16)
                     .padding(.top, 4)
                 ForEach(sections, id: \.title) { section in
                     VStack(alignment: .leading, spacing: 10) {
