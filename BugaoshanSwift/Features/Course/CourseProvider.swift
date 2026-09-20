@@ -13,6 +13,9 @@ final class CourseProvider: ObservableObject {
     @Published private(set) var config: ScheduleConfig?
     @Published private(set) var courses: [Course] = []
     @Published var loadError: String?
+    /// 首次加载是否完成：未完成前 UI 显示中性占位而非「导入课表」空态，
+    /// 避免 tab 切换/首启时空态闪现
+    @Published private(set) var hasLoaded = false
 
     private var database: DatabaseService
     private(set) var currentScheduleId = ""
@@ -46,6 +49,7 @@ final class CourseProvider: ObservableObject {
         } catch {
             loadError = error.localizedDescription
         }
+        hasLoaded = true
     }
 
     func switchSchedule(id: String) async {

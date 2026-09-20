@@ -28,7 +28,10 @@ struct MainTabView: View {
                 }
             }
             .navigationTitle(DockRegistry.item(id: selection)?.label ?? selection)
-            .modifier(RootTabChromeModifier(isCourseTab: selection == "course"))
+            .navigationBarTitleDisplayMode(.large)
+            // 恒定修饰符结构 + 值切换：分支切换会导致 TabView 子树整体重建，
+            // 引发 tab 荶丸滑动动画截断与课表页重载闪烁
+            .toolbar(selection == "course" ? .hidden : .visible, for: .navigationBar)
         }
     }
 
@@ -48,24 +51,6 @@ struct MainTabView: View {
             ProfilePage()
         default:
             PlaceholderFeaturePage(dockId: id)
-        }
-    }
-}
-
-/// tab 根页面导航栏模式：课表 tab 隐藏系统导航栏（头部由自绘玻璃顶栏承担，
-/// 保持紧凑布局），其余 tab 恒定大标题（显示模式在同位置切换值不会生效，
-/// 必须固定）。校园搜索采用页内玻璃胶囊（searchable 无法跨 TabView 传播）。
-private struct RootTabChromeModifier: ViewModifier {
-    let isCourseTab: Bool
-
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if isCourseTab {
-            content
-                .toolbar(.hidden, for: .navigationBar)
-        } else {
-            content
-                .navigationBarTitleDisplayMode(.large)
         }
     }
 }

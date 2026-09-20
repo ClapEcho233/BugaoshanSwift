@@ -6447,7 +6447,6 @@
       }
     },
     "成绩单" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -6535,7 +6534,6 @@
       }
     },
     "我参与的活动" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7333,6 +7331,7 @@
       }
     },
     "搜索功能" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -10202,7 +10201,6 @@
       }
     },
     "活动搜索" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -15511,7 +15509,6 @@
 
     },
     "预约的活动" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

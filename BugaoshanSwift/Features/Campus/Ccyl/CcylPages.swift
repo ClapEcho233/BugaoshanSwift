@@ -44,44 +44,22 @@ struct CcylPage: View {
     }
 
     private var tabs: some View {
-        VStack(spacing: 0) {
-            TabView(selection: $currentIndex) {
-                CcylActivitiesTab(api: api).tag(0)
-                CcylMyActivitiesTab(api: api).tag(1)
-                CcylOrderedActivitiesTab(api: api).tag(2)
-                CcylCreditListPage(api: api).tag(3)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-
-            Divider()
-            HStack {
-                tabItem(0, icon: "magnifyingglass", label: "活动搜索")
-                tabItem(1, icon: "person", label: "我参与的活动")
-                tabItem(2, icon: "bookmark", label: "预约的活动")
-                tabItem(3, icon: "doc.plaintext", label: "成绩单")
-            }
-            .padding(.vertical, 8)
-            .background(.bar)
+        // 原生 TabView：iOS 26 自动液态玻璃胶囊底栏（选中胶囊高亮、
+        // 滚动自动最小化/恢复均由系统托管），不用自绘
+        TabView(selection: $currentIndex) {
+            CcylActivitiesTab(api: api)
+                .tabItem { Label("活动搜索", systemImage: "magnifyingglass") }
+                .tag(0)
+            CcylMyActivitiesTab(api: api)
+                .tabItem { Label("我参与的活动", systemImage: "person") }
+                .tag(1)
+            CcylOrderedActivitiesTab(api: api)
+                .tabItem { Label("预约的活动", systemImage: "bookmark") }
+                .tag(2)
+            CcylCreditListPage(api: api)
+                .tabItem { Label("成绩单", systemImage: "doc.plaintext") }
+                .tag(3)
         }
-    }
-
-    private func tabItem(_ index: Int, icon: String, label: String) -> some View {
-        Button {
-            // 禁用动画：.page 样式带动画切换内容会闪跳
-            var t = Transaction()
-            t.disablesAnimations = true
-            withTransaction(t) { currentIndex = index }
-        } label: {
-            VStack(spacing: 3) {
-                Image(systemName: icon)
-                    .font(.subheadline.weight(currentIndex == index ? .semibold : .regular))
-                Text(label)
-                    .font(.caption2)
-            }
-            .foregroundStyle(currentIndex == index ? Color.accentColor : .secondary)
-            .frame(maxWidth: .infinity)
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -174,13 +152,20 @@ struct CcylActivitiesTab: View {
     var body: some View {
         ZStack(alignment: .top) {
             list
-                .contentMargins(.top, 54, for: .scrollContent)
+                // 搜索胶囊（10 顶距 + 约 40 高）+ 18pt 呼吸间距，与导航栏→搜索的 10pt 节奏协调
+                .contentMargins(.top, 68, for: .scrollContent)
                 .scrollEdgeEffectStyle(.hard, for: .top)
             searchBar
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.top, 10)
         }
         .autocorrectionDisabled()
+        .task {
+            // 首次进入默认展示全部活动（空关键字即全量首页，与兄弟 tab 一致）
+            if activities.isEmpty {
+                await load(loadMore: false)
+            }
+        }
     }
 
     /// 液态玻璃胶囊悬浮搜索框（不用 interactive：会随滚动边缘联动吸附）
