@@ -15,19 +15,21 @@ struct CampusPage: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 20) {
+            LazyVStack(alignment: .leading, spacing: 24) {
                 Text("校园")
                     .font(.largeTitle.bold())
                     .padding(.leading, 32)
                     .padding(.trailing, 16)
                     .padding(.top, 4)
                 ForEach(sections, id: \.title) { section in
-                    VStack(alignment: .leading, spacing: 10) {
+                    // 分组头与卡片网格共用 32pt 内容边距，同页同节奏；
+                    // 头与网格间距 12、网格行间距 16、组间距 24 的阶梯韵律
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(section.title)
                             .font(.headline)
                             .padding(.leading, 32)
                             .padding(.trailing, 16)
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 14) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 16) {
                             ForEach(section.items, id: \.id) { item in
                                 NavigationLink {
                                     campusDestination(item.id)
@@ -37,7 +39,7 @@ struct CampusPage: View {
                                 .buttonStyle(.plain)
                             }
                         }
-                        .padding(.horizontal, 8)
+                        .padding(.horizontal, 32)
                     }
                 }
             }
@@ -103,7 +105,10 @@ struct CampusItemCard: View {
                 .minimumScaleFactor(0.7)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 6)
+        .padding(.vertical, 10)
+        // 可见卡片背景：卡片边缘即网格边缘（32pt），与大字/分组头
+        // 同一左缘节奏（与我的页卡片同语言）
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
     }
 }
 
