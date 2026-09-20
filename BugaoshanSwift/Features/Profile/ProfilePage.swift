@@ -25,7 +25,8 @@ struct CampusPage: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text(section.title)
                             .font(.headline)
-                            .padding(.horizontal)
+                            .padding(.leading, 32)
+                            .padding(.trailing, 16)
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 12)], spacing: 14) {
                             ForEach(section.items, id: \.id) { item in
                                 NavigationLink {
