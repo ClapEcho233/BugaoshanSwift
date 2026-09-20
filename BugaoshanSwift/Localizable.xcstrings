@@ -978,7 +978,7 @@
     "不预约" : {
 
     },
-    "不高山上" : {
+    "不高山下" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -989,7 +989,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不高山上"
+            "value" : "不高山下"
           }
         }
       }
@@ -3625,7 +3625,7 @@
         }
       }
     },
-    "在 iOS 主屏幕长按，选择「不高山上」的课表组件添加" : {
+    "在 iOS 主屏幕长按，选择「不高山下」的课表组件添加" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
@@ -3637,12 +3637,12 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在 iOS 主屏幕长按，选择「不高山上」的课表组件添加"
+            "value" : "在 iOS 主屏幕长按，选择「不高山下」的课表组件添加"
           }
         }
       }
     },
-    "在 macOS 通知中心点击「编辑小组件」，添加「不高山上」的课表组件" : {
+    "在 macOS 通知中心点击「编辑小组件」，添加「不高山下」的课表组件" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
@@ -3654,7 +3654,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在 macOS 通知中心点击「编辑小组件」，添加「不高山上」的课表组件"
+            "value" : "在 macOS 通知中心点击「编辑小组件」，添加「不高山下」的课表组件"
           }
         }
       }
@@ -7060,7 +7060,7 @@
         }
       }
     },
-    "探索一切，尽在不高山上" : {
+    "探索一切，尽在不高山下" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
@@ -7072,7 +7072,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "探索一切，尽在不高山上"
+            "value" : "探索一切，尽在不高山下"
           }
         }
       }
@@ -9798,7 +9798,7 @@
         }
       }
     },
-    "欢迎使用不高山上" : {
+    "欢迎使用不高山下" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
@@ -9810,7 +9810,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "欢迎使用不高山上"
+            "value" : "欢迎使用不高山下"
           }
         }
       }

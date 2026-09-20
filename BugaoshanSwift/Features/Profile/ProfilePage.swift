@@ -259,8 +259,9 @@ struct AboutPage: View {
                 VStack(spacing: 10) {
                     Image(systemName: "mountain.2.fill")
                         .font(.system(size: 52))
+                        .rotationEffect(.degrees(180))
                         .foregroundStyle(Color.accentColor)
-                    Text("不高山上")
+                    Text("不高山下")
                         .font(.title2.bold())
                     Text("iOS 原生重制版")
                         .font(.caption)

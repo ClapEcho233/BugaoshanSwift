@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-**不高山上（Bugaoshan）** — 四川大学校园助手 iOS App。本仓库是 `/Users/clapecho233/Files/Work/Bugaoshan`（Flutter 版，301 个 Dart 文件）的 **iOS 原生重构 + 改进**，Swift + SwiftUI，液态玻璃设计语言。
+**不高山下（Bugaoshan）** — 四川大学校园助手 iOS App。本仓库是 `/Users/clapecho233/Files/Work/Bugaoshan`（Flutter 版，301 个 Dart 文件）的 **iOS 原生重构 + 改进**，Swift + SwiftUI，液态玻璃设计语言。
 
 - Bundle ID：`io.github.ClapEcho233.BugaoshanSwift`（与官方 Flutter 版不互通，无数据迁移）
 - 部署目标：iOS 27.0

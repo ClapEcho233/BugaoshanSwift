@@ -1,4 +1,4 @@
-// 生成“不高山上”App 图标：米色底 + 锦红大小双山（大山描线、小山实心）
+// 生成“不高山下”App 图标：米色底 + 锦红大小双山（大山描线、小山实心）
 // 几何与设计稿 MountainAppIcon.svg 一致：24 单位坐标系居中缩放到 832×832
 // 画布保持满幅方形 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
 // 运行：swift scripts/generate_app_icon.swift
@@ -49,11 +49,12 @@ func drawIcon(_ p: Palette, size: Int = 1024) -> CGImage {
                           colors: [p.bgTop, p.bgBottom] as CFArray, locations: [0, 1])!
     ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
 
-    // 双山：SVG transform translate(96 96) scale(832/24)；SVG 是 y 向下坐标系，需翻转 y
+    // 双山：SVG transform translate(96 96) scale(832/24)；SVG 是 y 向下坐标系
+    // 「不高山下」山体上下倒置：标准做法是 translate(0,24) scale(1,-1) 翻回 y 向上，
+    // 再叠加绕 y=12 的镜像（y → 24−y）即为倒置 —— 两次翻转抵消，
+    // 故直接在 y 向下坐标系绘制，山峰自然朝下
     ctx.translateBy(x: 96, y: 96)
     ctx.scaleBy(x: 832.0 / 24.0, y: 832.0 / 24.0)
-    ctx.translateBy(x: 0, y: 24)
-    ctx.scaleBy(x: 1, y: -1)
     ctx.setStrokeColor(p.ink)
     ctx.setFillColor(p.ink)
     ctx.setLineWidth(1.5)

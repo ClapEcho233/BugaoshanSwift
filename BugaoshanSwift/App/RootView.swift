@@ -84,7 +84,7 @@ struct EulaGatePage: View {
 /// EULA 正文（对应 assets/eula.md，简化渲染为纯文本段落）
 struct EulaContent: View {
     private static let paragraphs: [String] = [
-        "本应用（不高山上）是由四川大学学生自发组织的开源社区维护的校园助手工具，面向四川大学在校学生与教职工提供课表管理、成绩查询、校园服务聚合等便利功能。",
+        "本应用（不高山下）是由四川大学学生自发组织的开源社区维护的校园助手工具，面向四川大学在校学生与教职工提供课表管理、成绩查询、校园服务聚合等便利功能。",
         "本应用与四川大学官方无关，所有数据均直接来源于学校官方系统（统一身份认证、教务处、微服务平台等），应用本身不运营任何后台服务器存储您的账号信息。",
         "您的统一身份认证凭据仅保存在您本人的设备安全存储中，用于在您授权范围内完成自动登录与数据获取。请妥善保管设备，避免账号信息泄露。",
         "本应用按「现状」提供，不对其可用性、准确性与适用性作任何保证。因学校系统变更导致的临时不可用，请理解并等待适配更新。",
@@ -172,11 +172,12 @@ struct WizardWelcomePage: View {
             Spacer()
             Image(systemName: "mountain.2.fill")
                 .font(.system(size: 72))
+                .rotationEffect(.degrees(180))
                 .foregroundStyle(Color.accentColor)
                 .frame(width: 96, height: 96)
                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 20))
                 .shadow(color: Color.accentColor.opacity(0.2), radius: 24, y: 8)
-            Text("不高山上")
+            Text("不高山下")
                 .font(.largeTitle.bold())
             Text("四川大学校园助手 · 原生重制版")
                 .font(.subheadline)

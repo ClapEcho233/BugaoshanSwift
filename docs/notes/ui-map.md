@@ -1,10 +1,10 @@
-# Bugaoshan (不高山上) — UI / State Porting Reference
+# Bugaoshan (不高山下) — UI / State Porting Reference
 
 Source of truth for the Swift/SwiftUI rewrite. Generated from the Flutter codebase at
 `/Users/clapecho233/Files/Work/Bugaoshan` (lib/**, ios/CourseWidget/WidgetExtension.swift).
 All constant values are verbatim from code. Flutter file paths are relative to `lib/`.
 
-App name: 不高山上 (Bugaoshan) — SCU (Sichuan University) campus assistant.
+App name: 不高山下 (Bugaoshan) — SCU (Sichuan University) campus assistant.
 Stack in Flutter: Material 3 + GetIt DI + `ValueNotifier`/`ChangeNotifier` (no Riverpod/Bloc) + SharedPreferences + sqflite + flutter_inappwebview.
 
 ---
@@ -587,7 +587,7 @@ Existing SwiftUI/WidgetKit code to adapt. Key facts verbatim:
 
 - `lib/l10n/app_localizations_zh.dart` — **3064 lines, 915 getters** (+ parameterized methods). Largest key families: `ccyl*` (63), `repair*` (51), `train*` (35), `balance*` (31), `leave*` (26), `fitness*` (25), `dock*` (25), `course*` (24), `reset*` (23), `passpoint*` (22), `wizard*` (20), `campus*` (18), `export*` (17), `widget*` (16), `import*` (16).
 - Locales: `zh` + `en`; language override stored as BCP-47 tag; null = follow system.
-- App title key: `bugaoshan` → 不高山上.
+- App title key: `bugaoshan` → 不高山下.
 
 ## 9. Misc porting notes
 

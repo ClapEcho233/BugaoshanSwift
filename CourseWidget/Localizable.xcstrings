@@ -48,7 +48,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不高山上"
+            "value" : "不高山下"
           }
         }
       }
@@ -64,7 +64,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "显示不高山上的课表信息"
+            "value" : "显示不高山下的课表信息"
           }
         }
       }

@@ -1,6 +1,6 @@
-# 不高山上 iOS 原生重构方案
+# 不高山下 iOS 原生重构方案
 
-> 目标：将 Flutter 多平台版 Bugaoshan（不高山上）重构为 iOS 原生应用，采用 Swift + SwiftUI + 液态玻璃（Liquid Glass）设计语言。
+> 目标：将 Flutter 多平台版 Bugaoshan（不高山下）重构为 iOS 原生应用，采用 Swift + SwiftUI + 液态玻璃（Liquid Glass）设计语言。
 >
 > 原项目：`/Users/clapecho233/Files/Work/Bugaoshan`（Flutter 3.44，301 个 Dart 文件，约 72,500 行，v2.5.2）
 >
@@ -12,7 +12,7 @@
 
 ### 1.1 现有应用概况
 
-不高山上是四川大学校园助手 App，20+ 功能模块，按重要度分层：
+不高山下是四川大学校园助手 App，20+ 功能模块，按重要度分层：
 
 | 层 | 模块 | 数据来源 |
 |---|---|---|
