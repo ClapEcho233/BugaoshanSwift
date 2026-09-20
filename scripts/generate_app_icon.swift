@@ -1,7 +1,8 @@
-// 生成“不高山下”App 图标：米色底 + 锦红大小双山（大山描线、小山实心）
-// 几何与设计稿 MountainAppIcon.svg 一致：24 单位坐标系居中缩放到 832×832
-// 画布保持满幅方形 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
+// 生成“不高山下”App 图标：米色底 + 锦红 mountain.2.fill（关于页同款符号，上下倒置）
+// 使用 AppKit 渲染 SF Symbol（保持纵横比、不拉伸变形），sourceAtop 着色后合成到背景
+// 画布保持满幅方形、无 alpha 通道 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
 // 运行：swift scripts/generate_app_icon.swift
+import AppKit
 import CoreGraphics
 import ImageIO
 import Foundation
@@ -12,7 +13,7 @@ let S: CGFloat = 1024
 struct Palette {
     let bgTop: CGColor
     let bgBottom: CGColor
-    let ink: CGColor
+    let ink: UInt32
 }
 
 func rgb(_ hex: UInt32) -> CGColor {
@@ -22,25 +23,64 @@ func rgb(_ hex: UInt32) -> CGColor {
             alpha: 1)
 }
 
-// 默认：米色底 + 锦红双山（设计稿原色）
-let lightPalette = Palette(bgTop: rgb(0xF5EFE5), bgBottom: rgb(0xF5EFE5), ink: rgb(0xC50000))
+func nsColor(_ hex: UInt32) -> NSColor {
+    NSColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1)
+}
+
+// 默认：米色底 + 锦红（设计稿原色）
+let lightPalette = Palette(bgTop: rgb(0xF5EFE5), bgBottom: rgb(0xF5EFE5), ink: 0xC50000)
 // 深色：暗底 + 提亮红
-let darkPalette = Palette(bgTop: rgb(0x241E1B), bgBottom: rgb(0x15110F), ink: rgb(0xE0483A))
+let darkPalette = Palette(bgTop: rgb(0x241E1B), bgBottom: rgb(0x15110F), ink: 0xE0483A)
 // 着色：灰阶（系统按亮度着色）
-let tintedPalette = Palette(bgTop: rgb(0xA8A8A8), bgBottom: rgb(0x787878), ink: rgb(0xFFFFFF))
+let tintedPalette = Palette(bgTop: rgb(0xA8A8A8), bgBottom: rgb(0x787878), ink: 0xFFFFFF)
 
 func makeContext(_ size: Int) -> CGContext {
     let ctx = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8,
                         bytesPerRow: 0, space: CGColorSpace(name: CGColorSpace.sRGB)!,
                         // App 图标不允许 alpha 通道
                         bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
-    // 标准位图上下文为 y 向上；PNG 编码后 y=0 位于图像顶行
     ctx.setAllowsAntialiasing(true)
     ctx.setShouldAntialias(true)
     return ctx
 }
 
-func drawIcon(_ p: Palette, size: Int = 1024) -> CGImage {
+/// 将 SF Symbol 渲染为指定颜色 CGImage：居中、原始尺寸（保持纵横比，不拉伸），
+/// 先以模板黑绘制，再用 sourceAtop 整面填充着色（仅命中字形像素）
+func symbolImage(_ name: String, ink: UInt32, pointSize: CGFloat, canvas: Int) -> CGImage {
+    guard let base = NSImage(systemSymbolName: name, accessibilityDescription: nil) else {
+        fatalError("SF Symbol 不存在: \(name)")
+    }
+    let cfg = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .regular)
+    guard let sym = base.withSymbolConfiguration(cfg) else {
+        fatalError("符号配置失败: \(name)")
+    }
+    let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: canvas, pixelsHigh: canvas,
+                               bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                               colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+    rep.size = NSSize(width: canvas, height: canvas)
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+    // 居中按符号自身尺寸绘制（避免方形 rect 拉伸宽形山形符号）
+    let origin = NSPoint(x: (CGFloat(canvas) - sym.size.width) / 2,
+                         y: (CGFloat(canvas) - sym.size.height) / 2)
+    sym.draw(in: NSRect(origin: origin, size: sym.size))
+    // 着色：只覆盖已绘制的字形像素
+    nsColor(ink).set()
+    NSRect(x: 0, y: 0, width: canvas, height: canvas).fill(using: .sourceAtop)
+    NSGraphicsContext.restoreGraphicsState()
+    return rep.cgImage!
+}
+
+// 预渲染符号（三套配色共用同一几何，各着各色）
+let symbolCanvas = 2048
+let lightSymbol = symbolImage("mountain.2.fill", ink: lightPalette.ink, pointSize: 1600, canvas: symbolCanvas)
+let darkSymbol = symbolImage("mountain.2.fill", ink: darkPalette.ink, pointSize: 1600, canvas: symbolCanvas)
+let tintedSymbol = symbolImage("mountain.2.fill", ink: tintedPalette.ink, pointSize: 1600, canvas: symbolCanvas)
+
+func drawIcon(_ p: Palette, symbol: CGImage, size: Int = 1024) -> CGImage {
     let ctx = makeContext(size)
     ctx.scaleBy(x: CGFloat(size) / S, y: CGFloat(size) / S)
 
@@ -49,42 +89,16 @@ func drawIcon(_ p: Palette, size: Int = 1024) -> CGImage {
                           colors: [p.bgTop, p.bgBottom] as CFArray, locations: [0, 1])!
     ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
 
-    // 双山：SVG transform translate(96 96) scale(832/24)；SVG 是 y 向下坐标系
-    // 「不高山下」山体上下倒置：标准做法是 translate(0,24) scale(1,-1) 翻回 y 向上，
-    // 再叠加绕 y=12 的镜像（y → 24−y）即为倒置 —— 两次翻转抵消，
-    // 故直接在 y 向下坐标系绘制，山峰自然朝下
-    ctx.translateBy(x: 96, y: 96)
-    ctx.scaleBy(x: 832.0 / 24.0, y: 832.0 / 24.0)
-    ctx.setStrokeColor(p.ink)
-    ctx.setFillColor(p.ink)
-    ctx.setLineWidth(1.5)
-    ctx.setLineJoin(.round)
-    ctx.setLineCap(.round)
-
-    // 大山（描线不填充）：左坡 → 平顶 → 右坡 → 右底角 → 底边（左侧开放）
-    let big = CGMutablePath()
-    big.move(to: CGPoint(x: 9, y: 12.42))
-    big.addLine(to: CGPoint(x: 13.83, y: 5.66))
-    big.addLine(to: CGPoint(x: 14.16, y: 5.66))
-    big.addLine(to: CGPoint(x: 21.8, y: 18.11))
-    big.addLine(to: CGPoint(x: 21.63, y: 18.42))
-    big.addLine(to: CGPoint(x: 13, y: 18.42))
-    ctx.addPath(big)
-    ctx.strokePath()
-
-    // 小山（实心 + 描边）
-    let small = CGMutablePath()
-    small.move(to: CGPoint(x: 5.84, y: 12.65))
-    small.addLine(to: CGPoint(x: 2.2, y: 18.11))
-    small.addLine(to: CGPoint(x: 2.37, y: 18.42))
-    small.addLine(to: CGPoint(x: 10.16, y: 18.42))
-    small.addLine(to: CGPoint(x: 10.31, y: 18.10))
-    small.addLine(to: CGPoint(x: 6.16, y: 12.64))
-    small.closeSubpath()
-    ctx.addPath(small)
-    ctx.fillPath()
-    ctx.addPath(small)
-    ctx.strokePath()
+    // 山形符号居中、上下倒置 180°（「不高山下」品牌方向）
+    let side: CGFloat = 860
+    let rect = CGRect(x: (S - side) / 2, y: (S - side) / 2, width: side, height: side)
+    ctx.saveGState()
+    ctx.translateBy(x: rect.midX, y: rect.midY)
+    ctx.rotate(by: .pi)
+    ctx.translateBy(x: -rect.midX, y: -rect.midY)
+    ctx.interpolationQuality = .none
+    ctx.draw(symbol, in: rect)
+    ctx.restoreGState()
 
     return ctx.makeImage()!
 }
@@ -112,9 +126,9 @@ let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingL
 let appSet = root.appendingPathComponent("BugaoshanSwift/Assets.xcassets/AppIcon.appiconset")
 let widgetSet = root.appendingPathComponent("CourseWidget/Assets.xcassets/AppIcon.appiconset")
 
-let light = drawIcon(lightPalette)
-let dark = drawIcon(darkPalette)
-let tinted = drawIcon(tintedPalette)
+let light = drawIcon(lightPalette, symbol: lightSymbol)
+let dark = drawIcon(darkPalette, symbol: darkSymbol)
+let tinted = drawIcon(tintedPalette, symbol: tintedSymbol)
 
 for set in [appSet, widgetSet] {
     savePNG(light, to: set.appendingPathComponent("AppIcon.png").path)
