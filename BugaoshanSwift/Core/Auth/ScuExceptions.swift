@@ -9,7 +9,7 @@ enum SCUError: Error, LocalizedError, Equatable {
     case service(String, statusCode: Int? = nil)
     /// 服务端限流（zhjw「请勿频繁刷新」）。不做自动重试。
     case rateLimited
-    /// 登录页错误（验证码/凭据）。仅 UI 自动登录重试，且仅 invalid_captcha，最多 5 次。
+    /// 登录页错误（验证码/凭据）。仅 UI 自动登录重试，且仅 invalid_captcha，最多 3 次。
     case login(String)
     /// 忘记密码业务错误（400 验证码错误、439 验证码过期等）。
     case forgotPassword(String, businessCode: Int? = nil)

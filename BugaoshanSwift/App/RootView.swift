@@ -9,6 +9,7 @@ struct RootView: View {
 
     @State private var showLogin = false
     @State private var lastExpiredNoticeAt = Date.distantPast
+    @State private var showAutoLoginFailedAlert = false
 
     var body: some View {
         Group {
@@ -33,6 +34,15 @@ struct RootView: View {
             guard now.timeIntervalSince(lastExpiredNoticeAt) > 5 else { return }
             lastExpiredNoticeAt = now
             showLogin = true
+        }
+        .onChange(of: authBus.autoLoginFailedTrigger) { _ in
+            showAutoLoginFailedAlert = true
+        }
+        .alert("自动登录失败", isPresented: $showAutoLoginFailedAlert) {
+            Button("去登录") { showLogin = true }
+            Button("稍后", role: .cancel) {}
+        } message: {
+            Text("连续 3 次验证码识别失败，请手动重新登录。")
         }
     }
 }

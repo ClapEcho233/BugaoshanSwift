@@ -105,6 +105,8 @@ final class AuthBus: ObservableObject {
     @Published var subsystemReady: [String: Bool] = [:]
     /// 会话过期提示触发器（根视图 onChange 消费；视图侧 5s 冷却）
     @Published var sessionExpiredTrigger: Int = 0
+    /// 自动登录连续 3 次失败触发器（根视图弹警告引导重新登录）
+    @Published var autoLoginFailedTrigger: Int = 0
 
     nonisolated init() {}
 }

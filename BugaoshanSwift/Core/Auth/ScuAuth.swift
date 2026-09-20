@@ -572,45 +572,61 @@ actor ScuAuth {
         }
     }
 
-    /// 自动登录：凭据 + OCR 验证码，单次尝试。任何失败返回 false。
-    func autoLogin() async throws -> Bool {        guard let credentials = await getSavedCredentials() else {
+    /// 自动登录：凭据 + OCR 验证码，最多 3 次尝试（仅 invalid_captcha / OCR 失败换新验证码重试；
+    /// 其他错误如密码错/网络异常直接失败）。全部失败后经 AuthBus 触发 UI 警告。
+    func autoLogin() async throws -> Bool {
+        guard let credentials = await getSavedCredentials() else {
             log.d("ScuAuth", "autoLogin: no saved credentials")
             return false
         }
         log.i("ScuAuth", "autoLogin: starting")
-        do {
-            let captcha = try await fetchCaptcha()
-            let captchaText: String
+        let maxAttempts = 3
+        for attempt in 1...maxAttempts {
             do {
-                let base64 = captcha.captchaBase64
-                let stripped: String
-                if let comma = base64.firstIndex(of: ",") {
-                    stripped = String(base64[base64.index(after: comma)...])
-                } else {
-                    stripped = base64
+                let captcha = try await fetchCaptcha()
+                let captchaText: String
+                do {
+                    let base64 = captcha.captchaBase64
+                    let stripped: String
+                    if let comma = base64.firstIndex(of: ",") {
+                        stripped = String(base64[base64.index(after: comma)...])
+                    } else {
+                        stripped = base64
+                    }
+                    guard let imageBytes = Data(base64Encoded: stripped) else {
+                        throw SCUError.login("验证码图片解码失败")
+                    }
+                    guard let text = await ocr([UInt8](imageBytes)) else {
+                        throw SCUError.login("OCR 识别失败")
+                    }
+                    captchaText = text
+                } catch {
+                    // OCR/解码失败：换一张新验证码再试（除非已是最后一次）
+                    log.w("ScuAuth", "autoLogin: OCR error (attempt \(attempt)/\(maxAttempts)): \(error)")
+                    if attempt < maxAttempts { continue }
+                    break
                 }
-                guard let imageBytes = Data(base64Encoded: stripped) else {
-                    throw SCUError.login("验证码图片解码失败")
-                }
-                guard let text = await ocr([UInt8](imageBytes)) else {
-                    throw SCUError.login("OCR 识别失败")
-                }
-                captchaText = text
+                try await login(
+                    username: credentials.username,
+                    password: credentials.password,
+                    captchaCode: captcha.code,
+                    captchaText: captchaText
+                )
+                log.i("ScuAuth", "autoLogin: ok (attempt \(attempt))")
+                return true
+            } catch SCUError.login(let message) where message == "invalid_captcha" {
+                // 仅验证码错误换新重试；其他登录错误（密码错等）不重试
+                log.w("ScuAuth", "autoLogin: invalid captcha (attempt \(attempt)/\(maxAttempts))")
+                if attempt == maxAttempts { break }
             } catch {
-                log.e("ScuAuth", "autoLogin: OCR error: \(error)")
+                log.w("ScuAuth", "autoLogin: failed: \(error)")
                 return false
             }
-            try await login(
-                username: credentials.username,
-                password: credentials.password,
-                captchaCode: captcha.code,
-                captchaText: captchaText
-            )
-            log.i("ScuAuth", "autoLogin: ok")
-            return true
-        } catch {
-            log.w("ScuAuth", "autoLogin: failed: \(error)")
-            return false
         }
+        log.e("ScuAuth", "autoLogin: all \(maxAttempts) attempts failed")
+        // 三次全败 → UI 弹警告（重新登录引导）
+        let bus = self.bus
+        Task { @MainActor in bus?.autoLoginFailedTrigger += 1 }
+        return false
     }
 }

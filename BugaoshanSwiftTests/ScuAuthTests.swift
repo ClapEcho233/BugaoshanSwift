@@ -245,6 +245,56 @@ final class ScuAuthTests: XCTestCase {
         XCTAssertEqual(body["username"], "u1")
     }
 
+    func testAutoLoginRetriesInvalidCaptchaThenSucceeds() async throws {
+        await auth.saveCredentials(username: "u1", password: "pw1")
+        // 前 3 次请求中：captcha + sm2 正常，rest_token 前两次 invalid_captcha、第三次成功
+        transport.addJson(url: "one_time_login/captcha", body: #"{"data":{"code":"cap1","captcha":"aGVsbG8="}}"#)
+        transport.addJson(url: "one_time_login/captcha", body: #"{"data":{"code":"cap2","captcha":"aGVsbG8="}}"#)
+        transport.addJson(url: "one_time_login/captcha", body: #"{"data":{"code":"cap3","captcha":"aGVsbG8="}}"#)
+        let keyJson = #"{"data":{"publicKey":"\#(Self.stubPublicKeyBase64)","code":"sm2code"}}"#
+        transport.addJson(url: "sm2_key", body: keyJson)
+        transport.addJson(url: "sm2_key", body: keyJson)
+        transport.addJson(url: "sm2_key", body: keyJson)
+        transport.addJson(url: "rest_token", status: 400, body: #"{"message":"invalid_captcha"}"#)
+        transport.addJson(url: "rest_token", status: 400, body: #"{"message":"invalid_captcha"}"#)
+        transport.addJson(url: "rest_token", body: #"{"success":true,"data":{"access_token":"token-xyz"}}"#)
+
+        let ok = try await auth.autoLogin()
+        XCTAssertTrue(ok, "第三次应成功")
+        let state = await auth.state
+        XCTAssertEqual(state, .ready)
+        // 每次尝试都取了新验证码
+        let captchaCount = transport.recordedRequests.filter { $0.url.absoluteString.contains("captcha") }.count
+        XCTAssertEqual(captchaCount, 3)
+    }
+
+    func testAutoLoginFailsAfterThreeInvalidCaptchas() async throws {
+        await auth.saveCredentials(username: "u1", password: "pw1")
+        for _ in 0..<3 {
+            transport.addJson(url: "one_time_login/captcha", body: #"{"data":{"code":"cap","captcha":"aGVsbG8="}}"#)
+            transport.addJson(url: "sm2_key", body: #"{"data":{"publicKey":"\#(Self.stubPublicKeyBase64)","code":"sm2code"}}"#)
+            transport.addJson(url: "rest_token", status: 400, body: #"{"message":"invalid_captcha"}"#)
+        }
+
+        let ok = try await auth.autoLogin()
+        XCTAssertFalse(ok, "三次全败应返回 false")
+        let captchaCount = transport.recordedRequests.filter { $0.url.absoluteString.contains("captcha") }.count
+        XCTAssertEqual(captchaCount, 3, "不应超过 3 次尝试")
+    }
+
+    func testAutoLoginFailsFastOnPasswordError() async throws {
+        await auth.saveCredentials(username: "u1", password: "wrong")
+        transport.addJson(url: "one_time_login/captcha", body: #"{"data":{"code":"cap","captcha":"aGVsbG8="}}"#)
+        transport.addJson(url: "sm2_key", body: #"{"data":{"publicKey":"\#(Self.stubPublicKeyBase64)","code":"sm2code"}}"#)
+        transport.addJson(url: "rest_token", status: 400, body: #"{"message":"用户名或密码错误"}"#)
+
+        let ok = try await auth.autoLogin()
+        XCTAssertFalse(ok)
+        // 非验证码错误不重试：只拉过一次验证码
+        let captchaCount = transport.recordedRequests.filter { $0.url.absoluteString.contains("captcha") }.count
+        XCTAssertEqual(captchaCount, 1)
+    }
+
     func testAutoLoginNoCredentials() async throws {
         let ok = try await auth.autoLogin()
         XCTAssertFalse(ok)
