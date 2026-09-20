@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh-Hans</string>
 	<key>CFBundleDisplayName</key>
-	<string>不高山上</string>
+	<string>不高山下</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -34,7 +34,7 @@
 		</dict>
 	</dict>
 	<key>NSCalendarsWriteOnlyAccessKey</key>
-	<string>不高山上需要写入系统日历以导入课表、考试与校历日程。</string>
+	<string>不高山下需要写入系统日历以导入课表、考试与校历日程。</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchScreen</key>
