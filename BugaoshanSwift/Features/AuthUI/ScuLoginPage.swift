@@ -204,6 +204,11 @@ final class ScuLoginViewModel: ObservableObject {
         guard let image = captchaImage, let data = image.pngData() else { return }
         isRecognizing = true
         defer { isRecognizing = false }
+        // ddddocr CoreML 优先，旧质心模型回退；识别失败静默——用户手输兜底
+        if let recognized = DdddOcrRecognizer.recognize(imageData: data), !recognized.isEmpty {
+            captchaText = recognized.lowercased()
+            return
+        }
         guard let model = ScuOcrLite.loadBundledModel(),
               let recognized = try? ScuOcrLite.recognize(imageData: data, model: model),
               !recognized.isEmpty else {

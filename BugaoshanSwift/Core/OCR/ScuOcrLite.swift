@@ -289,7 +289,9 @@ struct RGBImage {
             rgb[i * 3 + 2] = rgba[i * 4 + 2]
         }
         let image = RGBImage(width: w, height: h, pixels: rgb)
-        return image.flipVertical()
+        // 注：ctx.draw 后内存首行已是图像顶行（CGImage 方向自持），直接返回即顶左原点；
+        // 曾经多余的 flipVertical 导致全图上下颠倒（真机识别率低的根源）
+        return image
     }
 
     func flipVertical() -> RGBImage {
@@ -325,17 +327,16 @@ struct RGBImage {
         return out
     }
 
-    /// 导出 PNG（测试用）。写入时补偿 CG 底朝向原点，产出标准左上原点 PNG，
-    /// 与 decode 的翻转互为逆操作，可回环。
+    /// 导出 PNG（测试用）。CGImage 方向自持，内存首行即顶行，直接写入；
+    /// 与 decode（不再翻转）互为逆操作，可回环
     func pngData() -> Data? {
         let rgba = UnsafeMutableRawPointer.allocate(byteCount: width * height * 4, alignment: 4)
         defer { rgba.deallocate() }
         let rgbaBytes = rgba.assumingMemoryBound(to: UInt8.self)
         for y in 0..<height {
-            let flippedRow = height - 1 - y
             for x in 0..<width {
                 let src = (y * width + x) * 3
-                let dst = (flippedRow * width + x) * 4
+                let dst = (y * width + x) * 4
                 rgbaBytes[dst] = pixels[src]
                 rgbaBytes[dst + 1] = pixels[src + 1]
                 rgbaBytes[dst + 2] = pixels[src + 2]

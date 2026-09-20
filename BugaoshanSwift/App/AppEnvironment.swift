@@ -40,6 +40,10 @@ final class AppEnvironment: ObservableObject {
         let secure = KeychainStore()
 
         let ocr: @Sendable ([UInt8]) async -> String? = { bytes in
+            // ddddocr CoreML 优先，旧质心模型回退
+            if let r = DdddOcrRecognizer.recognize(imageData: Data(bytes)), !r.isEmpty {
+                return r
+            }
             guard let model = ScuOcrLite.loadBundledModel() else { return nil }
             var result: String?
             do {
