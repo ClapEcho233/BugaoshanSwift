@@ -127,8 +127,6 @@ enum DockRegistry {
         DockItem(id: "academic_calendar", label: "校历", icon: "calendar.circle", accent: 0xFFD97757),
         DockItem(id: "zysc", label: "志愿四川", icon: "heart.circle", accent: 0xFF9A7FD1),
         DockItem(id: "leave", label: "办事大厅", icon: "checklist", accent: 0xFF6488C4),
-        DockItem(id: "notice", label: "通知", icon: "megaphone", accent: 0xFFE05D5D),
-        DockItem(id: "downloaded_attachments", label: "下载中心", icon: "folder", accent: 0xFF8F9BA8),
     ]
 
     /// 校园页三节分组（顺序即展示顺序）
@@ -136,7 +134,6 @@ enum DockRegistry {
         ("学业", ["grades", "ccyl", "plan_completion", "fitness_test", "exam_plan"]),
         ("实用工具", ["network_device", "passpoint", "balance_query", "repair",
                       "academic_calendar", "zysc", "leave"]),
-        ("通知", ["notice", "downloaded_attachments"]),
     ]
 
     static func item(id: String) -> DockItem? {

@@ -51,8 +51,6 @@ struct CampusPage: View {
             NetworkDevicePage()
         case "passpoint":
             PasspointPage()
-        case "notice":
-            NoticePage()
         case "repair":
             RepairPage()
         case "balance_query":
@@ -67,8 +65,6 @@ struct CampusPage: View {
             ServiceHallPage()
         case "ccyl":
             CcylPage()
-        case "downloaded_attachments":
-            NoticeDownloadedPage()
         case "zysc":
             WebViewNoticePage(
                 url: URL(string: "https://zysc.scyol.com/fzysc/#/pages/tabbar/index")!,

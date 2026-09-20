@@ -280,7 +280,7 @@ struct WizardStepCard: View {
 struct WizardFeaturesPage: View {
     private let features: [(icon: String, title: String, desc: String)] = [
         ("book", "课表", "多课表管理、教务导入、日历导出、桌面小组件"),
-        ("graduationcap", "校园", "成绩、电费、报修、通知等 18 项校园服务"),
+        ("graduationcap", "校园", "成绩、电费、报修等 12 项校园服务"),
         ("person.crop.circle", "我的", "账号信息与个性化设置"),
     ]
 

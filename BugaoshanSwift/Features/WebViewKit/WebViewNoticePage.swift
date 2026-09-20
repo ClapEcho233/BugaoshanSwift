@@ -199,51 +199,6 @@ struct WebViewContainer: UIViewRepresentable {
     }
 }
 
-// MARK: - 通知中心（hub）
-
-/// 通知 hub：三源入口（教务处 / 党委学工部 / 团委）
-struct NoticePage: View {
-    private let sources: [(label: String, icon: String, tint: Color, url: String, js: String?, dir: String, referer: String)] = [
-        ("教务处通知", "graduationcap", .blue, "https://jwc.scu.edu.cn/tzgg.htm", "jwc_notice_beautify", DownloadDirs.notice, "https://jwc.scu.edu.cn"),
-        ("党委学工部", "flag", .red, "https://xgb.scu.edu.cn/index/tzgg.htm", "party_notice_beautify", DownloadDirs.party, "https://xgb.scu.edu.cn"),
-        ("团委通知", "hands.and.sparkles", .orange, "https://tuanwei.scu.edu.cn/index/gg.htm", "tuanwei_notice_beautify", DownloadDirs.tuanwei, "https://tuanwei.scu.edu.cn"),
-    ]
-
-    var body: some View {
-        List {
-            ForEach(sources, id: \.label) { source in
-                NavigationLink {
-                    WebViewNoticePage(
-                        url: URL(string: source.url)!,
-                        beautifyJSFileName: source.js,
-                        title: source.label,
-                        attachmentDir: source.dir,
-                        downloadReferer: source.referer
-                    )
-                } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: source.icon)
-                            .font(.title3)
-                            .foregroundStyle(source.tint)
-                            .frame(width: 36, height: 36)
-                            .background(source.tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                        Text(source.label)
-                            .foregroundStyle(.primary)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.tertiary)
-                    }
-                    .padding(.vertical, 4)
-                }
-            }
-        }
-        .listStyle(.insetGrouped)
-        .navigationTitle("通知")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-
 extension URL: @retroactive Identifiable {
     public var id: String { absoluteString }
 }

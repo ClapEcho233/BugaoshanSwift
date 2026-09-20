@@ -34,16 +34,6 @@
         }
       }
     },
-    "%@ · %@ · %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ · %2$@ · %3$@"
-          }
-        }
-      }
-    },
     "%@ · %lld 门" : {
       "localizations" : {
         "zh-Hans" : {
@@ -127,9 +117,6 @@
       }
     },
     "*" : {
-
-    },
-    ".%@" : {
 
     },
     "0-365 天，0 表示最长有效期 6 年" : {
@@ -904,9 +891,6 @@
           }
         }
       }
-    },
-    "下载中心" : {
-
     },
     "下载完成" : {
       "extractionState" : "stale",
@@ -2377,9 +2361,6 @@
         }
       }
     },
-    "删除 %lld 个文件？" : {
-
-    },
     "删除 ({count})" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2397,9 +2378,6 @@
         }
       }
     },
-    "删除后不可恢复" : {
-
-    },
     "删除房间" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2416,9 +2394,6 @@
           }
         }
       }
-    },
-    "删除该文件？" : {
-
     },
     "删除课程" : {
       "localizations" : {
@@ -6018,16 +5993,6 @@
     "当前无在线设备" : {
 
     },
-    "当前来源 %lld 个，全部来源共 %lld 个" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "当前来源 %1$lld 个，全部来源共 %2$lld 个"
-          }
-        }
-      }
-    },
     "当前没有空闲教室" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7079,9 +7044,6 @@
         }
       }
     },
-    "排序" : {
-
-    },
     "排序方式" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7342,9 +7304,6 @@
           }
         }
       }
-    },
-    "搜索文件名" : {
-
     },
     "搜索活动名称" : {
       "localizations" : {
@@ -8617,9 +8576,6 @@
         }
       }
     },
-    "暂无附件" : {
-
-    },
     "暂未导入下学期课表" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -9122,9 +9078,6 @@
           }
         }
       }
-    },
-    "来源" : {
-
     },
     "查看下学期课表" : {
       "extractionState" : "stale",
@@ -14983,6 +14936,7 @@
       }
     },
     "通知" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
