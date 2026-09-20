@@ -110,12 +110,12 @@ func drawIcon(_ p: Palette, symbol: (image: CGImage, bbox: CGRect), size: Int = 
     ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
 
     // —— 全景出血构图 ——
-    // 字形宽度取画布 1.3 倍：左右各出血 15%，山坡自然越出图标边界
-    let targetW = S * 1.3
+    // 字形宽度取画布 1.45 倍：左右各出血 22%，山坡自然越出图标边界
+    let targetW = S * 1.45
     let scale = targetW / symbol.bbox.width
     let targetH = symbol.bbox.height * scale
-    // 旋转后底线（原字形顶边）锚定在画布顶部 20% 处，倒峰向下延伸
-    let anchorFromTop: CGFloat = 0.20
+    // 旋转后底线（原字形顶边）顶齐画布上缘：图标顶部不雷背景色
+    let anchorFromTop: CGFloat = 0.0
     let preRotationBaselineY = S * anchorFromTop
     // 字形目标框（旋转前坐标系：正常朝向、底线即 bbox 底边）
     let dstGlyph = CGRect(x: (S - targetW) / 2, y: preRotationBaselineY,
