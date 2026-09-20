@@ -116,14 +116,8 @@ struct ProfilePage: View {
 
     var body: some View {
         List {
-            Section {
-                Text("我的")
-                    .font(.largeTitle.bold())
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .listRowBackground(Color.clear)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
-                    .accessibilityAddTraits(.isHeader)
-            }
+            // 大标题作为原生 Section header：随内容滚动、天然对齐列表
+            // 内容边距（x=16），与 CampusPage 标题几何一致
             Section {
                 if isLoggedIn {
                     VStack(alignment: .leading, spacing: 6) {
@@ -173,7 +167,13 @@ struct ProfilePage: View {
                     .buttonStyle(.plain)
                     .padding(.vertical, 4)
                 }
+            } header: {
+                Text("我的")
+                    .font(.largeTitle.bold())
+                    .padding(.top, 10)
+                    .accessibilityAddTraits(.isHeader)
             }
+            .headerProminence(.increased)
 
             Section("应用") {
                 NavigationLink {
