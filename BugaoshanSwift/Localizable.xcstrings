@@ -6528,7 +6528,6 @@
 
     },
     "我的" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9610,7 +9609,6 @@
       }
     },
     "校园" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

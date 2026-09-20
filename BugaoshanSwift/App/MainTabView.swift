@@ -4,8 +4,8 @@ import SwiftUI
 /// 层级：NavigationStack 为父、TabView 为子——二级页 push 到外层栈，
 /// 与 TabView 平级，转场时从 tab bar 上方整体盖过去（无需隐藏修饰）；
 /// 若栈在 tab 内则页面永远处于 tab bar 之下。
-/// tab 根页面的导航栏要素（标题/显示模式/搜索栏）由外层按选中 tab 驱动，
-/// 因为 TabView 子视图的导航偏好不会传到外层共享导航栏。
+/// tab 根页面统一隐藏导航栏，标题由页面内容承担（见 body 内注释）；
+/// TabView 子视图的导航偏好不会传到外层共享导航栏。
 /// visibleDockIds 决定 tab 内容与顺序；少于 2 项时不显示 tab bar。
 struct MainTabView: View {
     @EnvironmentObject private var config: AppConfig
@@ -13,11 +13,6 @@ struct MainTabView: View {
     @EnvironmentObject private var authBus: AuthBus
 
     @State private var selection: String = "course"
-    /// 强制导航栏重扫滚动视图的信号：非课表 tab 间切换时导航栏不经历
-    /// 隐藏→重现转换，大标题的滚动跟踪仍绑在上一个 tab 的滚动视图上
-    /// （切到第二个 tab 后大标题钉死不收起，系统缺陷）。切换时短暂
-    /// 隐藏再立即恢复导航栏，迫使跟踪链重新绑定到新 tab 的滚动视图。
-    @State private var rebindTick = false
 
     var body: some View {
         let visibleIds = visibleTabIds
@@ -32,16 +27,14 @@ struct MainTabView: View {
                         .tag(id)
                 }
             }
-            .navigationTitle(DockRegistry.item(id: selection)?.label ?? selection)
-            .navigationBarTitleDisplayMode(.large)
-            // 恒定修饰符结构 + 值切换：分支切换会导致 TabView 子树整体重建，
-            // 引发 tab 荶丸滑动动画截断与课表页重载闪烁
-            .toolbar((selection == "course" || rebindTick) ? .hidden : .visible, for: .navigationBar)
-            .onChange(of: selection) { oldValue, newValue in
-                guard oldValue != newValue, newValue != "course", oldValue != "course" else { return }
-                rebindTick = true
-                DispatchQueue.main.async { rebindTick = false }
-            }
+            // 根级所有 tab 统一隐藏导航栏：tab 根页面标题由页面内容承担
+            //（课表自绘头部，校园/我的内容内大标题），与课表页模式一致。
+            // 规避 NavigationStack>TabView 单栈架构下共享导航栏大标题的
+            // 滚动跟踪在非课表 tab 间切换不重绑的系统缺陷（第二个访问的
+            // tab 大标题钉死不收起；唯一能触发重扫的导航栏隐藏→重现转换
+            // 又必产生中间帧闪烁，无法两全）。push 二级页自带标题+返回键，
+            // 不受根级隐藏影响。
+            .toolbar(.hidden, for: .navigationBar)
         }
     }
 

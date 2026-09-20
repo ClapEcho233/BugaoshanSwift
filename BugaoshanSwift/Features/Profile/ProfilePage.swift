@@ -2,7 +2,8 @@ import SwiftUI
 
 /// 校园功能聚合页（对应 campus_page.dart）：三节分组网格，
 /// 功能卡玻璃小卡片（GlassEffectContainer 分组）。
-/// 标题由外层 MainTabView 驱动（单栈架构）。
+/// 大标题由页面内容承担（根级导航栏隐藏，见 MainTabView 注释），
+/// 与课表页自绘头部模式一致，随内容滚动。
 struct CampusPage: View {
 
     private var sections: [(title: String, items: [DockItem])] {
@@ -15,6 +16,10 @@ struct CampusPage: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 20) {
+                Text("校园")
+                    .font(.largeTitle.bold())
+                    .padding(.horizontal)
+                    .padding(.top, 4)
                 ForEach(sections, id: \.title) { section in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(section.title)
@@ -111,6 +116,14 @@ struct ProfilePage: View {
 
     var body: some View {
         List {
+            Section {
+                Text("我的")
+                    .font(.largeTitle.bold())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .listRowBackground(Color.clear)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20))
+                    .accessibilityAddTraits(.isHeader)
+            }
             Section {
                 if isLoggedIn {
                     VStack(alignment: .leading, spacing: 6) {
