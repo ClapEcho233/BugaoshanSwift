@@ -21,8 +21,7 @@ enum Constants {
 
     // MARK: 链接
     static let orgLink = "https://github.com/The-Brotherhood-of-SCU"
-    static let appLink = "https://github.com/The-Brotherhood-of-SCU/Bugaoshan"
-    static let officialWebsiteLink = "https://bugaoshan.scubro.dev/"
+    static let appLink = "https://github.com/ClapEcho233/BugaoshanSwift"
     static let userManualLink = "https://bugaoshan-docs.scubro.dev/manual/"
 
     /// App Group（小组件共享）

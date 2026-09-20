@@ -284,9 +284,6 @@ struct AboutPage: View {
             UpdateCheckSection()
 
             Section("链接") {
-                Link(destination: URL(string: Constants.officialWebsiteLink)!) {
-                    Label("官方网站", systemImage: "globe")
-                }
                 Link(destination: URL(string: Constants.appLink)!) {
                     Label("GitHub 仓库", systemImage: "chevron.left.forwardslash.chevron.right")
                 }
