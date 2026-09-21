@@ -300,7 +300,7 @@ struct AboutPage: View {
             }
 
             Section("开源致谢") {
-                Text("本项目衍生自 The-Brotherhood-of-SCU/Bugaoshan（AGPL-3.0）。")
+                Text("本项目衍生自开源项目「不高山上」（The-Brotherhood-of-SCU/Bugaoshan，AGPL-3.0）。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }

@@ -1,10 +1,11 @@
 import Foundation
 
 /// GitHub 版本检查（update_checker.dart 全量移植）。
-/// 仓库：The-Brotherhood-of-SCU/Bugaoshan
+/// 仓库：ClapEcho233/BugaoshanSwift（本 App 自己的发布通道，
+/// 不查询原项目 The-Brotherhood-of-SCU/Bugaoshan 的 Releases）
 enum UpdateChecker {
 
-    static let githubRepo = "The-Brotherhood-of-SCU/Bugaoshan"
+    static let githubRepo = "ClapEcho233/BugaoshanSwift"
 
     static var latestReleaseURL: URL {
         URL(string: "https://api.github.com/repos/\(githubRepo)/releases/latest")!

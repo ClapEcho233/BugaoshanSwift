@@ -2,7 +2,7 @@
 
 四川大学校园助手 **「不高山下」** 的 iOS 原生重构版。基于 Swift + SwiftUI，采用 iOS 26 液态玻璃（Liquid Glass）设计语言。
 
-> 本仓库是 Flutter 版 [Bugaoshan](https://github.com/ClapEcho233/Bugaoshan) 的原生重构 + 改进。与官方 Flutter 版不互通数据，无需迁移。
+> 本仓库是 Flutter 版「不高山上」[Bugaoshan](https://github.com/ClapEcho233/Bugaoshan) 的原生重构 + 改进（本 App 命名为「不高山下」，与官方 Flutter 版不互通数据，无需迁移）。
 
 ## 功能
 
