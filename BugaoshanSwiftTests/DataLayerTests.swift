@@ -137,6 +137,28 @@ final class DataLayerTests: XCTestCase {
         XCTAssertEqual(ScheduleConfig.formatDate(wednesday), "2026-09-30")
     }
 
+    // MARK: - ScheduleConfig 当前节次（课表「正在上」高亮）
+
+    /// 默认时间表（8:00 起，45+10）：第 1 节 08:00-08:45、第 2 节 08:55-09:40…
+    func testCurrentSection() {
+        let config = ScheduleConfig()
+        func at(_ h: Int, _ m: Int) -> Date {
+            var comps = DateComponents()
+            comps.year = 2026; comps.month = 9; comps.day = 15
+            comps.hour = h; comps.minute = m
+            return Calendar.current.date(from: comps)!
+        }
+        XCTAssertEqual(config.currentSection(at: at(8, 0)), 1)    // 含开始时刻
+        XCTAssertEqual(config.currentSection(at: at(8, 44)), 1)
+        XCTAssertNil(config.currentSection(at: at(8, 45)))         // 结束时刻已下课
+        XCTAssertNil(config.currentSection(at: at(8, 50)))         // 课间
+        XCTAssertEqual(config.currentSection(at: at(8, 55)), 2)
+        XCTAssertNil(config.currentSection(at: at(7, 59)))         // 课前
+        XCTAssertNil(config.currentSection(at: at(12, 0)))         // 午休
+        XCTAssertEqual(config.currentSection(at: at(21, 30)), 12)  // 晚间末节 20:50-21:35
+        XCTAssertNil(config.currentSection(at: at(21, 36)))        // 课后
+    }
+
     // MARK: - ScheduleConfig JSON 兼容
 
     func testScheduleConfigRoundTrip() throws {

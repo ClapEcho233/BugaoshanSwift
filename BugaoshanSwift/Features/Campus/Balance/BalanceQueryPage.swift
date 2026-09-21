@@ -186,7 +186,11 @@ struct BalanceQueryPage: View {
     }
 
     private var trendSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        // 一次算齐全部绘图派生数据：SwiftUI 计算属性每次访问都会重算，
+        // 若在 body 多处直接访问 chartData，同一帧内日聚合会重复执行多次，
+        // 切换照明/空调时主线程阻塞导致掉帧。
+        let data = trendDisplayData
+        return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Text("余额趋势")
                     .font(.headline)
@@ -199,8 +203,8 @@ struct BalanceQueryPage: View {
                 .frame(width: 120)
             }
 
-            if chartData.count >= 2 {
-                Chart(chartData, id: \.timestamp) { record in
+            if data.points.count >= 2 {
+                Chart(data.points, id: \.timestamp) { record in
                     LineMark(
                         x: .value("时间", record.date),
                         y: .value("余额", record.balance)
@@ -217,13 +221,13 @@ struct BalanceQueryPage: View {
                         )
                     )
                 }
-                .chartXScale(domain: chartDomain)
+                .chartXScale(domain: data.domain)
                 .chartXAxis {
-                    AxisMarks(values: chartAxisDates) { value in
+                    AxisMarks(values: data.axisDates) { value in
                         AxisGridLine()
                         AxisValueLabel {
                             if let date = value.as(Date.self) {
-                                Text(BeijingTime.format(date, pattern: chartAxisPattern))
+                                Text(BeijingTime.format(date, pattern: data.axisPattern))
                             }
                         }
                     }
@@ -233,7 +237,7 @@ struct BalanceQueryPage: View {
                 }
                 .frame(height: 180)
 
-                if let first = chartData.first, let last = chartData.last,
+                if let first = data.points.first, let last = data.points.last,
                    last.balance < first.balance {
                     let consumed = first.balance - last.balance
                     let price = infos[trendType]?.price ?? 0
@@ -291,29 +295,32 @@ struct BalanceQueryPage: View {
         }
     }
 
-    /// 趋势图数据：按北京日聚合的日代表点（每日取最后一条，对应 Flutter dailyPoints）
-    private var chartData: [BalanceRecord] {
-        BalanceTrendMath.dailyPoints(from: history)
+    // MARK: - 趋势图派生数据
+
+    /// 趋势图全部绘图输入，一次聚合生成，避免 body 求值期间重复计算
+    private struct TrendDisplayData {
+        /// 按北京日聚合的日代表点（每日取最后一条，对应 Flutter dailyPoints）
+        var points: [BalanceRecord] = []
+        /// 横轴坐标域：最小缩放 10 分钟 + 2% 呼吸边距
+        var domain: ClosedRange<Date> = Date()...Date().addingTimeInterval(1)
+        /// 横轴刻度：坐标域内均匀分布的内部时间点，标签不会超出图表边界
+        var axisDates: [Date] = []
+        /// 横轴标签格式：不足一天 HH:mm，否则 MM-dd
+        var axisPattern: String = "MM-dd"
     }
 
-    /// 横轴坐标域：最小缩放 10 分钟 + 2% 呼吸边距
-    private var chartDomain: ClosedRange<Date> {
-        guard let first = chartData.first?.date, let last = chartData.last?.date else {
-            return Date()...Date().addingTimeInterval(1)
+    private var trendDisplayData: TrendDisplayData {
+        let points = BalanceTrendMath.dailyPoints(from: history)
+        guard let first = points.first?.date, let last = points.last?.date else {
+            return TrendDisplayData(points: points)
         }
-        return BalanceTrendMath.domain(from: first, to: last)
-    }
-
-    /// 横轴刻度：坐标域内均匀分布的内部时间点，标签不会超出图表边界
-    private var chartAxisDates: [Date] {
-        BalanceTrendMath.axisDates(from: chartDomain.lowerBound, to: chartDomain.upperBound)
-    }
-
-    /// 横轴标签格式按数据跨度自适应（不足一天 HH:mm，否则 MM-dd）
-    private var chartAxisPattern: String {
-        let span = (chartData.last?.date.timeIntervalSince1970 ?? 0)
-            - (chartData.first?.date.timeIntervalSince1970 ?? 0)
-        return BalanceTrendMath.axisPattern(span: span)
+        let domain = BalanceTrendMath.domain(from: first, to: last)
+        return TrendDisplayData(
+            points: points,
+            domain: domain,
+            axisDates: BalanceTrendMath.axisDates(from: domain.lowerBound, to: domain.upperBound),
+            axisPattern: BalanceTrendMath.axisPattern(span: last.timeIntervalSince(first))
+        )
     }
 
     /// 采样记录列表：默认最近 5 条，展开后全部（新→旧）

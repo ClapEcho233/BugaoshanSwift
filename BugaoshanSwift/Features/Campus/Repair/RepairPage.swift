@@ -519,7 +519,15 @@ struct RepairDetailPage: View {
                     Label("加载失败", systemImage: "exclamationmark.triangle")
                 } description: {
                     Text(errorMessage)
+                } actions: {
+                    Button("重试") {
+                        Task { await load() }
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
+            } else {
+                // 兜底：detail 为空且无错误时不留纯空白页
+                ContentUnavailableView("暂无数据", systemImage: "doc.questionmark")
             }
         }
         .navigationTitle("工单详情")

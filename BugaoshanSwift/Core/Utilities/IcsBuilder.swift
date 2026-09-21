@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// ICS 生成（对应 lib/services/ics_service.dart）：
 /// 伪 VTIMEZONE 固定 +0800；课程逐周 VEVENT；UID 方案支撑跨版本去重。
@@ -217,6 +218,17 @@ import CryptoKit
 enum BeijingTime {
     static let timeZone = TimeZone(secondsFromGMT: 8 * 3600)!
 
+    /// 复用 Gregorian 日历：Calendar 构造/桥接成本高，而 dayBucket 在趋势
+    /// 日聚合中对每条采样记录调用一次，必须避免反复创建。
+    /// Calendar 为值类型、所调方法均为只读，静态共享安全（语义与逐次创建一致）。
+    private static let calendar = Calendar(identifier: .gregorian)
+
+    /// DateFormatter 构造成本高（毫秒级），按 pattern 缓存复用；
+    /// 趋势图轴标签与采样列表在 body 中高频调用。Formatter 非线程安全，
+    /// 取用与格式化均在锁内完成。
+    private static let formatterCache = OSAllocatedUnfairLock(
+        initialState: [String: DateFormatter]())
+
     /// 北京日历日 y/m/d + h/m → UTC Date
     static func date(year: Int, month: Int, day: Int, hour: Int = 0, minute: Int = 0) -> Date {
         var comps = DateComponents()
@@ -226,12 +238,12 @@ enum BeijingTime {
         comps.hour = hour
         comps.minute = minute
         comps.timeZone = timeZone
-        return Calendar(identifier: .gregorian).date(from: comps)!
+        return calendar.date(from: comps)!
     }
 
     /// utcTime 所在北京日 00:00 对应的 UTC 即时
     static func startOfDayUtc(of utcTime: Date) -> Date {
-        let comps = Calendar(identifier: .gregorian).dateComponents(in: timeZone, from: utcTime)
+        let comps = calendar.dateComponents(in: timeZone, from: utcTime)
         return date(year: comps.year!, month: comps.month!, day: comps.day!)
     }
 
@@ -246,9 +258,17 @@ enum BeijingTime {
 
     /// 按北京时区格式化
     static func format(_ utcTime: Date, pattern: String) -> String {
-        let formatter = DateFormatter()
-        formatter.timeZone = timeZone
-        formatter.dateFormat = pattern
-        return formatter.string(from: utcTime)
+        formatterCache.withLock { cache in
+            let formatter: DateFormatter
+            if let cached = cache[pattern] {
+                formatter = cached
+            } else {
+                formatter = DateFormatter()
+                formatter.timeZone = timeZone
+                formatter.dateFormat = pattern
+                cache[pattern] = formatter
+            }
+            return formatter.string(from: utcTime)
+        }
     }
 }

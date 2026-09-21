@@ -71,6 +71,19 @@ struct ScheduleConfig: Codable, Equatable, Identifiable, Sendable {
     // MARK: - 派生
 
     var sectionsPerDay: Int { morningSections + afternoonSections + eveningSections }
+
+    /// 当前时间所在的节次（1-based）：now 落在 [start, end) 区间内才算，
+    /// 课间/课前/课后返回 nil。供课表高亮「正在上」的课程与当前节号。
+    func currentSection(at now: Date = Date()) -> Int? {
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: now)
+        let minuteOfDay = (comps.hour ?? 0) * 60 + (comps.minute ?? 0)
+        for (index, slot) in timeSlots.enumerated()
+        where minuteOfDay >= slot.startMinuteOfDay && minuteOfDay < slot.endMinuteOfDay {
+            return index + 1
+        }
+        return nil
+    }
+
     var semesterEndDate: Date {
         Calendar.current.date(byAdding: .day, value: totalWeeks * 7 - 1, to: semesterStartDate)!
     }

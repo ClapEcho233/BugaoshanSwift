@@ -1,5 +1,19 @@
 import SwiftUI
 
+/// 详情/编辑两态的呈现槽（单一 sheet(item:) 驱动，消除双 sheet 竞争）
+enum CourseSheet: Identifiable {
+    case detail(Course)
+    /// original = nil 时为新建课程
+    case edit(Course?)
+
+    var id: String {
+        switch self {
+        case .detail(let course): return "detail-\(course.id)"
+        case .edit: return "edit"
+        }
+    }
+}
+
 /// 课表主页面（对应 course_page.dart）：
 /// 顶栏（周导航/课表切换/导入导出/添加）+ 水平翻页周网格 + 假期页 + 空态。
 struct CoursePage: View {
@@ -9,9 +23,11 @@ struct CoursePage: View {
 
     @State private var pageIndex = 0
     @State private var showVacationPage = false
-    @State private var selectedCourse: Course?
-    @State private var showEditPage = false
-    @State private var editingCourse: Course?
+    /// 详情/编辑共用一个呈现槽（单一 sheet(item:)）：
+    /// 冷启动后首次「详情→编辑」若用两个独立 sheet 状态，编辑 sheet 的
+    /// content 会在旧状态快照中求值（editingCourse 仍为 nil）而弹出新建；
+    /// 合并为一个枚举后 item 切换由 SwiftUI 原生处理，无时序竞争
+    @State private var activeSheet: CourseSheet?
     @State private var showImportSheet = false
     @State private var showCalendarExport = false
     @State private var showManagement = false
@@ -50,31 +66,31 @@ struct CoursePage: View {
         .onChange(of: provider.config?.id) { _ in
             resetToToday()
         }
-        .sheet(item: $selectedCourse) { course in
-            CourseDetailSheet(
-                course: course,
-                config: provider.config ?? ScheduleConfig(),
-                onClose: { selectedCourse = nil },
-                onEdit: { courseToEdit in
-                    selectedCourse = nil
-                    editingCourse = courseToEdit
-                    showEditPage = true
-                },
-                onDelete: { courseId in
-                    selectedCourse = nil
-                    Task { await provider.deleteCourse(id: courseId) }
-                }
-            )
-            .presentationDetents([.medium])
-        }
-        .sheet(isPresented: $showEditPage) {
-            NavigationStack {
-                CourseEditPage(
-                    provider: provider,
-                    original: editingCourse,
-                    prefillDayOfWeek: nil,
-                    prefillSection: nil
+        .sheet(item: $activeSheet) { sheet in
+            switch sheet {
+            case .detail(let course):
+                CourseDetailSheet(
+                    course: course,
+                    config: provider.config ?? ScheduleConfig(),
+                    onClose: { activeSheet = nil },
+                    onEdit: { courseToEdit in
+                        activeSheet = .edit(courseToEdit)
+                    },
+                    onDelete: { courseId in
+                        activeSheet = nil
+                        Task { await provider.deleteCourse(id: courseId) }
+                    }
                 )
+                .presentationDetents([.medium])
+            case .edit(let original):
+                NavigationStack {
+                    CourseEditPage(
+                        provider: provider,
+                        original: original,
+                        prefillDayOfWeek: nil,
+                        prefillSection: nil
+                    )
+                }
             }
         }
         .sheet(isPresented: $showCalendarExport) {
@@ -125,8 +141,7 @@ struct CoursePage: View {
                 onImport: { showImportSheet = true },
                 onExport: { exportSchedule() },
                 onAddCourse: {
-                    editingCourse = nil
-                    showEditPage = true
+                    activeSheet = .edit(nil)
                 }
             )
             CourseGridHeader(
@@ -138,7 +153,12 @@ struct CoursePage: View {
             Divider()
             HStack(alignment: .top, spacing: 0) {
                 // 节次列固定在分页视图外：横向翻周时不随页滑动
-                CourseGridGutter(config: scheduleConfig, rowHeight: rowHeight)
+                CourseGridGutter(
+                    config: scheduleConfig,
+                    week: headerWeek,
+                    todayWeek: provider.currentWeek,
+                    rowHeight: rowHeight
+                )
                 TabView(selection: $pageIndex) {
                     ForEach(1...scheduleConfig.totalWeeks, id: \.self) { week in
                         CourseGridDayColumns(
@@ -146,9 +166,10 @@ struct CoursePage: View {
                             config: scheduleConfig,
                             week: week,
                             showWeekend: config.showWeekend,
+                            todayWeek: provider.currentWeek,
                             rowHeight: rowHeight,
                             onTapCourse: { course in
-                                selectedCourse = course
+                                activeSheet = .detail(course)
                             }
                         )
                         .tag(week - 1)

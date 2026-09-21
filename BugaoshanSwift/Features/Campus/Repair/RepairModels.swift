@@ -112,8 +112,13 @@ struct RepairTicket: Identifiable, Equatable, Sendable {
     }
 
     static func fromJson(_ json: [String: Any]) -> RepairTicket {
-        RepairTicket(
-            activeId: SafeJSON.string(json["activeId"]),
+        // activeId 缺失/为空时回退列表行自身的 id（对应 Flutter 版
+        // json['activeId'] ?? json['id'] ?? ''）：历史工单（已关闭等）
+        // 没有进行中的动态，后端只返回 id，没有 activeId。
+        let rawActiveId = SafeJSON.string(json["activeId"])
+        let activeId = rawActiveId.isEmpty ? SafeJSON.string(json["id"]) : rawActiveId
+        return RepairTicket(
+            activeId: activeId,
             areaName: SafeJSON.string(json["areaName"]),
             projectName: SafeJSON.string(json["projectName"]),
             serviceUnit: SafeJSON.string(json["serviceUnit"]),

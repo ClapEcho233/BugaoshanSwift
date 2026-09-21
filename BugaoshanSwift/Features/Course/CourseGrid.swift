@@ -50,33 +50,44 @@ struct CourseGridHeader: View {
     }
 }
 
-/// 节次列（35pt 固定）
+/// 节次列（35pt 固定）：节号 + 开始/结束时间，每分钟刷新，
+/// 浏览本周时高亮当前时刻所在的节次
 struct CourseGridGutter: View {
     let config: ScheduleConfig
+    let week: Int
+    let todayWeek: Int
     let rowHeight: Double
 
     var body: some View {
-        VStack(spacing: 0) {
-            ForEach(1...config.sectionsPerDay, id: \.self) { section in
-                VStack(spacing: 1) {
-                    Text("\(section)")
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                    if section <= config.timeSlots.count {
-                        Text(config.timeSlots[section - 1].format(true))
-                            .font(.system(size: 8))
-                            .foregroundStyle(.tertiary)
-                        if rowHeight >= 60 {
-                            Text(config.timeSlots[section - 1].format(false))
-                                .font(.system(size: 8))
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
+        TimelineView(.periodic(from: .now, by: 60)) { timeline in
+            let now = timeline.date
+            // 仅当正在浏览本周（今天所在教学周）时，当前节才有高亮意义
+            let currentSection = week == todayWeek ? config.currentSection(at: now) : nil
+            VStack(spacing: 0) {
+                ForEach(1...config.sectionsPerDay, id: \.self) { section in
+                    gutterCell(section, isCurrent: section == currentSection)
                 }
-                .frame(width: 35, height: rowHeight)
-                .overlay(alignment: .bottom) { sectionBoundary(section) }
             }
         }
+    }
+
+    private func gutterCell(_ section: Int, isCurrent: Bool) -> some View {
+        VStack(spacing: 1) {
+            Text("\(section)")
+                .font(.caption2.weight(isCurrent ? .bold : .semibold))
+                .foregroundStyle(isCurrent ? AnyShapeStyle(Color.accentColor) : AnyShapeStyle(Color.secondary))
+            if section <= config.timeSlots.count {
+                let slot = config.timeSlots[section - 1]
+                Text(slot.format(true))
+                    .font(.system(size: 8))
+                    .foregroundStyle(isCurrent ? AnyShapeStyle(Color.accentColor) : AnyShapeStyle(.tertiary))
+                Text(slot.format(false))
+                    .font(.system(size: 8))
+                    .foregroundStyle(isCurrent ? AnyShapeStyle(Color.accentColor) : AnyShapeStyle(.tertiary))
+            }
+        }
+        .frame(width: 35, height: rowHeight)
+        .overlay(alignment: .bottom) { sectionBoundary(section) }
     }
 
     /// 节次分隔线：上午/下午结束边界 1.5pt 强调，普通 0.5pt
@@ -92,20 +103,25 @@ struct CourseGridGutter: View {
     }
 }
 
-/// 天列组（仅天列，不带节次列）：供整页使用，也可被按周分页复用
+/// 天列组（仅天列，不带节次列）：供整页使用，也可被按周分页复用；
+/// 每分钟刷新，今天的当前节课程高亮
 struct CourseGridDayColumns: View {
     let courses: [Course]
     let config: ScheduleConfig
     let week: Int
     let showWeekend: Bool
+    let todayWeek: Int
     let rowHeight: Double
 
     var onTapCourse: ((Course) -> Void)?
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
-            ForEach(0..<dayCount, id: \.self) { index in
-                dayColumn(index)
+        TimelineView(.periodic(from: .now, by: 30)) { timeline in
+            let now = timeline.date
+            HStack(alignment: .top, spacing: 0) {
+                ForEach(0..<dayCount, id: \.self) { index in
+                    dayColumn(index, now: now)
+                }
             }
         }
     }
@@ -155,9 +171,14 @@ struct CourseGridDayColumns: View {
         showWeekend ? (index == 0 ? 7 : index) : index + 1
     }
 
-    private func dayColumn(_ index: Int) -> some View {
+    private func dayColumn(_ index: Int, now: Date) -> some View {
         let day = dayOfWeek(for: index)
         let dayCourses = visibleCourses(dayOfWeek: day)
+        // 今天且正在浏览本周 → 当前时刻所在节次；据此高亮「正在上」的课程
+        let isToday = week == todayWeek
+            && Calendar.current.isDate(
+                config.dateForCourseDay(week: week, dayOfWeek: day), inSameDayAs: now)
+        let currentSection = isToday ? config.currentSection(at: now) : nil
         return ZStack(alignment: .topLeading) {
             // 节次网格底
             VStack(spacing: 0) {
@@ -175,6 +196,7 @@ struct CourseGridDayColumns: View {
                     course: course,
                     config: config,
                     rowHeight: rowHeight,
+                    currentProgress: courseProgress(course, currentSection: currentSection, now: now),
                     onTap: { onTapCourse?(course) }
                 )
                 .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -189,6 +211,23 @@ struct CourseGridDayColumns: View {
                 .frame(width: 0.5)
         }
         .clipped()
+    }
+
+    /// 当前时刻落在课程节次区间内时的课程时间进度（0…1，跨整段连堂课：
+    /// 从首节并始到末节结束的总时长）；不在课内返回 nil
+    private func courseProgress(
+        _ course: Course, currentSection section: Int?, now: Date
+    ) -> Double? {
+        guard let section,
+              course.startSection <= section, section <= course.endSection,
+              course.startSection - 1 < config.timeSlots.count,
+              course.endSection - 1 < config.timeSlots.count else { return nil }
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: now)
+        let minuteOfDay = (comps.hour ?? 0) * 60 + (comps.minute ?? 0)
+        let start = config.timeSlots[course.startSection - 1].startMinuteOfDay
+        let end = config.timeSlots[course.endSection - 1].endMinuteOfDay
+        guard end > start else { return nil }
+        return min(max(Double(minuteOfDay - start) / Double(end - start), 0), 1)
     }
 
     /// 节次分隔线：上午/下午结束边界 1.5pt 强调，普通 0.5pt
@@ -210,7 +249,12 @@ struct CourseCardView: View {
     let course: Course
     let config: ScheduleConfig
     let rowHeight: Double
+    /// 当前时刻正上这节课的课程时间进度（0…1，仅今天 + 本周视图生效）；
+    /// nil = 非当前。高亮样式：轻微加深底色 + 课程色柔阴影 + 底部进度条
+    var currentProgress: Double?
     let onTap: () -> Void
+
+    private var isCurrent: Bool { currentProgress != nil }
 
     private var active: Bool { true }  // 可见课程已按 isActive 过滤
 
@@ -220,8 +264,15 @@ struct CourseCardView: View {
 
     private var courseColor: Color { course.colorValue.argbColor }
 
-    /// 文字统一黑色
-    private var textColor: Color { .primary }
+    /// 文字颜色：高亮卡白字（Apple 日历「进行中」事件风格），普通卡黑字
+    private var textColor: Color { isCurrent ? .white : .primary }
+
+    /// 课程色过亮（相对亮度 > 0.72，如浅黄/浅粉）时压暗填充背景，保证白字可读
+    private var needsDarkening: Bool {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        UIColor(courseColor).getRed(&r, green: &g, blue: &b, alpha: &a)
+        return (0.299 * r + 0.587 * g + 0.114 * b) > 0.72
+    }
 
     /// 卡高决定详情行预算：<56 → 0 行；<100 → 3 行；否则 5 行
     private var detailLineBudget: Int {
@@ -233,12 +284,16 @@ struct CourseCardView: View {
     var body: some View {
         Button(action: onTap) {
             HStack(alignment: .top, spacing: 0) {
-                Rectangle()
-                    .fill(courseColor)
-                    .frame(width: 3)
+                // 高亮卡背景已是课程色实底，左色条融入背景不再需要
+                if !isCurrent {
+                    Rectangle()
+                        .fill(courseColor)
+                        .frame(width: 3)
+                }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(course.name)
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.system(size: 12, weight: isCurrent ? .bold : .semibold))
+                        .foregroundStyle(textColor)
                         .lineLimit(6)
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -254,12 +309,30 @@ struct CourseCardView: View {
                         }
                     }
                     Spacer(minLength: 0)
+                    if let progress = currentProgress {
+                        // 课程时间进度条：直观表达「正在上」，替代硬描边
+                        progressTrack(progress)
+                    }
                 }
                 .padding(.horizontal, 5)
                 .padding(.vertical, 4)
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(courseColor.opacity(0.16), in: .rect(cornerRadius: 6))
+            .background {
+                Group {
+                    if isCurrent {
+                        // Apple 日历「进行中」高亮：课程色实底 + 白字
+                        ZStack {
+                            courseColor
+                            if needsDarkening {
+                                Color.black.opacity(0.15)
+                            }
+                        }
+                    } else {
+                        courseColor.opacity(0.16)
+                    }
+                }
+            }
             .clipShape(.rect(cornerRadius: 6))
         }
         .buttonStyle(.plain)
@@ -275,6 +348,18 @@ struct CourseCardView: View {
             .lineLimit(lines)
             .foregroundStyle(textColor.opacity(0.85))
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// 课程时间进度条（仅高亮卡白底白字语境）：轨道白色淡铺，填充宽 = 已过时间比例
+    private func progressTrack(_ progress: Double) -> some View {
+        ZStack(alignment: .leading) {
+            Capsule().fill(Color.white.opacity(0.25))
+            GeometryReader { geo in
+                Capsule().fill(Color.white)
+                    .frame(width: max(4, geo.size.width * progress))
+            }
+        }
+        .frame(height: 3)
     }
 
     private var weekRangeText: String {
