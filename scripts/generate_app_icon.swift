@@ -1,42 +1,18 @@
-// 生成“不高山下”App 图标：米色底 + 锦红 mountain.2.fill（关于页同款符号，上下倒置）
-// 山形左右出血越过画布、底线水平锚定 —— 截断即图标边界本身，呈全景山景构图
-// 使用 AppKit 渲染 SF Symbol（宽裕画布防内部裁切 + 像素扫描取字形紧包围盒，精确定位）
+// 生成「不高山下」App 图标：取原版「不高山上」App 图标，整体旋转 180°（倒山，品牌方向）
+// - Light/Dark：倒置原图平铺白底（iOS 图标禁 alpha，忠实保留原版观感）
+// - Tinted：灰阶版本（系统按亮度着色，Apple 推荐提供灰阶图）
+// 图标源文件：scripts/original-app-icon.png（1024×1024，取自 Flutter 版 Runner 资产；
+//   缺失时回退到 Flutter 原仓库绝对路径，并建议重新复制一份入库）
 // 画布保持满幅方形、无 alpha 通道 —— iOS 系统会自动应用圆角遮罩，预切圆角违反 Apple 规范
 // 运行：swift scripts/generate_app_icon.swift
 import AppKit
 import CoreGraphics
+import CoreImage
 import ImageIO
 import Foundation
 import UniformTypeIdentifiers
 
 let S: CGFloat = 1024
-
-struct Palette {
-    let bgTop: CGColor
-    let bgBottom: CGColor
-    let ink: UInt32
-}
-
-func rgb(_ hex: UInt32) -> CGColor {
-    CGColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255,
-            green: CGFloat((hex >> 8) & 0xFF) / 255,
-            blue: CGFloat(hex & 0xFF) / 255,
-            alpha: 1)
-}
-
-func nsColor(_ hex: UInt32) -> NSColor {
-    NSColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255,
-            green: CGFloat((hex >> 8) & 0xFF) / 255,
-            blue: CGFloat(hex & 0xFF) / 255,
-            alpha: 1)
-}
-
-// 默认：米色底 + 锦红（设计稿原色）
-let lightPalette = Palette(bgTop: rgb(0xF5EFE5), bgBottom: rgb(0xF5EFE5), ink: 0xC50000)
-// 深色：暗底 + 提亮红
-let darkPalette = Palette(bgTop: rgb(0x241E1B), bgBottom: rgb(0x15110F), ink: 0xE0483A)
-// 着色：灰阶（系统按亮度着色）
-let tintedPalette = Palette(bgTop: rgb(0xA8A8A8), bgBottom: rgb(0x787878), ink: 0xFFFFFF)
 
 func makeContext(_ size: Int) -> CGContext {
     let ctx = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8,
@@ -48,94 +24,52 @@ func makeContext(_ size: Int) -> CGContext {
     return ctx
 }
 
-/// 渲染 SF Symbol 为带 alpha 的 CGImage，并返回字形像素紧包围盒（画布坐标，y 向上）。
-/// 画布取标称尺寸 3 倍见方，保证任何宽形符号都不会在渲染阶段被裁切；
-/// 先以模板黑绘制，再用 sourceAtop 整面填充着色（仅命中字形像素）。
-func renderSymbol(_ name: String, ink: UInt32, pointSize: CGFloat) -> (image: CGImage, bbox: CGRect) {
-    guard let base = NSImage(systemSymbolName: name, accessibilityDescription: nil) else {
-        fatalError("SF Symbol 不存在: \(name)")
-    }
-    let cfg = NSImage.SymbolConfiguration(pointSize: pointSize, weight: .regular)
-    guard let sym = base.withSymbolConfiguration(cfg) else {
-        fatalError("符号配置失败: \(name)")
-    }
-    let cw = Int(pointSize * 3), ch = Int(pointSize * 3)
-    let rep = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: cw, pixelsHigh: ch,
-                               bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
-                               colorSpaceName: .calibratedRGB, bytesPerRow: 0, bitsPerPixel: 0)!
-    rep.size = NSSize(width: cw, height: ch)
-    NSGraphicsContext.saveGraphicsState()
-    NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
-    // 居中按符号自身尺寸绘制（保持纵横比）
-    let r = NSRect(x: (CGFloat(cw) - sym.size.width) / 2,
-                   y: (CGFloat(ch) - sym.size.height) / 2,
-                   width: sym.size.width, height: sym.size.height)
-    sym.draw(in: r)
-    // 着色：只覆盖已绘制的字形像素
-    nsColor(ink).set()
-    NSRect(x: 0, y: 0, width: cw, height: ch).fill(using: .sourceAtop)
-    NSGraphicsContext.restoreGraphicsState()
+// MARK: - 读取原版图标
 
-    guard let cg = rep.cgImage else { fatalError("符号位图转换失败") }
-    // 扫描 alpha 通道取紧包围盒（去除符号画布的透明边距，供精确定位）
-    guard let data = rep.bitmapData else { fatalError("无法读取位图") }
-    let bpr = rep.bytesPerRow
-    var minX = cw, maxX = 0, minY = ch, maxY = 0
-    for y in 0..<ch {
-        for x in 0..<cw {
-            if data[y * bpr + x * 4 + 3] > 8 {
-                minX = min(minX, x); maxX = max(maxX, x)
-                minY = min(minY, y); maxY = max(maxY, y)
-            }
-        }
-    }
-    let bbox = CGRect(x: minX, y: minY, width: maxX - minX + 1, height: maxY - minY + 1)
-    return (cg, bbox)
+let scriptDir = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+let root = scriptDir.deletingLastPathComponent()
+
+let candidates = [
+    scriptDir.appendingPathComponent("original-app-icon.png"),
+    URL(fileURLWithPath: "/Users/clapecho233/Files/Work/Bugaoshan/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png"),
+]
+guard let srcURL = candidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) else {
+    fatalError("找不到原版图标，尝试过: \(candidates.map(\.path))")
 }
+guard let src = CGImageSourceCreateWithURL(srcURL as CFURL, nil),
+      let original = CGImageSourceCreateImageAtIndex(src, 0, nil) else {
+    fatalError("无法读取原版图标: \(srcURL.path)")
+}
+print("图标源: \(srcURL.path)")
 
-// 预渲染符号（三套配色同几何，各着各色）
-let pointSize: CGFloat = 1600
-let lightSymbol = renderSymbol("mountain.2.fill", ink: lightPalette.ink, pointSize: pointSize)
-let darkSymbol = renderSymbol("mountain.2.fill", ink: darkPalette.ink, pointSize: pointSize)
-let tintedSymbol = renderSymbol("mountain.2.fill", ink: tintedPalette.ink, pointSize: pointSize)
-print(String(format: "字形包围盒: %.0f×%.0f (宽高比 1:%.3f)", lightSymbol.bbox.width, lightSymbol.bbox.height, lightSymbol.bbox.height / lightSymbol.bbox.width))
+// MARK: - 倒置 + 平铺
 
-func drawIcon(_ p: Palette, symbol: (image: CGImage, bbox: CGRect), size: Int = 1024) -> CGImage {
-    let ctx = makeContext(size)
-    ctx.scaleBy(x: CGFloat(size) / S, y: CGFloat(size) / S)
-
-    // 背景：对角线柔和渐变（两端同色即纯色）
-    let grad = CGGradient(colorsSpace: CGColorSpace(name: CGColorSpace.sRGB)!,
-                          colors: [p.bgTop, p.bgBottom] as CFArray, locations: [0, 1])!
-    ctx.drawLinearGradient(grad, start: .zero, end: CGPoint(x: S, y: S), options: [])
-
-    // —— 全景出血构图 ——
-    // 字形宽度取画布 1.45 倍：左右各出血 22%，山坡自然越出图标边界
-    let targetW = S * 1.45
-    let scale = targetW / symbol.bbox.width
-    let targetH = symbol.bbox.height * scale
-    // 旋转后底线（原字形顶边）顶齐画布上缘：图标顶部不雷背景色
-    let anchorFromTop: CGFloat = 0.0
-    let preRotationBaselineY = S * anchorFromTop
-    // 字形目标框（旋转前坐标系：正常朝向、底线即 bbox 底边）
-    let dstGlyph = CGRect(x: (S - targetW) / 2, y: preRotationBaselineY,
-                          width: targetW, height: targetH)
-    // 符号整图对应矩形 = 字形框向外补偿 bbox 原点缩放
-    let dstImage = CGRect(x: dstGlyph.minX - symbol.bbox.minX * scale,
-                          y: dstGlyph.minY - symbol.bbox.minY * scale,
-                          width: CGFloat(symbol.image.width) * scale,
-                          height: CGFloat(symbol.image.height) * scale)
-
-    // 整体旋转 180°（「不高山下」品牌方向：倒山、底线在上）
+/// 整体旋转 180° 并平铺到白底（去除 alpha 通道）。
+/// 180° 旋转是精确像素映射，无重采样损失；非 1024 源会按画布等比缩放绘制。
+func flippedOnWhite(_ image: CGImage) -> CGImage {
+    let ctx = makeContext(Int(S))
+    // 白底（原版图标本身为白底，平铺仅为去除 alpha）
+    ctx.setFillColor(CGColor(srgbRed: 1, green: 1, blue: 1, alpha: 1))
+    ctx.fill(CGRect(x: 0, y: 0, width: S, height: S))
+    // 整体旋转 180°（「不高山下」品牌方向：倒山）
     ctx.saveGState()
     ctx.translateBy(x: S / 2, y: S / 2)
     ctx.rotate(by: .pi)
     ctx.translateBy(x: -S / 2, y: -S / 2)
-    ctx.interpolationQuality = .none
-    ctx.draw(symbol.image, in: dstImage)
+    ctx.interpolationQuality = .high
+    ctx.draw(image, in: CGRect(x: 0, y: 0, width: S, height: S))
     ctx.restoreGState()
-
     return ctx.makeImage()!
+}
+
+/// 去饱和为灰阶（供 Tinted 变体，系统按亮度统一着色）。
+func desaturate(_ image: CGImage) -> CGImage {
+    let ci = CIImage(cgImage: image)
+    let gray = ci.applyingFilter("CIColorControls", parameters: [kCIInputSaturationKey: 0])
+    guard let out = CIContext().createCGImage(gray, from: ci.extent) else {
+        fatalError("灰阶转换失败")
+    }
+    return out
 }
 
 // MARK: - 导出
@@ -157,13 +91,12 @@ func resize(_ image: CGImage, to px: Int) -> CGImage {
     return ctx.makeImage()!
 }
 
-let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
 let appSet = root.appendingPathComponent("BugaoshanSwift/Assets.xcassets/AppIcon.appiconset")
 let widgetSet = root.appendingPathComponent("CourseWidget/Assets.xcassets/AppIcon.appiconset")
 
-let light = drawIcon(lightPalette, symbol: lightSymbol)
-let dark = drawIcon(darkPalette, symbol: darkSymbol)
-let tinted = drawIcon(tintedPalette, symbol: tintedSymbol)
+let light = flippedOnWhite(original)
+let dark = light          // 深色模式沿用原版白底画面，忠实还原原版图标
+let tinted = desaturate(light)
 
 for set in [appSet, widgetSet] {
     savePNG(light, to: set.appendingPathComponent("AppIcon.png").path)

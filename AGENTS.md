@@ -99,6 +99,6 @@ CourseWidget/             # WidgetKit 小组件：App Group 直读 SQLite，4 �
 ## 其他
 
 - `scripts/generate_app_icon.swift` — 程序化生成 App 图标：`swift scripts/generate_app_icon.swift`（改图标后需重跑）
-- App 图标/品牌：米色底 + 锦红双山（大山描线、小山实心）
+- App 图标：原版「不高山上」图标整体倒置 180°（倒山；源图 `scripts/original-app-icon.png`，生成脚本自动取用）
 - 检查更新走 GitHub Releases/TestFlight 链接，不做应用内自更新
 - 范围外（不做）：桌面平台、Android 专属功能、F-Droid 类打包
