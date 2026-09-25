@@ -105,7 +105,7 @@ struct SetDockPage: View {
                     } label: {
                         HStack {
                             Image(systemName: item.icon).foregroundStyle(item.accent.argbColor)
-                            Text(item.label).foregroundStyle(.primary)
+                            Text(LocalizedStringKey(item.label)).foregroundStyle(.primary)
                             Spacer()
                             Image(systemName: "plus.circle").foregroundStyle(Color.accentColor)
                         }
@@ -128,7 +128,7 @@ struct SetDockPage: View {
     private func dockRow(_ item: DockItem) -> some View {
         HStack {
             Image(systemName: item.icon).foregroundStyle(item.accent.argbColor)
-            Text(item.label)
+            Text(LocalizedStringKey(item.label))
             if item.id == "course" || item.id == "profile" {
                 Text("固定").font(.caption2).foregroundStyle(.tertiary)
             }
@@ -155,17 +155,25 @@ struct SetFontPage: View {
     }
 }
 
-/// 语言切换（写入 AppleLanguages，重启后生效；覆盖 UI 文案经
-/// Localizable.xcstrings 本地化，键为中文原文）
+/// 语言切换（与系统「设置 → App → 语言」写同一存储 AppleLanguages，双向一致；
+/// 覆盖 UI 文案经 Localizable.xcstrings 本地化，键为中文原文）
 struct SetLanguagePage: View {
-    @AppStorage("app_language") private var language = ""
+    /// 当前生效的语言覆盖（"" = 跟随系统）。进入页面时从 AppleLanguages 实时读取，
+    /// 保证系统侧改过语言后 App 内回显真实状态（旧实现存独立键 app_language，
+    /// 会与系统每-App 语言设置脱钩）
+    @State private var language: String = ""
+    @AppStorage("app_language") private var legacyLanguage = ""
     @State private var pendingRestart = false
+
+    static func currentOverride() -> String {
+        UserDefaults.standard.stringArray(forKey: "AppleLanguages")?.first ?? ""
+    }
 
     var body: some View {
         List {
             Picker("语言", selection: $language) {
                 Text("跟随系统").tag("")
-                Text("中文").tag("zh")
+                Text("中文").tag("zh-Hans")
                 Text("English").tag("en")
             }
             .pickerStyle(.inline)
@@ -180,6 +188,14 @@ struct SetLanguagePage: View {
         }
         .navigationTitle("语言")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // 旧版迁移：仅在未设置 AppleLanguages 时采用旧键的一次性偏好
+            if Self.currentOverride().isEmpty && !legacyLanguage.isEmpty {
+                language = legacyLanguage == "zh" ? "zh-Hans" : legacyLanguage
+            } else {
+                language = Self.currentOverride()
+            }
+        }
         .alert("需要重启", isPresented: $pendingRestart) {
             Button("好", role: .cancel) {}
         } message: {

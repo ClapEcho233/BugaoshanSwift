@@ -585,7 +585,7 @@ struct RepairDetailPage: View {
         }
     }
 
-    private func infoRow(_ title: String, _ value: String) -> some View {
+    private func infoRow(_ title: LocalizedStringKey, _ value: String) -> some View {
         HStack(alignment: .top) {
             Text(title)
                 .foregroundStyle(.secondary)

@@ -25,7 +25,7 @@ struct CampusPage: View {
                     // 分组头与卡片网格共用 32pt 内容边距，同页同节奏；
                     // 头与网格间距 12、网格行间距 16、组间距 24 的阶梯韵律
                     VStack(alignment: .leading, spacing: 12) {
-                        Text(section.title)
+                        Text(LocalizedStringKey(section.title))
                             .font(.headline)
                             .padding(.leading, 32)
                             .padding(.trailing, 16)
@@ -98,7 +98,7 @@ struct CampusItemCard: View {
                 .foregroundStyle(accent)
                 .frame(width: 46, height: 46)
                 .background(accent.opacity(0.14), in: RoundedRectangle(cornerRadius: 14))
-            Text(item.label)
+            Text(LocalizedStringKey(item.label))
                 .font(.caption)
                 .foregroundStyle(.primary)
                 .lineLimit(1)

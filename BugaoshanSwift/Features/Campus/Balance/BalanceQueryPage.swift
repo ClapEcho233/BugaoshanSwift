@@ -329,7 +329,7 @@ struct BalanceQueryPage: View {
         return recordsExpanded ? Array(newestFirst) : Array(newestFirst.prefix(collapsedRecordCount))
     }
 
-    private func statBlock(_ title: String, _ value: String) -> some View {
+    private func statBlock(_ title: LocalizedStringKey, _ value: String) -> some View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.headline.monospacedDigit())

@@ -45,8 +45,11 @@ struct CourseGridHeader: View {
         return "\(comps.month!)/\(comps.day!)"
     }
 
+    /// dayIndex → dayOfWeek：周末开启时 0=周日，否则 0=周一
+    /// 列头文字经 xcstrings 本地化（键为中文单字，en 表提供 Mon–Sun）
     private func weekdayName(_ day: Int) -> String {
-        ["一", "二", "三", "四", "五", "六", "日"][day - 1]
+        let keys = ["一", "二", "三", "四", "五", "六", "日"]
+        return NSLocalizedString(keys[day - 1], comment: "课表列头星期")
     }
 }
 

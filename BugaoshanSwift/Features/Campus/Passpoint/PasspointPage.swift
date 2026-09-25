@@ -157,7 +157,7 @@ struct PasspointPage: View {
         .listStyle(.insetGrouped)
     }
 
-    private func privacyRow(_ label: String, _ maskedValue: String) -> some View {
+    private func privacyRow(_ label: LocalizedStringKey, _ maskedValue: String) -> some View {
         Button {
             privacyHidden.toggle()
         } label: {

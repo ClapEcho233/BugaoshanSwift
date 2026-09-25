@@ -238,8 +238,8 @@ struct WizardLoginImportPage: View {
 
 struct WizardStepCard: View {
     let step: Int
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
     let done: Bool
     let action: () -> Void
 

@@ -158,7 +158,7 @@ struct ServiceHallPage: View {
                             NavigationLink {
                                 ServiceFormPage(app: app)
                             } label: {
-                                catalogRow(icon: app.icon, title: app.title, desc: app.desc)
+                                catalogRow(icon: app.icon, title: LocalizedStringKey(app.title), desc: LocalizedStringKey(app.desc))
                             }
                         }
                     }
@@ -179,7 +179,7 @@ struct ServiceHallPage: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private func catalogRow(icon: String, title: String, desc: String) -> some View {
+    private func catalogRow(icon: String, title: LocalizedStringKey, desc: LocalizedStringKey) -> some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title3)

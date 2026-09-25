@@ -22,7 +22,7 @@ struct MainTabView: View {
                     tabContent(for: id)
                         .tabItem {
                             let item = DockRegistry.item(id: id)
-                            Label(item?.label ?? id, systemImage: item?.icon ?? "circle")
+                            Label(LocalizedStringKey(item?.label ?? id), systemImage: item?.icon ?? "circle")
                         }
                         .tag(id)
                 }
@@ -64,11 +64,11 @@ struct PlaceholderFeaturePage: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label(DockRegistry.item(id: dockId)?.label ?? dockId, systemImage: DockRegistry.item(id: dockId)?.icon ?? "circle")
+            Label(LocalizedStringKey(DockRegistry.item(id: dockId)?.label ?? dockId), systemImage: DockRegistry.item(id: dockId)?.icon ?? "circle")
         } description: {
             Text("该功能将在后续版本中提供")
         }
-        .navigationTitle(DockRegistry.item(id: dockId)?.label ?? dockId)
+        .navigationTitle(Text(LocalizedStringKey(DockRegistry.item(id: dockId)?.label ?? dockId)))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

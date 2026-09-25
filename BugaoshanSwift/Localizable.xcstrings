@@ -19,13 +19,33 @@
       }
     },
     "%.1f 学时" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%.1f hrs"
+          }
+        }
+      }
     },
     "%@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "%@ %@ %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@ %3$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -36,6 +56,12 @@
     },
     "%@ · %lld 门" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lld courses"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -46,6 +72,12 @@
     },
     "%@ · 到期时间: %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Expires: %1$@→%2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -56,6 +88,12 @@
     },
     "%@ — %@ · 共 %lld 周" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ — %2$@ · %3$lld weeks total"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -66,6 +104,12 @@
     },
     "%@ 分 · %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ pts · %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -75,22 +119,63 @@
       }
     },
     "%@ 学分" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ credits"
+          }
+        }
+      }
     },
     "%@ 年暂无体测成绩" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No fitness scores in %@"
+          }
+        }
+      }
     },
     "%@学分" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ credits"
+          }
+        }
+      }
     },
     "%lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
     },
     "%lld 星" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld stars"
+          }
+        }
+      }
     },
     "%lld/%lld" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld/%2$lld"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -117,7 +202,14 @@
       }
     },
     "*" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "*"
+          }
+        }
+      }
     },
     "0-365 天，0 表示最长有效期 6 年" : {
       "localizations" : {
@@ -170,7 +262,14 @@
       }
     },
     "Bugaoshan 启动失败" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bugaoshan failed to start"
+          }
+        }
+      }
     },
     "Bugaoshan 新图标" : {
       "extractionState" : "stale",
@@ -207,10 +306,24 @@
       }
     },
     "Dock" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock"
+          }
+        }
+      }
     },
     "Dock 设置" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dock Settings"
+          }
+        }
+      }
     },
     "Dock栏页面切换动画" : {
       "extractionState" : "stale",
@@ -247,10 +360,24 @@
       }
     },
     "E 错误" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E Error"
+          }
+        }
+      }
     },
     "English" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        }
+      }
     },
     "GPA" : {
       "extractionState" : "stale",
@@ -287,7 +414,14 @@
       }
     },
     "GitHub 仓库" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub Repo"
+          }
+        }
+      }
     },
     "IP 地址" : {
       "extractionState" : "stale",
@@ -324,7 +458,14 @@
       }
     },
     "MAC %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC %@"
+          }
+        }
+      }
     },
     "MAC 地址" : {
       "localizations" : {
@@ -338,6 +479,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "MAC 地址"
+          }
+        }
+      }
+    },
+    "MAC 地址: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAC address: %@"
           }
         }
       }
@@ -392,7 +544,14 @@
       }
     },
     "W 警告" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W Warning"
+          }
+        }
+      }
     },
     "[非本周]" : {
       "extractionState" : "stale",
@@ -412,7 +571,14 @@
       }
     },
     "iOS 原生重制版" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Native iOS Remake"
+          }
+        }
+      }
     },
     "{campusName}校区" : {
       "extractionState" : "stale",
@@ -619,7 +785,25 @@
       }
     },
     "—" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "—"
+          }
+        }
+      }
+    },
+    "一" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mon"
+          }
+        }
+      }
     },
     "一键导入到日历" : {
       "extractionState" : "stale",
@@ -655,6 +839,17 @@
         }
       }
     },
+    "三" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wed"
+          }
+        }
+      }
+    },
     "上一步" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -673,7 +868,14 @@
       }
     },
     "上一页" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous"
+          }
+        }
+      }
     },
     "上传中…" : {
       "extractionState" : "stale",
@@ -744,10 +946,24 @@
       }
     },
     "上课周次" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weeks"
+          }
+        }
+      }
     },
     "上课地点" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        }
+      }
     },
     "下一步" : {
       "extractionState" : "stale",
@@ -767,7 +983,14 @@
       }
     },
     "下一页" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
     },
     "下个重要事件" : {
       "extractionState" : "stale",
@@ -854,7 +1077,14 @@
       }
     },
     "下线 %@？" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take %@ offline?"
+          }
+        }
+      }
     },
     "下线失败" : {
       "extractionState" : "stale",
@@ -874,7 +1104,14 @@
       }
     },
     "下线设备？" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take this device offline?"
+          }
+        }
+      }
     },
     "下载" : {
       "localizations" : {
@@ -976,7 +1213,14 @@
       }
     },
     "不预约" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't reserve"
+          }
+        }
+      }
     },
     "不高山下" : {
       "localizations" : {
@@ -1130,7 +1374,14 @@
       }
     },
     "主题色" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accent Color"
+          }
+        }
+      }
     },
     "主题色已从背景图片提取，如需修改请前往软件设置->主题颜色" : {
       "extractionState" : "stale",
@@ -1183,6 +1434,17 @@
         }
       }
     },
+    "二" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tue"
+          }
+        }
+      }
+    },
     "互动校历" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1196,6 +1458,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "互动校历"
+          }
+        }
+      }
+    },
+    "五" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fri"
           }
         }
       }
@@ -1303,10 +1576,24 @@
       }
     },
     "从分享文件导入（粘贴 JSON）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from shared file (paste JSON)"
+          }
+        }
+      }
     },
     "从教务 JSON 导入" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from academic system JSON"
+          }
+        }
+      }
     },
     "从教务系统在线导入" : {
       "localizations" : {
@@ -1341,7 +1628,14 @@
       }
     },
     "从教务系统导入，或从其他设备分享的文件导入" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from the academic system or a file shared from another device"
+          }
+        }
+      }
     },
     "从教务系统抓包导入" : {
       "extractionState" : "stale",
@@ -1463,7 +1757,14 @@
       }
     },
     "位置" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        }
+      }
     },
     "体测" : {
       "localizations" : {
@@ -1516,7 +1817,14 @@
       }
     },
     "余额" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance"
+          }
+        }
+      }
     },
     "余额 (度)" : {
       "extractionState" : "stale",
@@ -1536,7 +1844,14 @@
       }
     },
     "余额趋势" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balance Trend"
+          }
+        }
+      }
     },
     "你的校园生活助手，一站式查看课表、成绩与校园服务" : {
       "extractionState" : "stale",
@@ -1568,6 +1883,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 Google 字体"
+          }
+        }
+      }
+    },
+    "使用学号与统一身份认证密码登录" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in with your student ID and unified auth password"
           }
         }
       }
@@ -1961,7 +2286,14 @@
       }
     },
     "全部已启用" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All enabled"
+          }
+        }
+      }
     },
     "全部教学楼" : {
       "extractionState" : "stale",
@@ -2031,8 +2363,25 @@
         }
       }
     },
+    "六" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sat"
+          }
+        }
+      }
+    },
     "共 %lld 周 · %@ 开学" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld weeks · starts %2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -2109,7 +2458,14 @@
       }
     },
     "关于本机" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About This Device"
+          }
+        }
+      }
     },
     "关闭" : {
       "localizations" : {
@@ -2128,7 +2484,14 @@
       }
     },
     "关闭开发者模式" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disable Developer Mode"
+          }
+        }
+      }
     },
     "关闭省电优化" : {
       "extractionState" : "stale",
@@ -2199,10 +2562,24 @@
       }
     },
     "准考证 %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Admission Ticket %@"
+          }
+        }
+      }
     },
     "出口" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit"
+          }
+        }
+      }
     },
     "分享" : {
       "localizations" : {
@@ -2323,7 +2700,14 @@
       }
     },
     "切换语言后需要重新启动 App 才能完全生效。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart the app to fully apply the new language."
+          }
+        }
+      }
     },
     "切换课表" : {
       "extractionState" : "stale",
@@ -2343,7 +2727,14 @@
       }
     },
     "创建" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
     },
     "删除" : {
       "localizations" : {
@@ -2412,7 +2803,14 @@
       }
     },
     "删除这门课？" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete this course?"
+          }
+        }
+      }
     },
     "到期时间" : {
       "extractionState" : "stale",
@@ -2466,7 +2864,14 @@
       }
     },
     "刷新验证码" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh Captcha"
+          }
+        }
+      }
     },
     "前往 Releases" : {
       "extractionState" : "stale",
@@ -2486,7 +2891,14 @@
       }
     },
     "前往下载页" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Download"
+          }
+        }
+      }
     },
     "前往登录" : {
       "extractionState" : "stale",
@@ -2590,7 +3002,14 @@
       }
     },
     "功能一览" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Features"
+          }
+        }
+      }
     },
     "功能即将上线" : {
       "extractionState" : "stale",
@@ -2627,7 +3046,14 @@
       }
     },
     "加载中…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
+          }
+        }
+      }
     },
     "加载失败" : {
       "localizations" : {
@@ -2679,10 +3105,24 @@
       }
     },
     "加载校历…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading calendar…"
+          }
+        }
+      }
     },
     "动画" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Animation"
+          }
+        }
+      }
     },
     "动画时长" : {
       "extractionState" : "stale",
@@ -2719,7 +3159,14 @@
       }
     },
     "包含预发布版" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include prereleases"
+          }
+        }
+      }
     },
     "区县" : {
       "localizations" : {
@@ -2738,7 +3185,14 @@
       }
     },
     "区域" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Area"
+          }
+        }
+      }
     },
     "升级到最新版本" : {
       "extractionState" : "stale",
@@ -2841,7 +3295,14 @@
       }
     },
     "单项成绩" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Individual Scores"
+          }
+        }
+      }
     },
     "危险操作" : {
       "extractionState" : "stale",
@@ -3075,7 +3536,14 @@
       }
     },
     "取消选择" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect"
+          }
+        }
+      }
     },
     "取消预约" : {
       "localizations" : {
@@ -3110,8 +3578,18 @@
         }
       }
     },
-    "可上传 1-%lld 张图片作为请假证明（非必填）" : {
+    "受理部门" : {
 
+    },
+    "可上传 1-%lld 张图片作为请假证明（非必填）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You may attach 1-%lld images as proof (optional)"
+          }
+        }
+      }
     },
     "可上传 1-3 张图片作为请假证明（非必填）" : {
       "extractionState" : "stale",
@@ -3148,10 +3626,24 @@
       }
     },
     "可办理事项" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available Services"
+          }
+        }
+      }
     },
     "可添加" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available"
+          }
+        }
+      }
     },
     "可预约" : {
       "extractionState" : "stale",
@@ -3441,7 +3933,25 @@
       }
     },
     "周类型" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week Type"
+          }
+        }
+      }
+    },
+    "四" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thu"
+          }
+        }
+      }
     },
     "四川大学望江/华西校区" : {
       "extractionState" : "stale",
@@ -3478,7 +3988,14 @@
       }
     },
     "四川大学校园助手 · 原生重制版" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SCU Campus Assistant · Native Remake"
+          }
+        }
+      }
     },
     "四川大学江安校区" : {
       "extractionState" : "stale",
@@ -3532,7 +4049,14 @@
       }
     },
     "固定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinned"
+          }
+        }
+      }
     },
     "图书借阅量" : {
       "extractionState" : "stale",
@@ -3552,7 +4076,14 @@
       }
     },
     "图形验证码" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Captcha"
+          }
+        }
+      }
     },
     "图片不能超过 10MB" : {
       "extractionState" : "stale",
@@ -3606,7 +4137,14 @@
       }
     },
     "图片（最多 3 张）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images (up to 3)"
+          }
+        }
+      }
     },
     "在 iOS 26 及更高版本中，主屏幕的透明与着色外观会自动使用系统玻璃或着色效果。" : {
       "extractionState" : "stale",
@@ -3710,7 +4248,14 @@
       }
     },
     "在线导入" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Online"
+          }
+        }
+      }
     },
     "在线报修" : {
       "extractionState" : "stale",
@@ -3747,10 +4292,24 @@
       }
     },
     "地区数据加载中…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading region data…"
+          }
+        }
+      }
     },
     "地址" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
+          }
+        }
+      }
     },
     "地址已保存" : {
       "extractionState" : "stale",
@@ -3804,7 +4363,14 @@
       }
     },
     "城市" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "City"
+          }
+        }
+      }
     },
     "培养方案" : {
       "localizations" : {
@@ -3857,7 +4423,14 @@
       }
     },
     "处理进度" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progress"
+          }
+        }
+      }
     },
     "备注" : {
       "extractionState" : "stale",
@@ -3911,10 +4484,24 @@
       }
     },
     "复制课表数据" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Schedule Data"
+          }
+        }
+      }
     },
     "外观" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
     },
     "外部资源" : {
       "extractionState" : "stale",
@@ -3934,7 +4521,14 @@
       }
     },
     "大" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Large"
+          }
+        }
+      }
     },
     "大组件 (4×4)" : {
       "extractionState" : "stale",
@@ -3954,7 +4548,14 @@
       }
     },
     "好" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "如需调整字号和字重，请在系统设置中修改" : {
       "extractionState" : "stale",
@@ -3974,7 +4575,6 @@
       }
     },
     "姓名" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4076,6 +4676,12 @@
     },
     "学分: %@/%@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits: %1$@/%2$@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -4102,7 +4708,6 @@
       }
     },
     "学号" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4119,7 +4724,14 @@
       }
     },
     "学号 / 工号" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Student / Staff ID"
+          }
+        }
+      }
     },
     "学工部" : {
       "extractionState" : "stale",
@@ -4190,7 +4802,14 @@
       }
     },
     "学时统计" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Class Hours"
+          }
+        }
+      }
     },
     "学期" : {
       "extractionState" : "stale",
@@ -4363,10 +4982,16 @@
       }
     },
     "完成" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
     },
     "完成统一身份认证登录" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4383,7 +5008,14 @@
       }
     },
     "完成验证后下载" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download after verification"
+          }
+        }
+      }
     },
     "官方图表" : {
       "extractionState" : "stale",
@@ -4432,6 +5064,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "实用功能"
+          }
+        }
+      }
+    },
+    "实用工具" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilities"
           }
         }
       }
@@ -4505,7 +5148,14 @@
       }
     },
     "宿舍报修" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dorm Repair"
+          }
+        }
+      }
     },
     "密码" : {
       "extractionState" : "stale",
@@ -4593,10 +5243,24 @@
       }
     },
     "导入" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        }
+      }
     },
     "导入中…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importing…"
+          }
+        }
+      }
     },
     "导入失败" : {
       "extractionState" : "stale",
@@ -4633,7 +5297,14 @@
       }
     },
     "导入完成" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import finished"
+          }
+        }
+      }
     },
     "导入或新建一个课表开始使用" : {
       "extractionState" : "stale",
@@ -4855,7 +5526,14 @@
       }
     },
     "小" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Small"
+          }
+        }
+      }
     },
     "小组件" : {
       "extractionState" : "stale",
@@ -4943,16 +5621,44 @@
       }
     },
     "尚未绑定房间" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No room bound"
+          }
+        }
+      }
     },
     "展开全部（%lld）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show all (%lld)"
+          }
+        }
+      }
     },
     "工单信息" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ticket Info"
+          }
+        }
+      }
     },
     "工单详情" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ticket Details"
+          }
+        }
+      }
     },
     "工单进度" : {
       "extractionState" : "stale",
@@ -4972,7 +5678,14 @@
       }
     },
     "已上传 %lld 张" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld uploaded"
+          }
+        }
+      }
     },
     "已下载附件" : {
       "extractionState" : "stale",
@@ -5094,7 +5807,14 @@
       }
     },
     "已启用（自上而下）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enabled (top to bottom)"
+          }
+        }
+      }
     },
     "已完成" : {
       "extractionState" : "stale",
@@ -5487,7 +6207,14 @@
       }
     },
     "应用" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply"
+          }
+        }
+      }
     },
     "应用名称" : {
       "extractionState" : "stale",
@@ -5558,7 +6285,14 @@
       }
     },
     "座位号 %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seat %@"
+          }
+        }
+      }
     },
     "开发团队" : {
       "extractionState" : "stale",
@@ -5578,10 +6312,24 @@
       }
     },
     "开发者" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer"
+          }
+        }
+      }
     },
     "开发者选项" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer Options"
+          }
+        }
+      }
     },
     "开发者页面" : {
       "extractionState" : "stale",
@@ -5635,13 +6383,34 @@
       }
     },
     "开始" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
+          }
+        }
+      }
     },
     "开始之前" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before You Start"
+          }
+        }
+      }
     },
     "开始使用" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        }
+      }
     },
     "开始周" : {
       "extractionState" : "stale",
@@ -5661,7 +6430,14 @@
       }
     },
     "开始导入" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Import"
+          }
+        }
+      }
     },
     "开始日期" : {
       "extractionState" : "stale",
@@ -5765,7 +6541,14 @@
       }
     },
     "开源致谢" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Source Credits"
+          }
+        }
+      }
     },
     "开源许可" : {
       "extractionState" : "stale",
@@ -5921,7 +6704,14 @@
       }
     },
     "当前值: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current: %@"
+          }
+        }
+      }
     },
     "当前动画时长: {value} ms" : {
       "extractionState" : "stale",
@@ -5992,7 +6782,14 @@
       }
     },
     "当前无在线设备" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No devices online"
+          }
+        }
+      }
     },
     "当前没有空闲教室" : {
       "extractionState" : "stale",
@@ -6024,6 +6821,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当前空闲"
+          }
+        }
+      }
+    },
+    "当前第 %lld 周" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently Week %lld"
           }
         }
       }
@@ -6165,10 +6972,24 @@
       }
     },
     "忘记密码" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot Password"
+          }
+        }
+      }
     },
     "忘记密码？" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot password?"
+          }
+        }
+      }
     },
     "快速设置" : {
       "extractionState" : "stale",
@@ -6439,7 +7260,14 @@
       }
     },
     "成绩类型" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Score Type"
+          }
+        }
+      }
     },
     "成绩统计" : {
       "extractionState" : "stale",
@@ -6526,7 +7354,14 @@
       }
     },
     "我已阅读并同意以上协议" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I have read and agree to the agreement"
+          }
+        }
+      }
     },
     "我的" : {
       "localizations" : {
@@ -6545,7 +7380,14 @@
       }
     },
     "我的工单" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Tickets"
+          }
+        }
+      }
     },
     "我的报修" : {
       "extractionState" : "stale",
@@ -6614,10 +7456,24 @@
       }
     },
     "户名 %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account %@"
+          }
+        }
+      }
     },
     "户名与户号取自当前登录账号，房间需为本人寝室" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account name and number are taken from the signed-in account; the room must be your own dorm"
+          }
+        }
+      }
     },
     "房间号" : {
       "localizations" : {
@@ -6771,7 +7627,14 @@
       }
     },
     "报修地址" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repair Address"
+          }
+        }
+      }
     },
     "报修工单" : {
       "extractionState" : "stale",
@@ -6840,6 +7703,9 @@
           }
         }
       }
+    },
+    "报修编号" : {
+
     },
     "报修详情" : {
       "extractionState" : "stale",
@@ -7096,6 +7962,16 @@
       }
     },
     "接收方式" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivery"
+          }
+        }
+      }
+    },
+    "描述" : {
 
     },
     "提交失败，请稍后重试" : {
@@ -7166,7 +8042,14 @@
       }
     },
     "提交时间: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submitted: %@"
+          }
+        }
+      }
     },
     "提交申请" : {
       "localizations" : {
@@ -7202,7 +8085,14 @@
       }
     },
     "提交评价" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit Review"
+          }
+        }
+      }
     },
     "提前报备返校行程" : {
       "extractionState" : "stale",
@@ -7339,7 +8229,14 @@
       }
     },
     "搜索课程" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search courses"
+          }
+        }
+      }
     },
     "搜索课程名称" : {
       "extractionState" : "stale",
@@ -7393,7 +8290,14 @@
       }
     },
     "撤回" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw"
+          }
+        }
+      }
     },
     "撤回后将需要重新同意用户协议才能继续使用，确定要撤回吗？" : {
       "extractionState" : "stale",
@@ -7430,7 +8334,14 @@
       }
     },
     "撤回工单" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw Ticket"
+          }
+        }
+      }
     },
     "撤回报修" : {
       "extractionState" : "stale",
@@ -7467,7 +8378,14 @@
       }
     },
     "撤回该工单？" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraw this ticket?"
+          }
+        }
+      }
     },
     "操作失败" : {
       "extractionState" : "stale",
@@ -7504,7 +8422,14 @@
       }
     },
     "操作结果" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Result"
+          }
+        }
+      }
     },
     "收费类型" : {
       "extractionState" : "stale",
@@ -7524,7 +8449,14 @@
       }
     },
     "收起" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collapse"
+          }
+        }
+      }
     },
     "放假" : {
       "extractionState" : "stale",
@@ -7778,7 +8710,14 @@
       }
     },
     "新密码（8 位以上）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New password (8+ characters)"
+          }
+        }
+      }
     },
     "新建副本" : {
       "extractionState" : "stale",
@@ -7929,7 +8868,25 @@
       }
     },
     "无感设备出口: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passpoint exit: %@"
+          }
+        }
+      }
+    },
+    "日" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sun"
+          }
+        }
+      }
     },
     "日均消耗" : {
       "extractionState" : "stale",
@@ -7966,7 +8923,14 @@
       }
     },
     "日期" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
     },
     "旧版图标" : {
       "extractionState" : "stale",
@@ -7986,10 +8950,24 @@
       }
     },
     "时段" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time Slot"
+          }
+        }
+      }
     },
     "时间" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time"
+          }
+        }
+      }
     },
     "时间信息" : {
       "extractionState" : "stale",
@@ -8365,7 +9343,14 @@
       }
     },
     "暂无工单" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No tickets"
+          }
+        }
+      }
     },
     "暂无已下载附件" : {
       "extractionState" : "stale",
@@ -8385,7 +9370,14 @@
       }
     },
     "暂无成绩" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No scores"
+          }
+        }
+      }
     },
     "暂无成绩数据" : {
       "extractionState" : "stale",
@@ -8437,7 +9429,14 @@
       }
     },
     "暂无方案成绩" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No plan scores"
+          }
+        }
+      }
     },
     "暂无班级数据" : {
       "extractionState" : "stale",
@@ -8457,7 +9456,14 @@
       }
     },
     "暂无申请记录" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No applications"
+          }
+        }
+      }
     },
     "暂无考试安排" : {
       "localizations" : {
@@ -8662,7 +9668,14 @@
       }
     },
     "更新" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        }
+      }
     },
     "更新到最新版本（含预览版）" : {
       "extractionState" : "stale",
@@ -8801,7 +9814,14 @@
       }
     },
     "最终用户许可协议" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End User License Agreement"
+          }
+        }
+      }
     },
     "最长有效期6年" : {
       "extractionState" : "stale",
@@ -8870,6 +9890,26 @@
         }
       }
     },
+    "期间用量" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage"
+          }
+        }
+      }
+    },
+    "期间电费" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cost"
+          }
+        }
+      }
+    },
     "未发布" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8888,7 +9928,6 @@
       }
     },
     "未开学" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -8989,7 +10028,6 @@
       }
     },
     "本周" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9040,7 +10078,14 @@
       }
     },
     "本学期特殊事件" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Special Events This Semester"
+          }
+        }
+      }
     },
     "本应用基于 AGPL-3.0 开源许可协议发布" : {
       "extractionState" : "stale",
@@ -9060,7 +10105,14 @@
       }
     },
     "本项目衍生自开源项目「不高山上」（The-Brotherhood-of-SCU/Bugaoshan，AGPL-3.0）。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This project is derived from the open-source project Bugaoshan (The-Brotherhood-of-SCU/Bugaoshan, AGPL-3.0)."
+          }
+        }
+      }
     },
     "材质" : {
       "extractionState" : "stale",
@@ -9301,7 +10353,6 @@
       }
     },
     "查看请假、报备等申请记录" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -9335,7 +10386,14 @@
       }
     },
     "查询中…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Searching…"
+          }
+        }
+      }
     },
     "查询体测成绩和查看通知公告" : {
       "extractionState" : "stale",
@@ -9573,7 +10631,14 @@
       }
     },
     "校历加载失败" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load calendar"
+          }
+        }
+      }
     },
     "校历已更新" : {
       "extractionState" : "stale",
@@ -9677,7 +10742,14 @@
       }
     },
     "校园网设备" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Campus Network Devices"
+          }
+        }
+      }
     },
     "校园网设备查询" : {
       "extractionState" : "stale",
@@ -9780,7 +10852,14 @@
       }
     },
     "模式" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        }
+      }
     },
     "次阅读" : {
       "extractionState" : "stale",
@@ -9903,6 +10982,12 @@
     },
     "正在导入 %lld/%lld…" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importing %1$lld/%2$lld…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "new",
@@ -9963,7 +11048,14 @@
       }
     },
     "正在获取学期列表…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fetching semesters…"
+          }
+        }
+      }
     },
     "正在获取校历数据..." : {
       "extractionState" : "stale",
@@ -9983,7 +11075,14 @@
       }
     },
     "正在获取账号信息…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fetching account…"
+          }
+        }
+      }
     },
     "此字段不能为空" : {
       "extractionState" : "stale",
@@ -10237,7 +11336,14 @@
       }
     },
     "添加到系统日历" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to Calendar"
+          }
+        }
+      }
     },
     "添加后缀导入" : {
       "extractionState" : "stale",
@@ -10357,7 +11463,14 @@
       }
     },
     "点击刷新" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to refresh"
+          }
+        }
+      }
     },
     "点击按钮自动完成绑定" : {
       "localizations" : {
@@ -10376,7 +11489,14 @@
       }
     },
     "点击要导入的学期" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap a semester to import"
+          }
+        }
+      }
     },
     "点击重试" : {
       "extractionState" : "stale",
@@ -10396,7 +11516,14 @@
       }
     },
     "照明" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lighting"
+          }
+        }
+      }
     },
     "照明电量" : {
       "extractionState" : "stale",
@@ -10450,7 +11577,14 @@
       }
     },
     "版本 %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version %@"
+          }
+        }
+      }
     },
     "版本更新日志" : {
       "extractionState" : "stale",
@@ -10484,6 +11618,9 @@
           }
         }
       }
+    },
+    "状态" : {
+
     },
     "环境信息" : {
       "extractionState" : "stale",
@@ -10787,8 +11924,18 @@
         }
       }
     },
-    "登录后可使用校园功能" : {
+    "登录后可一键导入本学期课表" : {
 
+    },
+    "登录后可使用校园功能" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to use campus features"
+          }
+        }
+      }
     },
     "登录后可自动获取课表" : {
       "extractionState" : "stale",
@@ -10944,7 +12091,14 @@
       }
     },
     "省份" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Province"
+          }
+        }
+      }
     },
     "省电优化已关闭" : {
       "extractionState" : "stale",
@@ -11116,7 +12270,14 @@
       }
     },
     "确定要取消该设备的无感认证吗？\nMAC 地址: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Passpoint access from this device?\nMAC address: %1$@"
+          }
+        }
+      }
     },
     "确定要撤回该报修工单吗？" : {
       "extractionState" : "stale",
@@ -11254,7 +12415,14 @@
       }
     },
     "示例：B8782EBDCE85" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g. B8782EBDCE85"
+          }
+        }
+      }
     },
     "离校/返校时间" : {
       "extractionState" : "stale",
@@ -11358,10 +12526,24 @@
       }
     },
     "稍后" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        }
+      }
     },
     "空调" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Air Conditioning"
+          }
+        }
+      }
     },
     "空调电量" : {
       "extractionState" : "stale",
@@ -11466,7 +12648,14 @@
       }
     },
     "第 %lld 周" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week %lld"
+          }
+        }
+      }
     },
     "第 {n} 节" : {
       "extractionState" : "stale",
@@ -11503,7 +12692,14 @@
       }
     },
     "第%lld节" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period %lld"
+          }
+        }
+      }
     },
     "第{start}-{end}节" : {
       "extractionState" : "stale",
@@ -11658,13 +12854,34 @@
       }
     },
     "管理课表" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage Schedules"
+          }
+        }
+      }
     },
     "类型" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type"
+          }
+        }
+      }
     },
     "粘贴 JSON" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paste JSON"
+          }
+        }
+      }
     },
     "系列名称" : {
       "extractionState" : "stale",
@@ -11701,7 +12918,14 @@
       }
     },
     "系统" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
     },
     "紧凑" : {
       "extractionState" : "stale",
@@ -11772,10 +12996,24 @@
       }
     },
     "级别" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Level"
+          }
+        }
+      }
     },
     "绑定后可查看电费余额与用量趋势" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bind your room to see balance and usage trends"
+          }
+        }
+      }
     },
     "绑定失败，请稍后重试" : {
       "extractionState" : "stale",
@@ -11828,10 +13066,24 @@
       }
     },
     "绑定有效期" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binding Validity"
+          }
+        }
+      }
     },
     "绑定有效期（天）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binding validity (days)"
+          }
+        }
+      }
     },
     "绑定第二课堂" : {
       "localizations" : {
@@ -12050,7 +13302,14 @@
       }
     },
     "统一身份认证密码" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unified Auth Password"
+          }
+        }
+      }
     },
     "统一身份认证登录" : {
       "extractionState" : "stale",
@@ -12137,7 +13396,14 @@
       }
     },
     "缴费账户" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment Account"
+          }
+        }
+      }
     },
     "网格视图" : {
       "extractionState" : "stale",
@@ -12292,7 +13558,14 @@
       }
     },
     "考试周临近时会在这里显示" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exam weeks will appear here as they approach"
+          }
+        }
+      }
     },
     "考试安排" : {
       "extractionState" : "stale",
@@ -12480,7 +13753,14 @@
       }
     },
     "自动登录失败" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto Login Failed"
+          }
+        }
+      }
     },
     "自动获取当前周数" : {
       "extractionState" : "stale",
@@ -12534,7 +13814,14 @@
       }
     },
     "自动识别" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto Detect"
+          }
+        }
+      }
     },
     "自定义" : {
       "localizations" : {
@@ -12621,7 +13908,14 @@
       }
     },
     "至" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "to"
+          }
+        }
+      }
     },
     "色块" : {
       "extractionState" : "stale",
@@ -12793,10 +14087,24 @@
       }
     },
     "解绑房间" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbind Room"
+          }
+        }
+      }
     },
     "计划完成度" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan Completion"
+          }
+        }
+      }
     },
     "认证失败" : {
       "extractionState" : "stale",
@@ -12865,7 +14173,14 @@
       }
     },
     "设备" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Device"
+          }
+        }
+      }
     },
     "设备ID" : {
       "extractionState" : "stale",
@@ -12885,7 +14200,14 @@
       }
     },
     "设置" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
     },
     "设置当前周数" : {
       "extractionState" : "stale",
@@ -12922,10 +14244,24 @@
       }
     },
     "评价" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review"
+          }
+        }
+      }
     },
     "评价内容" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review"
+          }
+        }
+      }
     },
     "评价失败，请稍后重试" : {
       "extractionState" : "stale",
@@ -12978,10 +14314,24 @@
       }
     },
     "评分 %lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rated %lld"
+          }
+        }
+      }
     },
     "诊断" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostics"
+          }
+        }
+      }
     },
     "该功能仅限校园网访问，请连接校园网或使用学校 VPN 后重试" : {
       "extractionState" : "stale",
@@ -13001,7 +14351,14 @@
       }
     },
     "该功能将在后续版本中提供" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This feature will be available in a future version"
+          }
+        }
+      }
     },
     "该年份暂无体测成绩" : {
       "extractionState" : "stale",
@@ -13139,10 +14496,24 @@
       }
     },
     "语言" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        }
+      }
     },
     "语言设置将在重新打开 App 后生效。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language settings take effect the next time you open the app."
+          }
+        }
+      }
     },
     "请假申请" : {
       "extractionState" : "stale",
@@ -13213,10 +14584,24 @@
       }
     },
     "请先登录统一身份认证后查看在线设备" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to unified auth to view online devices"
+          }
+        }
+      }
     },
     "请先登录统一身份认证后查看成绩" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to unified auth to view scores"
+          }
+        }
+      }
     },
     "请先绑定第二课堂账号" : {
       "localizations" : {
@@ -13286,10 +14671,24 @@
       }
     },
     "请先选校区" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a campus first"
+          }
+        }
+      }
     },
     "请先选楼栋" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a building first"
+          }
+        }
+      }
     },
     "请先阅读完协议内容" : {
       "extractionState" : "stale",
@@ -13766,7 +15165,14 @@
       }
     },
     "课程信息" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Course Info"
+          }
+        }
+      }
     },
     "课程卡片" : {
       "extractionState" : "stale",
@@ -13837,7 +15243,14 @@
       }
     },
     "课程名称（必填）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Course name (required)"
+          }
+        }
+      }
     },
     "课程安排" : {
       "extractionState" : "stale",
@@ -14077,7 +15490,14 @@
       }
     },
     "课表名称（如 2026-2027学年秋季学期）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedule name (e.g. 2026-2027 Fall)"
+          }
+        }
+      }
     },
     "课表导入成功" : {
       "extractionState" : "stale",
@@ -14232,10 +15652,24 @@
       }
     },
     "账号" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
+        }
+      }
     },
     "账号信息" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
+        }
+      }
     },
     "账户状态" : {
       "localizations" : {
@@ -14271,7 +15705,14 @@
       }
     },
     "趋势按日聚合（每日取最后一次查询结果），记录满 2 天后展示" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trends aggregate daily (last query per day) and appear after 2 days of records"
+          }
+        }
+      }
     },
     "距离下学期上课还有 {days} 天" : {
       "extractionState" : "stale",
@@ -14459,7 +15900,14 @@
       }
     },
     "输入收到的验证码" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the code you received"
+          }
+        }
+      }
     },
     "输入绑定信息" : {
       "extractionState" : "stale",
@@ -14615,7 +16063,14 @@
       }
     },
     "连续 3 次验证码识别失败，请手动重新登录。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Captcha recognition failed 3 times. Please sign in again."
+          }
+        }
+      }
     },
     "退出登录" : {
       "localizations" : {
@@ -14734,7 +16189,14 @@
       }
     },
     "选择图片" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Images"
+          }
+        }
+      }
     },
     "选择城市" : {
       "localizations" : {
@@ -14803,7 +16265,14 @@
       }
     },
     "选择日历" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Calendar"
+          }
+        }
+      }
     },
     "选择日期" : {
       "extractionState" : "stale",
@@ -14924,7 +16393,14 @@
       }
     },
     "选择颜色" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Color"
+          }
+        }
+      }
     },
     "通用" : {
       "extractionState" : "stale",
@@ -15114,10 +16590,24 @@
       }
     },
     "采样记录（%lld）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Samples (%lld)"
+          }
+        }
+      }
     },
     "重新发送" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resend"
+          }
+        }
+      }
     },
     "重新登录" : {
       "extractionState" : "stale",
@@ -15137,7 +16627,14 @@
       }
     },
     "重新绑定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rebind"
+          }
+        }
+      }
     },
     "重置" : {
       "extractionState" : "stale",
@@ -15225,7 +16722,14 @@
       }
     },
     "重置成功后请使用新密码重新登录" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After resetting, sign in again with your new password"
+          }
+        }
+      }
     },
     "重试" : {
       "localizations" : {
@@ -15244,7 +16748,14 @@
       }
     },
     "链接" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        }
+      }
     },
     "错误" : {
       "extractionState" : "stale",
@@ -15349,10 +16860,24 @@
       }
     },
     "需要先完成统一身份认证登录" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to unified auth first"
+          }
+        }
+      }
     },
     "需要重启" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart Required"
+          }
+        }
+      }
     },
     "青春川大" : {
       "extractionState" : "stale",
@@ -15389,13 +16914,34 @@
       }
     },
     "页面切换动画" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page Transition Animation"
+          }
+        }
+      }
     },
     "页面加载失败" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load page"
+          }
+        }
+      }
     },
     "项目" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item"
+          }
+        }
+      }
     },
     "项目仓库" : {
       "extractionState" : "stale",
@@ -15482,7 +17028,14 @@
       }
     },
     "预约时间" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserved Time"
+          }
+        }
+      }
     },
     "预约的活动" : {
       "localizations" : {
@@ -15551,7 +17104,14 @@
       }
     },
     "验证并绑定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verify & Bind"
+          }
+        }
+      }
     },
     "验证码" : {
       "localizations" : {
@@ -15638,7 +17198,14 @@
       }
     },
     "验证码（不区分大小写）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Captcha (case-insensitive)"
+          }
+        }
+      }
     },
     "高级" : {
       "extractionState" : "stale",
