@@ -28,6 +28,8 @@ final class AppEnvironment: ObservableObject {
 
     /// 启动错误（构造/恢复失败时降级页展示）
     @Published var startupError: String?
+    /// bootstrap 是否已执行（幂等保护：init 触发 + RootView task 兑底不双跑）
+    private var didBootstrap = false
 
     func clearStartupError() {
         startupError = nil
@@ -35,6 +37,7 @@ final class AppEnvironment: ObservableObject {
 
     init() {
         let logger = AuthLogger.shared
+        logger.i("App", "boot: AppEnvironment.init")
         let bus = AuthBus()
         let defaults = UserDefaultsStore()
         let secure = KeychainStore()
@@ -95,22 +98,34 @@ final class AppEnvironment: ObservableObject {
                 await MainActor.run { bus?.sessionExpiredTrigger += 1 }
             }
         }
+
+        // 启动序列尽早起跑：与首帧渲染/场景建立重叠执行（DB 打开 + 认证恢复
+        // 均为 IO 型等待，不占主线程）；依赖构造顺序不变，仅前移触发时机。
+        // RootView.task 仍兑底调用（幂等，见 didBootstrap）。
+        Task { await self.bootstrap() }
     }
 
-    /// 启动序列（DB 打开 + 认证恢复）；失败降级
+    /// 启动序列（DB 打开 + 认证恢复）；失败降级。幂等：重复调用直接返回。
     func bootstrap() async {
+        guard !didBootstrap else { return }
+        didBootstrap = true
+        authLogger.i("App", "boot: bootstrap start")
         do {
             try await database.open()
+            authLogger.i("App", "boot: db opened")
             await scuAuth.restoreFromStorage()
             await ccylAuth.restoreFromStorage()
             await zhhqAuth.restoreFromStorage()
+            authLogger.i("App", "boot: auth restored")
             if await scuAuth.isReady {
                 // 冷启动恢复后：预热子系统 + 拉取用户资料
                 authCoordinator.warmUpAllInBackground()
                 Task { await self.fetchUserInfo() }
             } else if await scuAuth.isAutoLoginEnabled {
                 // token 过期/缺失 → 自动登录重建会话（对应 Dart HomePage._attemptAutoLogin：
-                // 未登录即尝试 autoLogin，其内部自检开关与凭据），否则整个 app 静默未登录
+                // 未登录即尝试 autoLogin，其内部自检开关与凭据），否则整个 app 静默未登录。
+                // OCR 模型预热与验证码网络请求并行，模型首次加载不叠加在登录路径上。
+                Task.detached(priority: .utility) { DdddOcrRecognizer.warmUp() }
                 Task {
                     do {
                         if try await self.scuAuth.autoLogin() {
@@ -123,6 +138,7 @@ final class AppEnvironment: ObservableObject {
                 }
             }
         } catch {
+            didBootstrap = false   // 允许降级页重试
             startupError = "启动失败：\(error.localizedDescription)"
             authLogger.e("App", "bootstrap failed: \(error)")
         }

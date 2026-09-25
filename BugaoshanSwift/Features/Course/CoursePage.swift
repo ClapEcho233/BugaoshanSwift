@@ -59,8 +59,10 @@ struct CoursePage: View {
             }
         }
         .task {
+            environment.authLogger.i("App", "boot: CoursePage task")
             provider.attach(database: environment.database)
             await provider.reload()
+            environment.authLogger.i("App", "boot: CoursePage first reload done")
             resetToToday()
         }
         .onChange(of: provider.config?.id) { _ in
@@ -323,7 +325,7 @@ struct CourseTopBar: View {
         return "\(comps.year!)/\(comps.month!)/\(comps.day!)"
     }
 
-    private var weekLabel: String {
+    private var weekLabel: LocalizedStringKey {
         if isViewingVacation { return "放假中" }
         return "第 \(visibleWeek) 周"
     }
@@ -341,7 +343,7 @@ struct CourseTopBar: View {
         }
     }
 
-    private func badgeText(_ text: String, _ color: Color) -> some View {
+    private func badgeText(_ text: LocalizedStringKey, _ color: Color) -> some View {
         Text(text)
             .font(.system(size: 9, weight: .semibold))
             .padding(.horizontal, 5)

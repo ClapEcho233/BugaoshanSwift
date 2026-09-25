@@ -37,6 +37,12 @@ enum DdddOcrRecognizer {
         return list
     }()
 
+    /// 预热模型（提前触发懒加载）：冷启动自动登录前与验证码网络请求并行调用，
+    /// 避免 103MB 模型首次加载串行叠加在登录关键路径上
+    static func warmUp() {
+        _ = model
+    }
+
     /// 识别验证码图片数据（PNG/JPEG），失败或低可信时返回 nil
     static func recognize(imageData: Data) -> String? {
         guard let model else { return nil }
